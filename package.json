@@ -1,6 +1,8 @@
 {
-  "name": "graphiql",
-  "version": "0.12.0",
+  "name": "@graphprotocol/graphiql",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "types": "index.d.ts",
   "description": "An graphical interactive in-browser GraphQL IDE.",
   "contributors": [
     "Hyohyeon Jeong <asiandrummer@fb.com>",
@@ -15,8 +17,7 @@
     "url": "http://github.com/graphql/graphiql.git"
   },
   "license": "SEE LICENSE IN LICENSE",
-  "main": "dist/index.js",
-  "types": "index.d.ts",
+ 
   "files": [
     "dist",
     "graphiql.js",
@@ -66,6 +67,7 @@
     "autoprefixer": "^7.0.0",
     "babel-cli": "6.24.1",
     "babel-eslint": "7.2.3",
+    "babel-plugin-inline-import-data-uri": "^1.0.1",
     "babel-plugin-syntax-async-functions": "6.13.0",
     "babel-plugin-transform-class-properties": "6.24.1",
     "babel-plugin-transform-object-rest-spread": "6.22.0",

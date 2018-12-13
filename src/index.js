@@ -6,4 +6,8 @@
  */
 
 // The primary React component to use.
-module.exports = require('./components/GraphiQL').GraphiQL;
+// module.exports = require('./components/GraphiQL').GraphiQL;
+
+import { GraphiQL } from './components/GraphiQL';
+
+export default GraphiQL;

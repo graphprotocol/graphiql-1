@@ -25,9 +25,11 @@
   margin: 0;
   overflow: hidden;
   width: 100%;
+  border-radius: 16px;
 }
 
 .graphiql-container .editorWrap {
+  border-radius: 16px 0 0 0;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -36,6 +38,11 @@
 
 .graphiql-container .title {
   font-size: 18px;
+  font-family: BrownStd;
+  font-size: 16px;
+  color: #B4BAC5;
+  font-weight: bold;	
+  line-height: 19px;
 }
 
 .graphiql-container .title em {
@@ -50,13 +57,12 @@
 
 .graphiql-container .topBar {
   align-items: center;
-  background: linear-gradient(#f7f7f7, #e2e2e2);
-  border-bottom: 1px solid #d0d0d0;
+  background: #13161F;
   cursor: default;
   display: flex;
   flex-direction: row;
   flex: 1;
-  height: 34px;
+  height: 60px;
   overflow-y: visible;
   padding: 7px 14px 6px;
   user-select: none;
@@ -69,38 +75,37 @@
 
 .graphiql-container .docExplorerShow,
 .graphiql-container .historyShow {
-  background: linear-gradient(#f7f7f7, #e2e2e2);
-  border-radius: 0;
-  border-bottom: 1px solid #d0d0d0;
-  border-right: none;
-  border-top: none;
-  color: #3B5998;
-  cursor: pointer;
+  color: #B4BAC5;
+  font-family: BrownStd;
   font-size: 14px;
+  font-weight: bold;
+  line-height: 17px;
+  text-align: right;
+  cursor: pointer;
   margin: 0;
   outline: 0;
   padding: 2px 20px 0 18px;
+  border: none;
+  background: none;
 }
 
-.graphiql-container .docExplorerShow {
-  border-left: 1px solid rgba(0, 0, 0, 0.2);
+.graphiql-container .docExplorerShow .btnInner {
+  padding: 6px 14px;
+  background-color: #1B1E2A;
+  border-radius: 14px;
 }
 
-.graphiql-container .historyShow {
-  border-right: 1px solid rgba(0, 0, 0, 0.2);
-  border-left: 0;
-}
-
-.graphiql-container .docExplorerShow:before {
-  border-left: 2px solid #3B5998;
-  border-top: 2px solid #3B5998;
+.graphiql-container .docExplorerShow .btnInner:before {
+  border-left: 2px solid #FFF;
+  border-bottom: 2px solid #FFF;
+  opacity: 0.8;
   content: '';
   display: inline-block;
-  height: 9px;
-  margin: 0 3px -1px 0;
+  height: 6px;
+  margin-right: 3px;
   position: relative;
-  transform: rotate(-45deg);
-  width: 9px;
+  transform: rotate(45deg);
+  width: 6px;
 }
 
 .graphiql-container .editorBar {
@@ -116,7 +121,7 @@
 }
 
 .graphiql-container .resultWrap {
-  border-left: solid 1px #e0e0e0;
+  border-left: solid 1px rgba(11,13,19,0.8);
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -149,8 +154,22 @@
 .graphiql-container .docExplorerHide {
   cursor: pointer;
   font-size: 18px;
-  margin: -7px -8px -6px 0;
-  padding: 18px 16px 15px 12px;
+  margin-left: -115px;
+  height: 30px;
+}
+
+.graphiql-container .docExplorerHide:before {
+  border-right: 2px solid #FFF;
+  border-bottom: 2px solid #FFF;
+  opacity: 0.8;
+  content: '';
+  display: inline-block;
+  height: 6px;
+  margin: 0 3px -1px 0;
+  position: relative;
+  transform: rotate(-45deg);
+  width: 6px;
+  top: 7px;
 }
 
 .graphiql-container div .query-editor {
@@ -212,6 +231,34 @@
 /* No `.graphiql-container` here so themes can overwrite */
 .result-window .CodeMirror {
   background: #f6f7f8;
+}
+
+.graphiql-container .CodeMirror .CodeMirror-gutter {
+  background-color: #13161F;
+}
+
+.graphiql-container .CodeMirror .CodeMirror-gutter-wrapper {
+  left: -80px;
+}
+
+.graphiql-container .CodeMirror .CodeMirror-linenumbers {
+  width: 60px;
+}
+
+.graphiql-container .CodeMirror .CodeMirror-code>div {
+  padding-left: 10px;
+  font-family: 'Roboto Mono';
+  font-size: 14px;
+  line-height: 23px;
+}
+
+.graphiql-container .CodeMirror .CodeMirror-linenumber {
+  color: #C4C9D2;
+  font-family: 'Roboto Mono';
+}
+
+.graphiql-container .CodeMirror .CodeMirror-line {
+  z-index: 5;
 }
 
 .graphiql-container .result-window .CodeMirror-gutters {
@@ -286,16 +333,16 @@
 }
 
 .graphiql-container .execute-button {
-  background: linear-gradient(#fdfdfd, #d2d3d6);
-  border-radius: 17px;
-  border: 1px solid rgba(0,0,0,0.25);
-  box-shadow: 0 1px 0 #fff;
+  background: linear-gradient(315deg, #5500A0 0%, #8B35FF 100%);
+  border: none;
+  opacity: 0.8;
+  border-radius: 24px;
   cursor: pointer;
-  fill: #444;
-  height: 34px;
+  fill: #FFF;
+  height: 40px;
   margin: 0;
   padding: 0;
-  width: 34px;
+  width: 40px;
 }
 
 .graphiql-container .execute-button svg {
@@ -406,6 +453,7 @@
 }
 
 .graphiql-container .CodeMirror {
+  background-color: #13161F !important;
   color: #141823;
   font-family:
     'Consolas',
@@ -415,7 +463,7 @@
     monospace;
   font-size: 13px;
   height: 100%;
-  left: 0;
+  left: 15px;
   position: absolute;
   top: 0;
   width: 100%;

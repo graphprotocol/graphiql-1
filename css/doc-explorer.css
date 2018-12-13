@@ -1,9 +1,15 @@
 .graphiql-container .doc-explorer {
-  background: white;
+  background-color: rgba(11,13,19,0.8);
+  border-radius: 0 16px 0 0;
 }
 
 .graphiql-container .doc-explorer-title-bar,
 .graphiql-container .history-title-bar {
+  color: #B4BAC5;	
+  font-family: BrownStd;	
+  font-size: 14px;	
+  font-weight: bold;	
+  line-height: 17px;
   cursor: default;
   display: flex;
   height: 34px;
@@ -18,8 +24,8 @@
   flex: 1;
   font-weight: bold;
   overflow-x: hidden;
-  padding: 10px 0 10px 10px;
-  text-align: center;
+  padding: 10px 10px 10px 10px;
+  text-align: right;
   text-overflow: ellipsis;
   user-select: initial;
   white-space: nowrap;
@@ -57,8 +63,7 @@
 
 .graphiql-container .doc-explorer-contents,
 .graphiql-container .history-contents {
-  background-color: #ffffff;
-  border-top: 1px solid #d6d6d6;
+  background-color: rgba(11,13,19,0.8);
   bottom: 0;
   left: 0;
   overflow-y: auto;
@@ -75,6 +80,11 @@
 .graphiql-container .doc-type-description p:first-child ,
 .graphiql-container .doc-type-description blockquote:first-child {
   margin-top: 0;
+  color: #B4BAC5;
+  font-family: BrownStd;
+  font-size: 14px;
+  line-height: 21px;
+  padding: 30px 30px;
 }
 
 .graphiql-container .doc-explorer-contents a {
@@ -96,6 +106,7 @@
 
 .graphiql-container .doc-category {
   margin: 20px 0;
+  padding-left: 30px;
 }
 
 .graphiql-container .doc-category-title {
@@ -117,11 +128,19 @@
 }
 
 .graphiql-container .keyword {
-  color: #B11A04;
+  color: #B00DA5;
+  font-family: "Roboto Mono";
+  font-size: 14px;
+  letter-spacing: 1px;
+  line-height: 19px;
 }
 
 .graphiql-container .type-name {
-  color: #CA9800;
+  color: #FFA542;
+  font-family: "Roboto Mono";
+  font-size: 14px;
+  letter-spacing: 1px;
+  line-height: 19px;
 }
 
 .graphiql-container .field-name {
@@ -212,7 +231,6 @@
 }
 
 .graphiql-container .search-box {
-  border-bottom: 1px solid #d3d6db;
   display: block;
   font-size: 14px;
   margin: -15px -15px 12px 0;
@@ -226,6 +244,10 @@
   font-size: 24px;
   position: absolute;
   top: -2px;
+  color: #fff;
+  right: 30px;
+  opacity: 0.5;
+  z-index: 5;
   transform: rotate(-45deg);
   user-select: none;
 }
@@ -248,11 +270,16 @@
 }
 
 .graphiql-container .search-box > input {
+  background-color: rgba(11,13,19,0.8);
   border: none;
   box-sizing: border-box;
-  font-size: 14px;
+  opacity: 0.5;	
+  color: #FFFFFF;	
+  font-family: BrownStd;	
+  font-size: 16px;	
+  line-height: 19px;
   outline: none;
-  padding: 6px 24px 8px 20px;
+  padding: 6px 24px 8px 30px;
   width: 100%;
 }
 

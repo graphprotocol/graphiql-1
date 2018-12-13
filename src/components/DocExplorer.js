@@ -17,7 +17,7 @@ import TypeDoc from './DocExplorer/TypeDoc';
 
 const initialNav = {
   name: 'Schema',
-  title: 'Documentation Explorer',
+  title: 'Hide schema',
 };
 
 /**
@@ -135,7 +135,7 @@ export class DocExplorer extends React.Component {
           {shouldSearchBoxAppear &&
             <SearchBox
               value={navItem.search}
-              placeholder={`Search ${navItem.name}...`}
+              placeholder={`Search...`}
               onSearch={this.handleSearch}
             />}
           {content}

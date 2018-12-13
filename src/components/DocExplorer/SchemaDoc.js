@@ -38,9 +38,6 @@ export default class SchemaDoc extends React.Component {
           }
         />
         <div className="doc-category">
-          <div className="doc-category-title">
-            {'root types'}
-          </div>
           <div className="doc-category-item">
             <span className="keyword">{'query'}</span>
             {': '}
