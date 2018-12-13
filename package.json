@@ -1,8 +1,8 @@
 {
   "name": "@graphprotocol/graphiql",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "dist/index.js",
-  "types": "index.d.ts",
+  "types": "dist/index.d.ts",
   "description": "An graphical interactive in-browser GraphQL IDE.",
   "contributors": [
     "Hyohyeon Jeong <asiandrummer@fb.com>",
