@@ -1,6 +1,6 @@
 {
   "name": "@graphprotocol/graphiql",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "dist/index.js",
   "types": "index.d.ts",
   "description": "An graphical interactive in-browser GraphQL IDE.",
@@ -17,7 +17,6 @@
     "url": "http://github.com/graphql/graphiql.git"
   },
   "license": "SEE LICENSE IN LICENSE",
- 
   "files": [
     "dist",
     "graphiql.js",
