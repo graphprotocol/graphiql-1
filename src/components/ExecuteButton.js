@@ -71,7 +71,7 @@ export class ExecuteButton extends React.Component {
 
     const pathJSX = this.props.isRunning
       ? <path d="M 10 10 L 23 10 L 23 23 L 10 23 z" />
-      : <path d="M 11 9 L 24 16 L 11 23 z" />;
+      : <path d="M 11 10 L 20 15 L 11 20 z" />;
 
     return (
       <div className="execute-button-wrap">
@@ -81,7 +81,7 @@ export class ExecuteButton extends React.Component {
           onMouseDown={onMouseDown}
           onClick={onClick}
           title="Execute Query (Ctrl-Enter)">
-          <svg width="34" height="34">{pathJSX}</svg>
+          <svg width="30" height="30">{pathJSX}</svg>
         </button>
         {options}
       </div>

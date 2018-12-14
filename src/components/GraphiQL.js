@@ -118,6 +118,9 @@ export class GraphiQL extends React.Component {
           DEFAULT_DOC_EXPLORER_WIDTH,
       isWaitingForResponse: false,
       subscription: null,
+      showHistoryButton: false,
+      showPrettifyButton: false,
+      showQueryVariables: false,
       ...queryFacts,
     };
 
@@ -245,16 +248,18 @@ export class GraphiQL extends React.Component {
     const toolbar =
       find(children, child => child.type === GraphiQL.Toolbar) ||
       <GraphiQL.Toolbar>
-        <ToolbarButton
-          onClick={this.handlePrettifyQuery}
-          title="Prettify Query (Shift-Ctrl-P)"
-          label="Prettify"
-        />
-        <ToolbarButton
-          onClick={this.handleToggleHistory}
-          title="Show History"
-          label="History"
-        />
+        {this.state.showPrettifyButton &&
+          <ToolbarButton
+            onClick={this.handlePrettifyQuery}
+            title="Prettify Query (Shift-Ctrl-P)"
+            label="Prettify"
+          />}
+        {this.state.showHistoryButton &&
+          <ToolbarButton
+            onClick={this.handleToggleHistory}
+            title="Show History"
+            label="History"
+          />}
 
       </GraphiQL.Toolbar>;
 
@@ -268,6 +273,8 @@ export class GraphiQL extends React.Component {
     const docWrapStyle = {
       display: this.state.docExplorerOpen ? 'block' : 'none',
       width: this.state.docExplorerWidth,
+      borderRadius: '0 16px 0 0',
+      background: 'rgba(11,13,19,0.8)',
     };
     const docExplorerWrapClasses =
       'docExplorerWrap' +
@@ -282,6 +289,7 @@ export class GraphiQL extends React.Component {
     const variableOpen = this.state.variableEditorOpen;
     const variableStyle = {
       height: variableOpen ? this.state.variableEditorHeight : null,
+      display: 'none',
     };
 
     return (
@@ -315,7 +323,9 @@ export class GraphiQL extends React.Component {
               <button
                 className="docExplorerShow"
                 onClick={this.handleToggleDocs}>
-                {'Docs'}
+                <span className="btnInner">
+                  {'Show schema'}
+                </span>
               </button>}
           </div>
           <div
@@ -388,9 +398,7 @@ export class GraphiQL extends React.Component {
               this.docExplorerComponent = c;
             }}
             schema={this.state.schema}>
-            <div className="docExplorerHide" onClick={this.handleToggleDocs}>
-              {'\u2715'}
-            </div>
+            <div className="docExplorerHide" onClick={this.handleToggleDocs} />
           </DocExplorer>
         </div>
       </div>
@@ -952,7 +960,7 @@ export class GraphiQL extends React.Component {
 GraphiQL.Logo = function GraphiQLLogo(props) {
   return (
     <div className="title">
-      {props.children || <span>{'Graph'}<em>{'i'}</em>{'QL'}</span>}
+      {props.children || <span>{'Query'}</span>}
     </div>
   );
 };

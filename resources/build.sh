@@ -17,4 +17,6 @@ browserify -g browserify-shim -t uglifyify -s GraphiQL dist/index.js 2> /dev/nul
 echo "Bundling graphiql.css..."
 postcss --no-map --use autoprefixer -d dist/ css/*.css
 cat dist/*.css > graphiql.css
+echo "Copying index.d.ts to dist"
+cat index.d.ts > dist/index.d.ts
 echo "Done"
