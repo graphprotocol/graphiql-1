@@ -20,6 +20,7 @@ export class ExecuteButton extends React.Component {
     onStop: PropTypes.func,
     isRunning: PropTypes.bool,
     operations: PropTypes.array,
+    copyToClipboard: PropTypes.func,
   };
 
   constructor(props) {
@@ -41,7 +42,7 @@ export class ExecuteButton extends React.Component {
       const highlight = this.state.highlight;
       options = (
         <ul className="execute-options">
-          {operations.map(operation =>
+          {operations.map(operation => (
             <li
               key={operation.name ? operation.name.value : '*'}
               className={operation === highlight ? 'selected' : undefined}
@@ -49,8 +50,8 @@ export class ExecuteButton extends React.Component {
               onMouseOut={() => this.setState({ highlight: null })}
               onMouseUp={() => this._onOptionSelected(operation)}>
               {operation.name ? operation.name.value : '<Unnamed>'}
-            </li>,
-          )}
+            </li>
+          ))}
         </ul>
       );
     }
@@ -69,9 +70,11 @@ export class ExecuteButton extends React.Component {
       onMouseDown = this._onOptionsOpen;
     }
 
-    const pathJSX = this.props.isRunning
-      ? <path d="M 10 10 L 23 10 L 23 23 L 10 23 z" />
-      : <path d="M 11 10 L 20 15 L 11 20 z" />;
+    const pathJSX = this.props.isRunning ? (
+      <path d="M 10 10 L 23 10 L 23 23 L 10 23 z" />
+    ) : (
+      <path d="M 11 10 L 20 15 L 11 20 z" />
+    );
 
     return (
       <div className="execute-button-wrap">
@@ -81,9 +84,14 @@ export class ExecuteButton extends React.Component {
           onMouseDown={onMouseDown}
           onClick={onClick}
           title="Execute Query (Ctrl-Enter)">
-          <svg width="30" height="30">{pathJSX}</svg>
+          <svg width="30" height="30">
+            {pathJSX}
+          </svg>
         </button>
         {options}
+        <button className="copy-button" onClick={this.props.copyToClipboard}>
+          <span className="copy-text">Copy</span>
+        </button>
       </div>
     );
   }

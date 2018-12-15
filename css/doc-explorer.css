@@ -92,10 +92,6 @@
   text-decoration: none;
 }
 
-.graphiql-container .doc-explorer-contents a:hover {
-  text-decoration: underline;
-}
-
 .graphiql-container .doc-value-description > :first-child {
   margin-top: 4px;
 }
@@ -124,11 +120,18 @@
 
 .graphiql-container .doc-category-item {
   margin: 12px 0;
-  color: #555;
+  font-family: "Roboto Mono";
+  font-size: 14px;
+  line-height: 19px;
+}
+
+.graphiql-container .doc-category-item>span, 
+.graphiql-container .doc-category-item>span .type-name {
+  color: #BD93F9;
 }
 
 .graphiql-container .keyword {
-  color: #B00DA5;
+  color: #BD93F9;
   font-family: "Roboto Mono";
   font-size: 14px;
   letter-spacing: 1px;
@@ -136,7 +139,7 @@
 }
 
 .graphiql-container .type-name {
-  color: #FFA542;
+  color: #fbe884;
   font-family: "Roboto Mono";
   font-size: 14px;
   letter-spacing: 1px;
@@ -144,7 +147,7 @@
 }
 
 .graphiql-container .field-name {
-  color: #1F61A0;
+  color: #B4BAC5;
 }
 
 .graphiql-container .field-short-description {
