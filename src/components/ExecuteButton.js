@@ -20,7 +20,7 @@ export class ExecuteButton extends React.Component {
     onStop: PropTypes.func,
     isRunning: PropTypes.bool,
     operations: PropTypes.array,
-    copyToClipboard: PropTypes.func,
+    onHandleCopyToClipboard: PropTypes.func,
   };
 
   constructor(props) {
@@ -89,8 +89,10 @@ export class ExecuteButton extends React.Component {
           </svg>
         </button>
         {options}
-        <button className="copy-button" onClick={this.props.copyToClipboard}>
-          <span className="copy-text">Copy</span>
+        <button
+          className="copy-button"
+          onClick={this.props.onHandleCopyToClipboard}>
+          <span className="copy-text">{'Copy'}</span>
         </button>
       </div>
     );
