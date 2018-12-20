@@ -30,7 +30,11 @@ export default class TypeDoc extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { showDeprecated: false };
+    this.state = {
+      showDeprecated: false,
+      showMarkdownDescription: false,
+      showTitle: false,
+    };
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -64,7 +68,9 @@ export default class TypeDoc extends React.Component {
     if (types && types.length > 0) {
       typesDef = (
         <div className="doc-category">
-          <div className="doc-category-title">{typesTitle}</div>
+          {this.state.showTitle && (
+            <div className="doc-category-title">{typesTitle}</div>
+          )}
           {types.map(subtype => (
             <div key={subtype.name} className="doc-category-item">
               <TypeLink type={subtype} onClick={onClickType} />
@@ -82,7 +88,9 @@ export default class TypeDoc extends React.Component {
       const fields = Object.keys(fieldMap).map(name => fieldMap[name]);
       fieldsDef = (
         <div className="doc-category">
-          <div className="doc-category-title">{'fields'}</div>
+          {this.state.showTitle && (
+            <div className="doc-category-title">{'fields'}</div>
+          )}
           {fields
             .filter(field => !field.isDeprecated)
             .map(field => (
@@ -101,7 +109,9 @@ export default class TypeDoc extends React.Component {
       if (deprecatedFields.length > 0) {
         deprecatedFieldsDef = (
           <div className="doc-category">
-            <div className="doc-category-title">{'deprecated fields'}</div>
+            {this.state.showTitle && (
+              <div className="doc-category-title">{'deprecated fields'}</div>
+            )}
             {!this.state.showDeprecated ? (
               <button className="show-btn" onClick={this.handleShowDeprecated}>
                 {'Show deprecated fields...'}
@@ -128,10 +138,14 @@ export default class TypeDoc extends React.Component {
       const values = type.getValues();
       valuesDef = (
         <div className="doc-category">
-          <div className="doc-category-title">{'values'}</div>
+          {this.state.showTitle && (
+            <div className="doc-category-title">{'values'}</div>
+          )}
           {values
             .filter(value => !value.isDeprecated)
-            .map(value => <EnumValue key={value.name} value={value} />)}
+            .map(value => (
+              <EnumValue key={value.name} value={value} />
+            ))}
         </div>
       );
 
@@ -139,7 +153,9 @@ export default class TypeDoc extends React.Component {
       if (deprecatedValues.length > 0) {
         deprecatedValuesDef = (
           <div className="doc-category">
-            <div className="doc-category-title">{'deprecated values'}</div>
+            {this.state.showTitle && (
+              <div className="doc-category-title">{'deprecated values'}</div>
+            )}
             {!this.state.showDeprecated ? (
               <button className="show-btn" onClick={this.handleShowDeprecated}>
                 {'Show deprecated values...'}
@@ -156,10 +172,12 @@ export default class TypeDoc extends React.Component {
 
     return (
       <div>
-        <MarkdownContent
-          className="doc-type-description"
-          markdown={type.description || 'No Description'}
-        />
+        {this.state.showMarkdownDescription && (
+          <MarkdownContent
+            className="doc-type-description"
+            markdown={type.description || 'No Description'}
+          />
+        )}
         {type instanceof GraphQLObjectType && typesDef}
         {fieldsDef}
         {deprecatedFieldsDef}
