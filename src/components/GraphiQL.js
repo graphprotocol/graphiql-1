@@ -325,7 +325,7 @@ export class GraphiQL extends React.Component {
                 onRun={this.handleRunQuery}
                 onStop={this.handleStopQuery}
                 operations={this.state.operations}
-                copyToClipboard={this.copyToClipboard}
+                onHandleCopyToClipboard={this.handleCopyToClipboard}
               />
               {toolbar}
             </div>
@@ -416,7 +416,7 @@ export class GraphiQL extends React.Component {
   }
 
   /** Copy to clipboard */
-  copyToClipboard() {
+  handleCopyToClipboard() {
     if (window.getSelection) {
       const range = document.createRange();
       const code = document.querySelector('.CodeMirror-code');
