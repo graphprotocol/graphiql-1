@@ -21,6 +21,7 @@ export interface GraphiQLProps {
   editorTheme?: string,
   onToggleHistory?: () => void,
   ResultsTooltip?: any,
+  defaultTypeOrField: string,
 }
 declare class GraphiQL extends React.Component<GraphiQLProps, any> {}
 export default GraphiQL
