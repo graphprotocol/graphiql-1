@@ -63,6 +63,8 @@ export class GraphiQL extends React.Component {
     editorTheme: PropTypes.string,
     onToggleHistory: PropTypes.func,
     ResultsTooltip: PropTypes.any,
+
+    defaultTypeOrField: PropTypes.string,
   };
 
   constructor(props) {
@@ -407,7 +409,8 @@ export class GraphiQL extends React.Component {
             ref={c => {
               this.docExplorerComponent = c;
             }}
-            schema={this.state.schema}>
+            schema={this.state.schema}
+            defaultTypeOrField={this.props.defaultTypeOrField}>
             <div className="docExplorerHide" onClick={this.handleToggleDocs} />
           </DocExplorer>
         </div>

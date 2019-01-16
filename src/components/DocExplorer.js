@@ -39,11 +39,23 @@ const initialNav = {
 export class DocExplorer extends React.Component {
   static propTypes = {
     schema: PropTypes.instanceOf(GraphQLSchema),
+    defaultTypeOrField: PropTypes.string,
   };
 
-  constructor() {
-    super();
-    this.state = { navStack: [initialNav] };
+  constructor(props) {
+    super(props);
+
+    this.state = { navStack: this.createFreshNavStack(props) };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.schema !== nextProps.schema) {
+      if (nextProps.schema) {
+        this.setState({
+          navStack: this.createFreshNavStack(nextProps),
+        });
+      }
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -137,6 +149,22 @@ export class DocExplorer extends React.Component {
         </div>
       </div>
     );
+  }
+
+  createFreshNavStack(props) {
+    const navStack = [initialNav];
+
+    if (props.defaultTypeOrField && props.schema !== undefined) {
+      const typeOrField = props.schema.getType(props.defaultTypeOrField);
+      if (typeOrField) {
+        navStack.push({
+          name: typeOrField.name,
+          def: typeOrField,
+        });
+      }
+    }
+
+    return navStack;
   }
 
   // Public API
