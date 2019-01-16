@@ -54,7 +54,7 @@
     "@types/react": "^16.7.13"
   },
   "dependencies": {
-    "@types/react": "^16.7.17",
+    "@types/react": "^16.7.20",
     "codemirror": "^5.26.0",
     "codemirror-graphql": "^0.7.1",
     "markdown-it": "^8.4.0"
