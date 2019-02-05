@@ -580,6 +580,33 @@ div.CodeMirror-lint-tooltip > * + * {
   color: #f00;
 }
 
+/* Media queries */
+@media (max-width: 720px) {
+  .graphiql-container .editorWrap .topBarWrap.overlap {
+    width: 300px;
+    z-index: 2;
+    position: relative;
+  }
+}
+
+@media (max-width: 640px) {
+  .graphiql-container .editorWrap .topBar .title {
+    margin-left: 0px;
+  }
+
+  .graphiql-container .editorWrap .topBar .execute-button-wrap {
+    margin: 0 12px;
+  }
+
+  .graphiql-container .editorWrap .topBar .copy-button {
+    margin-left: 6px;
+  }
+
+  .graphiql-container .query-editor .CodeMirror {
+    margin-left: -40px;
+  }
+}
+
 /* Comment */
 .cm-comment {
   color: #999;
