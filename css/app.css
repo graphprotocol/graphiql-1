@@ -61,6 +61,10 @@
   margin-left: 30px;
 }
 
+.graphiql-container .topBar .title > span {
+  pointer-events: none;
+}
+
 .graphiql-container .toolbar {
   overflow-x: visible;
   display: flex;
@@ -363,12 +367,6 @@
   pointer-events: none;
 }
 
-.graphiql-container .execute-button:active {
-  background: linear-gradient(#e6e6e6, #c3c3c3);
-  box-shadow: 0 1px 0 #fff, inset 0 0 2px rgba(0, 0, 0, 0.2),
-    inset 0 0 6px rgba(0, 0, 0, 0.1);
-}
-
 .graphiql-container .execute-button:focus {
   outline: 0;
 }
@@ -604,6 +602,45 @@ div.CodeMirror-lint-tooltip > * + * {
 
   .graphiql-container .query-editor .CodeMirror {
     margin-left: -40px;
+  }
+
+  .graphiql-container .topBarWrap .docExplorerShow {
+    padding: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .graphiql-container .resultWrap {
+    flex: 100%;
+  }
+  .graphiql-container .topBar .title > span {
+    pointer-events: all;
+    font-size: 14px;
+    padding: 6px 14px;
+    background-color: #1b1e2a;
+    border-radius: 14px;
+  }
+
+  .graphiql-container .docExplorerWrap {
+    width: 100%;
+  }
+
+  .graphiql-container .resultWrap {
+    transition: 'all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1)';
+  }
+}
+
+@media (max-width: 400px) {
+  .graphiql-container .editorWrap .topBar .execute-button-wrap {
+    margin: 0 6px;
+  }
+
+  .graphiql-container .editorWrap .topBar .copy-button {
+    display: none;
+  }
+
+  .graphiql-container .topBarWrap .toolbar {
+    display: none;
   }
 }
 
