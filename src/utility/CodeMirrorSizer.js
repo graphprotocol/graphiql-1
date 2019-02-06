@@ -16,11 +16,13 @@ export default class CodeMirrorSizer {
 
   updateSizes(components) {
     components.forEach((component, i) => {
-      const size = component.getClientHeight();
-      if (i <= this.sizes.length && size !== this.sizes[i]) {
-        component.getCodeMirror().setSize();
+      if (component) {
+        const size = component.getClientHeight();
+        if (i <= this.sizes.length && size !== this.sizes[i]) {
+          component.getCodeMirror().setSize();
+        }
+        this.sizes[i] = size;
       }
-      this.sizes[i] = size;
     });
   }
 }

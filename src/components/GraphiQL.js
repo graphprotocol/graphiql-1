@@ -32,6 +32,7 @@ import {
   introspectionQuery,
   introspectionQuerySansSubscriptions,
 } from '../utility/introspectionQueries';
+import classnames from 'classnames';
 
 const DEFAULT_DOC_EXPLORER_WIDTH = 350;
 
@@ -118,8 +119,12 @@ export class GraphiQL extends React.Component {
       variableEditorOpen: Boolean(variables),
       variableEditorHeight:
         Number(this._storage.get('variableEditorHeight')) || 200,
-      docExplorerOpen: this._storage.get('docExplorerOpen') === 'true' || false,
+      docExplorerOpen:
+        document.documentElement.clientWidth < 640
+          ? false
+          : this._storage.get('docExplorerOpen') === 'true' || false,
       historyPaneOpen: this._storage.get('historyPaneOpen') === 'true' || false,
+      resultPaneOpen: !(document.documentElement.clientWidth < 480),
       docExplorerWidth:
         Number(this._storage.get('docExplorerWidth')) ||
         DEFAULT_DOC_EXPLORER_WIDTH,
@@ -140,6 +145,7 @@ export class GraphiQL extends React.Component {
         this.componentWillUnmount(),
       );
     }
+    this.handleResultPaneOpen = this.handleResultPaneOpen.bind(this);
   }
 
   componentDidMount() {
@@ -248,9 +254,9 @@ export class GraphiQL extends React.Component {
   render() {
     const children = React.Children.toArray(this.props.children);
 
-    const logo = find(children, child => child.type === GraphiQL.Logo) || (
-      <GraphiQL.Logo />
-    );
+    // const logo = find(children, child => child.type === GraphiQL.Logo) || (
+    //   <GraphiQL.Logo />
+    // );
 
     const toolbar = find(
       children,
@@ -319,9 +325,15 @@ export class GraphiQL extends React.Component {
           </QueryHistory>
         </div>
         <div className="editorWrap">
-          <div className="topBarWrap">
+          <div
+            className={classnames(
+              'topBarWrap',
+              this.state.docExplorerOpen && 'overlap',
+            )}>
             <div className="topBar">
-              {logo}
+              <div className="title">
+                <span onClick={this.handleResultPaneOpen}>{'Query'}</span>
+              </div>
               <ExecuteButton
                 isRunning={Boolean(this.state.subscription)}
                 onRun={this.handleRunQuery}
@@ -381,22 +393,24 @@ export class GraphiQL extends React.Component {
                 />
               </div>
             </div>
-            <div className="resultWrap">
-              {this.state.isWaitingForResponse && (
-                <div className="spinner-container">
-                  <div className="spinner" />
-                </div>
-              )}
-              <ResultViewer
-                ref={c => {
-                  this.resultComponent = c;
-                }}
-                value={this.state.response}
-                editorTheme={this.props.editorTheme}
-                ResultsTooltip={this.props.ResultsTooltip}
-              />
-              {footer}
-            </div>
+            {this.state.resultPaneOpen && (
+              <div className="resultWrap">
+                {this.state.isWaitingForResponse && (
+                  <div className="spinner-container">
+                    <div className="spinner" />
+                  </div>
+                )}
+                <ResultViewer
+                  ref={c => {
+                    this.resultComponent = c;
+                  }}
+                  value={this.state.response}
+                  editorTheme={this.props.editorTheme}
+                  ResultsTooltip={this.props.ResultsTooltip}
+                />
+                {footer}
+              </div>
+            )}
           </div>
         </div>
         <div className={docExplorerWrapClasses} style={docWrapStyle}>
@@ -416,6 +430,10 @@ export class GraphiQL extends React.Component {
         </div>
       </div>
     );
+  }
+
+  handleResultPaneOpen() {
+    this.setState({ resultPaneOpen: false });
   }
 
   /** Copy to clipboard */
@@ -670,7 +688,7 @@ export class GraphiQL extends React.Component {
         },
       );
 
-      this.setState({ subscription });
+      this.setState({ subscription, resultPaneOpen: true });
     } catch (error) {
       this.setState({
         isWaitingForResponse: false,
