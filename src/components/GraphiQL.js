@@ -119,9 +119,12 @@ export class GraphiQL extends React.Component {
       variableEditorOpen: Boolean(variables),
       variableEditorHeight:
         Number(this._storage.get('variableEditorHeight')) || 200,
-      docExplorerOpen: this._storage.get('docExplorerOpen') === 'true' || false,
+      docExplorerOpen:
+        document.documentElement.clientWidth < 640
+          ? false
+          : this._storage.get('docExplorerOpen') === 'true' || false,
       historyPaneOpen: this._storage.get('historyPaneOpen') === 'true' || false,
-      resultPaneOpen: true,
+      resultPaneOpen: !(document.documentElement.clientWidth < 480),
       docExplorerWidth:
         Number(this._storage.get('docExplorerWidth')) ||
         DEFAULT_DOC_EXPLORER_WIDTH,
@@ -142,7 +145,7 @@ export class GraphiQL extends React.Component {
         this.componentWillUnmount(),
       );
     }
-    this.setResultPaneOpen = this.setResultPaneOpen.bind(this);
+    this.handleResultPaneOpen = this.handleResultPaneOpen.bind(this);
   }
 
   componentDidMount() {
@@ -156,14 +159,6 @@ export class GraphiQL extends React.Component {
     this.codeMirrorSizer = new CodeMirrorSizer();
 
     global.g = this;
-
-    if (document.documentElement.clientWidth < 640) {
-      this.setState({ docExplorerOpen: false });
-    }
-
-    if (document.documentElement.clientWidth < 480) {
-      this.setState({ resultPaneOpen: false });
-    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -243,10 +238,6 @@ export class GraphiQL extends React.Component {
     ]);
   }
 
-  setResultPaneOpen() {
-    this.setState({ resultPaneOpen: false });
-  }
-
   // When the component is about to unmount, store any persistable state, such
   // that when the component is remounted, it will use the last used values.
   componentWillUnmount() {
@@ -263,9 +254,9 @@ export class GraphiQL extends React.Component {
   render() {
     const children = React.Children.toArray(this.props.children);
 
-    const logo = find(children, child => child.type === GraphiQL.Logo) || (
-      <GraphiQL.Logo />
-    );
+    // const logo = find(children, child => child.type === GraphiQL.Logo) || (
+    //   <GraphiQL.Logo />
+    // );
 
     const toolbar = find(
       children,
@@ -341,7 +332,7 @@ export class GraphiQL extends React.Component {
             )}>
             <div className="topBar">
               <div className="title">
-                <span onClick={this.setResultPaneOpen}>{'Query'}</span>
+                <span onClick={this.handleResultPaneOpen}>{'Query'}</span>
               </div>
               <ExecuteButton
                 isRunning={Boolean(this.state.subscription)}
@@ -439,6 +430,10 @@ export class GraphiQL extends React.Component {
         </div>
       </div>
     );
+  }
+
+  handleResultPaneOpen() {
+    this.setState({ resultPaneOpen: false });
   }
 
   /** Copy to clipboard */
