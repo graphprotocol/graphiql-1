@@ -90,6 +90,7 @@
   padding: 6px 14px;
   background-color: #1b1e2a;
   border-radius: 14px;
+  margin-right: 6px;
 }
 
 .graphiql-container .docExplorerShow .btnInner:before {
@@ -123,6 +124,7 @@
   flex-direction: column;
   flex: 1;
   position: relative;
+  padding-left: 8px;
 }
 
 .graphiql-container .docExplorerWrap,
@@ -466,7 +468,6 @@
   font-family: 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace;
   font-size: 13px;
   height: 100%;
-  left: 15px;
   position: absolute;
   top: 0;
   width: 100%;
@@ -619,6 +620,7 @@ div.CodeMirror-lint-tooltip > * + * {
     padding: 6px 14px;
     background-color: #1b1e2a;
     border-radius: 14px;
+    cursor: pointer;
   }
 
   .graphiql-container .docExplorerWrap {
@@ -627,6 +629,11 @@ div.CodeMirror-lint-tooltip > * + * {
 
   .graphiql-container .resultWrap {
     transition: 'all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1)';
+    padding: 0;
+  }
+
+  .graphiql-container .CodeMirror .CodeMirror-line {
+    background-color: #13161f;
   }
 }
 
