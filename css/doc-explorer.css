@@ -1,14 +1,14 @@
 .graphiql-container .doc-explorer {
-  background-color: rgba(11,13,19,0.8);
+  background-color: rgba(11, 13, 19, 0.8);
   border-radius: 0 16px 0 0;
 }
 
 .graphiql-container .doc-explorer-title-bar,
 .graphiql-container .history-title-bar {
-  color: #B4BAC5;	
-  font-family: BrownStd;	
-  font-size: 14px;	
-  font-weight: bold;	
+  color: #b4bac5;
+  font-family: EuclidCircular, Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
   line-height: 17px;
   cursor: default;
   display: flex;
@@ -32,7 +32,7 @@
 }
 
 .graphiql-container .doc-explorer-back {
-  color: #3B5998;
+  color: #3b5998;
   cursor: pointer;
   margin: -7px 0 -6px -8px;
   overflow-x: hidden;
@@ -46,8 +46,8 @@
 }
 
 .graphiql-container .doc-explorer-back:before {
-  border-left: 2px solid #3B5998;
-  border-top: 2px solid #3B5998;
+  border-left: 2px solid #3b5998;
+  border-top: 2px solid #3b5998;
   content: '';
   display: inline-block;
   height: 9px;
@@ -63,7 +63,7 @@
 
 .graphiql-container .doc-explorer-contents,
 .graphiql-container .history-contents {
-  background-color: rgba(11,13,19,0.8);
+  background-color: rgba(11, 13, 19, 0.8);
   bottom: 0;
   left: 0;
   overflow-y: auto;
@@ -77,11 +77,11 @@
   min-width: 300px;
 }
 
-.graphiql-container .doc-type-description p:first-child ,
+.graphiql-container .doc-type-description p:first-child,
 .graphiql-container .doc-type-description blockquote:first-child {
   margin-top: 0;
-  color: #B4BAC5;
-  font-family: BrownStd;
+  color: #b4bac5;
+  font-family: EuclidCircular, Arial, Helvetica, sans-serif;
   font-size: 14px;
   line-height: 21px;
   padding: 30px 30px;
@@ -120,19 +120,19 @@
 
 .graphiql-container .doc-category-item {
   margin: 12px 0;
-  font-family: "Roboto Mono";
+  font-family: 'Roboto Mono';
   font-size: 14px;
   line-height: 19px;
 }
 
-.graphiql-container .doc-category-item>span, 
-.graphiql-container .doc-category-item>span .type-name {
-  color: #BD93F9;
+.graphiql-container .doc-category-item > span,
+.graphiql-container .doc-category-item > span .type-name {
+  color: #bd93f9;
 }
 
 .graphiql-container .keyword {
-  color: #BD93F9;
-  font-family: "Roboto Mono";
+  color: #bd93f9;
+  font-family: 'Roboto Mono';
   font-size: 14px;
   letter-spacing: 1px;
   line-height: 19px;
@@ -140,14 +140,14 @@
 
 .graphiql-container .type-name {
   color: #fbe884;
-  font-family: "Roboto Mono";
+  font-family: 'Roboto Mono';
   font-size: 14px;
   letter-spacing: 1px;
   line-height: 19px;
 }
 
 .graphiql-container .field-name {
-  color: #B4BAC5;
+  color: #b4bac5;
 }
 
 .graphiql-container .field-short-description {
@@ -158,11 +158,11 @@
 }
 
 .graphiql-container .enum-value {
-  color: #0B7FC7;
+  color: #0b7fc7;
 }
 
 .graphiql-container .arg-name {
-  color: #8B2BB9;
+  color: #8b2bb9;
 }
 
 .graphiql-container .arg {
@@ -182,13 +182,13 @@
 }
 
 .graphiql-container .arg-default-value {
-  color: #43A047;
+  color: #43a047;
 }
 
 .graphiql-container .doc-deprecation {
   background: #fffae8;
   box-shadow: inset 0 0 1px #bfb063;
-  color: #867F70;
+  color: #867f70;
   line-height: 16px;
   margin: 8px -8px;
   max-height: 80px;
@@ -273,13 +273,13 @@
 }
 
 .graphiql-container .search-box > input {
-  background-color: rgba(11,13,19,0.8);
+  background-color: rgba(11, 13, 19, 0.8);
   border: none;
   box-sizing: border-box;
-  opacity: 0.5;	
-  color: #FFFFFF;	
-  font-family: BrownStd;	
-  font-size: 16px;	
+  opacity: 0.5;
+  color: #ffffff;
+  font-family: EuclidCircular, Arial, Helvetica, sans-serif;
+  font-size: 16px;
   line-height: 19px;
   outline: none;
   padding: 6px 24px 8px 30px;
