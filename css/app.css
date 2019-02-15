@@ -27,7 +27,7 @@
 
 .graphiql-container .title {
   font-size: 18px;
-  font-family: BrownStd;
+  font-family: EuclidCircular, Arial, Helvetica, sans-serif;
   font-size: 16px;
   color: #b4bac5;
   font-weight: bold;
@@ -73,7 +73,7 @@
 .graphiql-container .docExplorerShow,
 .graphiql-container .historyShow {
   color: #b4bac5;
-  font-family: BrownStd;
+  font-family: EuclidCircular, Arial, Helvetica, sans-serif;
   font-size: 14px;
   font-weight: bold;
   line-height: 17px;
