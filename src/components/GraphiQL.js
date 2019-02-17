@@ -289,7 +289,10 @@ export class GraphiQL extends React.Component {
 
     const docWrapStyle = {
       display: this.state.docExplorerOpen ? 'block' : 'none',
-      width: this.state.docExplorerWidth,
+      width:
+        document.documentElement.clientWidth <= 480
+          ? '100%'
+          : this.state.docExplorerWidth,
       borderRadius: '0 16px 0 0',
       background: 'rgba(11,13,19,0.8)',
     };
@@ -309,6 +312,14 @@ export class GraphiQL extends React.Component {
       display: 'none',
     };
 
+    const editorWrapStyle = {
+      display:
+        this.state.docExplorerOpen &&
+        document.documentElement.clientWidth <= 480
+          ? 'none'
+          : 'flex',
+    };
+
     return (
       <div className="graphiql-container">
         <div className="historyPaneWrap" style={historyPaneStyle}>
@@ -324,7 +335,7 @@ export class GraphiQL extends React.Component {
             </div>
           </QueryHistory>
         </div>
-        <div className="editorWrap">
+        <div className="editorWrap" style={editorWrapStyle}>
           <div
             className={classnames(
               'topBarWrap',
