@@ -288,7 +288,6 @@ export class GraphiQL extends React.Component {
     };
 
     const docWrapStyle = {
-      display: this.state.docExplorerOpen ? 'block' : 'none',
       width:
         document.documentElement.clientWidth <= 480
           ? '100%'
@@ -424,7 +423,12 @@ export class GraphiQL extends React.Component {
             )}
           </div>
         </div>
-        <div className={docExplorerWrapClasses} style={docWrapStyle}>
+        <div
+          className={classnames(
+            docExplorerWrapClasses,
+            this.state.docExplorerOpen ? 'show' : 'hide',
+          )}
+          style={docWrapStyle}>
           <div
             className="docExplorerResizer"
             onDoubleClick={this.handleDocsResetResize}
@@ -436,7 +440,9 @@ export class GraphiQL extends React.Component {
             }}
             schema={this.state.schema}
             defaultTypeOrField={this.props.defaultTypeOrField}>
-            <div className="docExplorerHide" onClick={this.handleToggleDocs} />
+            <div className="docExplorerHide" onClick={this.handleToggleDocs}>
+              Hide Schema
+            </div>
           </DocExplorer>
         </div>
       </div>

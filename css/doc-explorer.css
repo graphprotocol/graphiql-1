@@ -19,6 +19,14 @@
   user-select: none;
 }
 
+.graphiql-container .doc-explorer-title-bar {
+  justify-content: space-between;
+}
+
+.graphiql-container .doc-explorer-title-bar-end {
+  justify-content: flex-end;
+}
+
 .graphiql-container .doc-explorer-title,
 .graphiql-container .history-title {
   flex: 1;
@@ -102,7 +110,7 @@
 
 .graphiql-container .doc-category {
   margin: 20px 0;
-  padding-left: 30px;
+  padding-left: 10px;
 }
 
 .graphiql-container .doc-category-title {
@@ -123,6 +131,7 @@
   font-family: 'Roboto Mono';
   font-size: 14px;
   line-height: 19px;
+  color: #b4bac5;
 }
 
 .graphiql-container .doc-category-item > span,

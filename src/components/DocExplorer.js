@@ -15,6 +15,8 @@ import SearchBox from './DocExplorer/SearchBox';
 import SearchResults from './DocExplorer/SearchResults';
 import TypeDoc from './DocExplorer/TypeDoc';
 
+import classnames from 'classnames';
+
 const initialNav = {
   name: 'Schema',
   title: 'Hide schema',
@@ -124,7 +126,11 @@ export class DocExplorer extends React.Component {
 
     return (
       <div className="doc-explorer" key={navItem.name}>
-        <div className="doc-explorer-title-bar">
+        <div
+          className={classnames(
+            'doc-explorer-title-bar',
+            !prevName && 'doc-explorer-title-bar-end',
+          )}>
           {prevName && (
             <div
               className="doc-explorer-back"
@@ -132,9 +138,6 @@ export class DocExplorer extends React.Component {
               {prevName}
             </div>
           )}
-          <div className="doc-explorer-title">
-            {navItem.title || navItem.name}
-          </div>
           <div className="doc-explorer-rhs">{this.props.children}</div>
         </div>
         <div className="doc-explorer-contents">
