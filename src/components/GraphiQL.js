@@ -441,7 +441,7 @@ export class GraphiQL extends React.Component {
             schema={this.state.schema}
             defaultTypeOrField={this.props.defaultTypeOrField}>
             <div className="docExplorerHide" onClick={this.handleToggleDocs}>
-              Hide Schema
+              {'Hide Schema'}
             </div>
           </DocExplorer>
         </div>
