@@ -192,6 +192,22 @@ export default class TypeDoc extends React.Component {
 }
 
 function Field({ type, field, onClickType, onClickField }) {
+  const filteredFields = [
+    'skip',
+    'first',
+    'last',
+    'after',
+    'before',
+    'orderBy',
+    'orderDirection',
+    'where',
+  ];
+  const filteredArgs =
+    field.args &&
+    field.args.length > 0 &&
+    field.args.filter(arg => {
+      return filteredFields.indexOf(arg.name) === -1;
+    });
   return (
     <div className="doc-category-item">
       <a
@@ -199,11 +215,11 @@ function Field({ type, field, onClickType, onClickField }) {
         onClick={event => onClickField(field, type, event)}>
         {field.name}
       </a>
-      {field.args &&
-        field.args.length > 0 && [
+      {filteredArgs &&
+        filteredArgs.length > 0 && [
           '(',
           <span key="args">
-            {field.args.map(arg => (
+            {filteredArgs.map(arg => (
               <Argument key={arg.name} arg={arg} onClickType={onClickType} />
             ))}
           </span>,
