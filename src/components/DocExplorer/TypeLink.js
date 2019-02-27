@@ -7,7 +7,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { GraphQLList, GraphQLNonNull, GraphQLObjectType } from 'graphql';
+import { GraphQLList, GraphQLNonNull } from 'graphql';
 
 export default class TypeLink extends React.Component {
   static propTypes = {

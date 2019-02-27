@@ -15,7 +15,6 @@ import {
   GraphQLEnumType,
 } from 'graphql';
 
-import Argument from './Argument';
 import MarkdownContent from './MarkdownContent';
 import TypeLink from './TypeLink';
 import DefaultValue from './DefaultValue';
@@ -198,22 +197,6 @@ export default class TypeDoc extends React.Component {
 }
 
 function Field({ type, field, onClickType, onClickField }) {
-  const filteredFields = [
-    'skip',
-    'first',
-    'last',
-    'after',
-    'before',
-    'orderBy',
-    'orderDirection',
-    'where',
-  ];
-  const filteredArgs =
-    field.args &&
-    field.args.length > 0 &&
-    field.args.filter(arg => {
-      return filteredFields.indexOf(arg.name) === -1;
-    });
   return (
     <div className="doc-category-item">
       {type.name !== 'Query' && type.name !== 'Subscription' && (
@@ -223,7 +206,7 @@ function Field({ type, field, onClickType, onClickField }) {
             onClick={event => onClickField(field, type, event)}>
             {field.name}
           </a>
-          :&nbsp;
+          {':'}&nbsp;
         </span>
       )}
       <TypeLink type={field.type} onClick={onClickType} fieldName={type.name} />
