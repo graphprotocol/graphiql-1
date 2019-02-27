@@ -80,6 +80,11 @@ export default class TypeDoc extends React.Component {
       );
     }
 
+    let typeTitle;
+    if (type.name !== 'Query' && type.name !== 'Subscription') {
+      typeTitle = <div className="doc-category-title">{type.name}</div>;
+    }
+
     // InputObject and Object
     let fieldsDef;
     let deprecatedFieldsDef;
@@ -178,6 +183,7 @@ export default class TypeDoc extends React.Component {
             markdown={type.description || 'No Description'}
           />
         )}
+        {typeTitle}
         {type instanceof GraphQLObjectType && typesDef}
         {fieldsDef}
         {deprecatedFieldsDef}
@@ -210,23 +216,17 @@ function Field({ type, field, onClickType, onClickField }) {
     });
   return (
     <div className="doc-category-item">
-      <a
-        className="field-name"
-        onClick={event => onClickField(field, type, event)}>
-        {field.name}
-      </a>
-      {filteredArgs &&
-        filteredArgs.length > 0 && [
-          '(',
-          <span key="args">
-            {filteredArgs.map(arg => (
-              <Argument key={arg.name} arg={arg} onClickType={onClickType} />
-            ))}
-          </span>,
-          ')',
-        ]}
-      {': '}
-      <TypeLink type={field.type} onClick={onClickType} />
+      {type.name !== 'Query' && type.name !== 'Subscription' && (
+        <span>
+          <a
+            className="field-name"
+            onClick={event => onClickField(field, type, event)}>
+            {field.name}
+          </a>
+          :&nbsp;
+        </span>
+      )}
+      <TypeLink type={field.type} onClick={onClickType} fieldName={type.name} />
       <DefaultValue field={field} />
       {field.description && (
         <MarkdownContent
