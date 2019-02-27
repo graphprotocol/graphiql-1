@@ -15,7 +15,6 @@ import {
   GraphQLEnumType,
 } from 'graphql';
 
-import Argument from './Argument';
 import MarkdownContent from './MarkdownContent';
 import TypeLink from './TypeLink';
 import DefaultValue from './DefaultValue';
@@ -78,6 +77,11 @@ export default class TypeDoc extends React.Component {
           ))}
         </div>
       );
+    }
+
+    let typeTitle;
+    if (type.name !== 'Query' && type.name !== 'Subscription') {
+      typeTitle = <div className="doc-category-title">{type.name}</div>;
     }
 
     // InputObject and Object
@@ -178,6 +182,7 @@ export default class TypeDoc extends React.Component {
             markdown={type.description || 'No Description'}
           />
         )}
+        {typeTitle}
         {type instanceof GraphQLObjectType && typesDef}
         {fieldsDef}
         {deprecatedFieldsDef}
@@ -192,41 +197,19 @@ export default class TypeDoc extends React.Component {
 }
 
 function Field({ type, field, onClickType, onClickField }) {
-  const filteredFields = [
-    'skip',
-    'first',
-    'last',
-    'after',
-    'before',
-    'orderBy',
-    'orderDirection',
-    'where',
-  ];
-  const filteredArgs =
-    field.args &&
-    field.args.length > 0 &&
-    field.args.filter(arg => {
-      return filteredFields.indexOf(arg.name) === -1;
-    });
   return (
     <div className="doc-category-item">
-      <a
-        className="field-name"
-        onClick={event => onClickField(field, type, event)}>
-        {field.name}
-      </a>
-      {filteredArgs &&
-        filteredArgs.length > 0 && [
-          '(',
-          <span key="args">
-            {filteredArgs.map(arg => (
-              <Argument key={arg.name} arg={arg} onClickType={onClickType} />
-            ))}
-          </span>,
-          ')',
-        ]}
-      {': '}
-      <TypeLink type={field.type} onClick={onClickType} />
+      {type.name !== 'Query' && type.name !== 'Subscription' && (
+        <span>
+          <a
+            className="field-name"
+            onClick={event => onClickField(field, type, event)}>
+            {field.name}
+          </a>
+          {':'}&nbsp;
+        </span>
+      )}
+      <TypeLink type={field.type} onClick={onClickType} fieldName={type.name} />
       <DefaultValue field={field} />
       {field.description && (
         <MarkdownContent
