@@ -20,6 +20,7 @@ import { VariableEditor } from './VariableEditor';
 import { ResultViewer } from './ResultViewer';
 import { DocExplorer } from './DocExplorer';
 import { QueryHistory } from './QueryHistory';
+import { SimpleMenu } from './SimpleMenu';
 import CodeMirrorSizer from '../utility/CodeMirrorSizer';
 import StorageAPI from '../utility/StorageAPI';
 import getQueryFacts from '../utility/getQueryFacts';
@@ -318,6 +319,10 @@ export class GraphiQL extends React.Component {
           ? 'none'
           : 'flex',
     };
+    const options = [
+      { id: '1', name: 'Query 1', default: true },
+      { id: '2', name: 'Query 2' },
+    ];
 
     return (
       <div className="graphiql-container">
@@ -335,6 +340,7 @@ export class GraphiQL extends React.Component {
           </QueryHistory>
         </div>
         <div className="editorWrap" style={editorWrapStyle}>
+          <SimpleMenu options={options} />
           <div
             className={classnames(
               'topBarWrap',

@@ -1,0 +1,80 @@
+.graphiql-container .simple-menu {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: rgba(216, 216, 216, 0.04);
+  width: 350px;
+  margin: 32px;
+  padding: 16px;
+  height: 50px;
+  box-sizing: border-box;
+}
+
+.graphiql-container .simple-menu img {
+  height: 12px;
+}
+
+.graphiql-container .simple-menu .form-control {
+  width: 100%;
+}
+
+.graphiql-container .simple-menu .menu-input {
+  font-family: EuclidCircular, Arial, Helvetica, sans-serif;
+  font-size: 0.875rem;
+  letter-spacing: 1px;
+  line-height: 0.5rem;
+  color: #ffffff;
+}
+
+.graphiql-container .simple-menu .menu-input::before,
+.graphiql-container .simple-menu .menu-input::after {
+  content: none;
+}
+
+.graphiql-container .simple-menu .menu-input:focus {
+  outline: none;
+}
+
+.graphiql-container .simple-menu .menu-input div:focus {
+  background: transparent;
+}
+
+.graphiql-container .simple-menu .menu-icon {
+  position: absolute;
+  right: 0;
+  top: 1px;
+  width: 18px;
+  height: 16px;
+  pointer-events: none;
+}
+
+.graphiql-container .simple-menu .menu {
+  padding: 16px 0;
+}
+
+.menu-item {
+  position: relative;
+}
+
+.menu-item .header {
+  font-weight: 600;
+  opacity: 0.7;
+}
+
+.menu-item.selected .header {
+  opacity: 1;
+}
+
+.menu-item.selected img {
+  position: absolute;
+  right: 0;
+}
+
+.menu-item .default-tag {
+  background-color: rgba(216, 216, 216, 0.1);
+  border-radius: 4px;
+  padding: 2px 4px;
+  margin-left: 8px;
+  color: #ffffff;
+  font-family: EuclidCircular, Arial, Helvetica, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 400;
+}
