@@ -1,5 +1,12 @@
 import * as React from 'react'
 
+type SavedQuery = {
+  id: string
+  name: string
+  query: string
+  default: boolean
+}
+
 export interface GraphiQLProps {
   fetcher?: (graphQLParams: any) => Promise<any>
   schema?: any
@@ -22,6 +29,7 @@ export interface GraphiQLProps {
   onToggleHistory?: () => void
   ResultsTooltip?: any
   defaultTypeOrField: string
+  savedQueries: Array<SavedQuery>
 }
 declare class GraphiQL extends React.Component<GraphiQLProps, any> {}
 export default GraphiQL

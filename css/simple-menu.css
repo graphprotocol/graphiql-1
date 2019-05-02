@@ -3,8 +3,22 @@
   background-color: rgba(216, 216, 216, 0.04);
   width: 350px;
   margin: 32px;
-  padding: 16px;
   height: 50px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.graphiql-container .simple-menu > div:first-child {
+  position: relative;
+  height: 100%;
+}
+
+.graphiql-container .simple-menu .vertical-line {
+  height: 32px;
+  width: 1px;
+  border: 1px solid #ffffff;
+  opacity: 0.08;
+  margin: 8px 0;
   box-sizing: border-box;
 }
 
@@ -12,11 +26,12 @@
   height: 12px;
 }
 
-.graphiql-container .simple-menu .form-control {
-  width: 100%;
+.graphiql-container .simple-menu .menu-input {
+  width: 230px;
+  padding-left: 12px;
 }
 
-.graphiql-container .simple-menu .menu-input {
+.graphiql-container .simple-menu .menu-input input {
   font-family: EuclidCircular, Arial, Helvetica, sans-serif;
   font-size: 0.875rem;
   letter-spacing: 1px;
@@ -24,34 +39,42 @@
   color: #ffffff;
 }
 
+.graphiql-container .simple-menu .menu-input:focus {
+  outline: none;
+}
+
 .graphiql-container .simple-menu .menu-input::before,
 .graphiql-container .simple-menu .menu-input::after {
   content: none;
 }
 
-.graphiql-container .simple-menu .menu-input:focus {
-  outline: none;
-}
-
-.graphiql-container .simple-menu .menu-input div:focus {
-  background: transparent;
+.graphiql-container .simple-menu .menu-icons {
+  display: flex;
 }
 
 .graphiql-container .simple-menu .menu-icon {
-  position: absolute;
-  right: 0;
-  top: 1px;
+  padding: 16px;
   width: 18px;
   height: 16px;
-  pointer-events: none;
+  cursor: pointer;
 }
 
-.graphiql-container .simple-menu .menu {
-  padding: 16px 0;
+.graphiql-container .simple-menu .menu-options {
+  position: absolute;
+  z-index: 2;
+  background-color: rgba(30, 26, 48, 0.94);
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 4px 0;
+  top: 0;
+  left: -1px;
+  width: 350px;
 }
 
 .menu-item {
   position: relative;
+  padding: 12px;
+  cursor: pointer;
 }
 
 .menu-item .header {
@@ -65,14 +88,14 @@
 
 .menu-item.selected img {
   position: absolute;
-  right: 0;
+  right: 10px;
 }
 
 .menu-item .default-tag {
   background-color: rgba(216, 216, 216, 0.1);
   border-radius: 4px;
-  padding: 2px 4px;
-  margin-left: 8px;
+  padding: 2px 6px;
+  margin-left: 12px;
   color: #ffffff;
   font-family: EuclidCircular, Arial, Helvetica, sans-serif;
   font-size: 0.75rem;

@@ -1,12 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import {
-  FormControl,
-  Select as Selector,
-  MenuItem as MuiMenuItem,
-  Input,
-} from '@material-ui/core';
-import MenuItem from './MenuItem';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { MenuItem as MuiMenuItem, Input, Grid } from '@material-ui/core'
+import MenuItem from './MenuItem'
 
 /**
  * Dropdown menu that's in the Toolbar
@@ -16,25 +11,38 @@ import MenuItem from './MenuItem';
 export class SimpleMenu extends React.Component {
   static propTypes = {
     value: PropTypes.string,
-    options: PropTypes.arrayOf(
+    queries: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.string,
         name: PropTypes.string,
-      }),
+        query: PropTypes.string,
+        default: PropTypes.bool,
+      })
     ),
-  };
+  }
 
   constructor(props) {
-    super(props);
+    super(props)
+    const initialQuery = this.props.queries.length > 0 ? this.props.queries[0].name : ''
     this.state = {
-      selectedValue: this.props.options[0].name,
-    };
+      selectedValue: initialQuery,
+      queryName: initialQuery,
+      open: false,
+    }
   }
 
   handleChange = e => {
-    e.preventDefault();
-    this.setState({ selectedValue: e.target.value });
-  };
+    console.log('EEEEE: ', e.target)
+    this.setState({ queryName: e.target.value })
+  }
+
+  handleMenuItemClick = (e, header) => {
+    this.setState({ selectedValue: header, queryName: header, open: false })
+  }
+
+  handleOpenMenu = e => {
+    this.setState({ open: true })
+  }
 
   render() {
     const MenuProps = {
@@ -49,48 +57,45 @@ export class SimpleMenu extends React.Component {
           border: '1px solid rgba(255,255,255,0.08)',
         },
       },
-    };
-    const { options } = this.props;
+    }
+    const { queries } = this.props
+    console.log('GRAPHQL: ', queries)
 
     return (
-      <form className="simple-menu" autoComplete="off">
-        <FormControl className="form-control">
-          <Selector
-            value={this.state.selectedValue}
+      <Grid className="simple-menu" autoComplete="off">
+        <Grid container justify="space-between">
+          <Input
+            name="query"
+            value={this.state.queryName}
+            className="menu-input"
             onChange={this.handleChange}
-            input={
-              <Input
-                name={options.name}
-                id={options.id}
-                value={this.state.selectedValue}
-                className="menu-input"
-              />
-            }
-            renderValue={value => value}
-            IconComponent={() => (
-              <img
-                className="menu-icon"
-                src={`${process.env.PUBLIC_URL}/images/selector-icon.svg`}
-              />
-            )}
-            MenuProps={MenuProps}>
-            {options &&
-              options.map(option => (
-                <MuiMenuItem
-                  value={option.name}
-                  key={option.id}
-                  className="menu">
-                  <MenuItem
-                    header={option.name}
-                    className="item"
-                    selected={this.state.selectedValue === option.name}
-                    isDefault={option.default}
-                  />
-                </MuiMenuItem>
-              ))}
-          </Selector>
-        </FormControl>
-      </form>
-    );
+          />
+          <Grid className="menu-icons">
+            <div className="vertical-line" />
+            <img
+              className="menu-icon"
+              src={`${process.env.PUBLIC_URL}/images/selector-icon.svg`}
+              onClick={this.handleOpenMenu}
+            />
+          </Grid>
+        </Grid>
+
+        {this.state.open && (
+          <Grid className="menu-options">
+            {queries.map((option, index) => (
+              <Grid key={index}>
+                <MenuItem
+                  header={option.name}
+                  className="item"
+                  selected={this.state.selectedValue === option.name}
+                  isDefault={option.default}
+                  onClick={this.handleMenuItemClick}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        )}
+      </Grid>
+    )
   }
 }
