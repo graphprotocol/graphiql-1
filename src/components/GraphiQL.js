@@ -20,7 +20,7 @@ import { VariableEditor } from './VariableEditor'
 import { ResultViewer } from './ResultViewer'
 import { DocExplorer } from './DocExplorer'
 import { QueryHistory } from './QueryHistory'
-import { SimpleMenu } from './SimpleMenu'
+import { SavedQueriesToolbar } from './SavedQueriesToolbar'
 import CodeMirrorSizer from '../utility/CodeMirrorSizer'
 import StorageAPI from '../utility/StorageAPI'
 import getQueryFacts from '../utility/getQueryFacts'
@@ -67,6 +67,7 @@ export class GraphiQL extends React.Component {
     ResultsTooltip: PropTypes.any,
     defaultTypeOrField: PropTypes.string,
     savedQueries: PropTypes.any,
+    handleQueryUpdate: PropTypes.func,
   }
 
   constructor(props) {
@@ -84,10 +85,10 @@ export class GraphiQL extends React.Component {
     const query =
       props.query !== undefined
         ? props.query
-        : this._storage.get('query') !== null
-        ? this._storage.get('query')
         : props.defaultQuery !== undefined
         ? props.defaultQuery
+        : this._storage.get('query') !== null
+        ? this._storage.get('query')
         : defaultQuery
 
     // Get the initial query facts.
@@ -107,6 +108,7 @@ export class GraphiQL extends React.Component {
             queryFacts && queryFacts.operations
           )
 
+    this.selectedQuery = query
     // Initialize state
     this.state = {
       schema: props.schema,
@@ -141,6 +143,9 @@ export class GraphiQL extends React.Component {
       window.addEventListener('beforeunload', () => this.componentWillUnmount())
     }
     this.handleResultPaneOpen = this.handleResultPaneOpen.bind(this)
+    this.handleSelectedQuery = this.handleSelectedQuery.bind(this)
+    this.handleCancel = this.handleCancel.bind(this)
+    this.handleQueryUpdate = this.handleQueryUpdate.bind(this)
   }
 
   componentDidMount() {
@@ -324,7 +329,12 @@ export class GraphiQL extends React.Component {
           </QueryHistory>
         </div>
         <div className="editorWrap" style={editorWrapStyle}>
-          <SimpleMenu queries={this.props.savedQueries} />
+          <SavedQueriesToolbar
+            queries={this.props.savedQueries}
+            handleSelectedQuery={this.handleSelectedQuery}
+            handleCancel={this.handleCancel}
+            handleQueryUpdate={this.handleQueryUpdate}
+          />
           <div
             className={classnames('topBarWrap', this.state.docExplorerOpen && 'overlap')}
           >
@@ -439,6 +449,20 @@ export class GraphiQL extends React.Component {
         </div>
       </div>
     )
+  }
+
+  handleSelectedQuery(query) {
+    this.selectedQuery = query
+    this.handleEditQuery(query)
+  }
+
+  handleCancel() {
+    this.handleEditQuery(this.selectedQuery)
+  }
+
+  handleQueryUpdate(args) {
+    console.log('THIS STATE QUERY: ', this.state.query)
+    this.props.handleQueryUpdate({ ...args, query: this.state.query })
   }
 
   handleResultPaneOpen() {

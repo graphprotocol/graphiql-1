@@ -101,3 +101,14 @@
   font-size: 0.75rem;
   font-weight: 400;
 }
+
+.saved-queries-toolbar .query-actions {
+  width: 200px;
+}
+
+.saved-queries-toolbar .query-actions .action {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+  cursor: pointer;
+}

@@ -30,6 +30,7 @@ export interface GraphiQLProps {
   ResultsTooltip?: any
   defaultTypeOrField: string
   savedQueries: Array<SavedQuery>
+  handleQueryUpdate: (query: SavedQuery) => void
 }
 declare class GraphiQL extends React.Component<GraphiQLProps, any> {}
 export default GraphiQL
