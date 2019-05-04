@@ -50,6 +50,7 @@ export class SimpleMenu extends React.Component {
             value={queryName}
             className="menu-input"
             onChange={handleChange}
+            onClick={handleChange}
           />
           <Grid className="menu-icons">
             <div className="vertical-line" />

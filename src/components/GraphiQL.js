@@ -68,6 +68,7 @@ export class GraphiQL extends React.Component {
     defaultTypeOrField: PropTypes.string,
     savedQueries: PropTypes.any,
     handleQueryUpdate: PropTypes.func,
+    handleCreateQuery: PropTypes.func,
   }
 
   constructor(props) {
@@ -132,6 +133,7 @@ export class GraphiQL extends React.Component {
       showHistoryButton: false,
       showPrettifyButton: false,
       showQueryVariables: false,
+      queries: props.savedQueries,
       ...queryFacts,
     }
 
@@ -225,7 +227,10 @@ export class GraphiQL extends React.Component {
     )
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
+    if (prevProps.savedQueries !== this.props.savedQueries) {
+      this.setState({ queries: this.props.savedQueries })
+    }
     // If this update caused DOM nodes to have changed sizes, update the
     // corresponding CodeMirror instance sizes to match.
     this.codeMirrorSizer.updateSizes([
@@ -330,10 +335,11 @@ export class GraphiQL extends React.Component {
         </div>
         <div className="editorWrap" style={editorWrapStyle}>
           <SavedQueriesToolbar
-            queries={this.props.savedQueries}
+            queries={this.state.queries}
             handleSelectedQuery={this.handleSelectedQuery}
             handleCancel={this.handleCancel}
             handleQueryUpdate={this.handleQueryUpdate}
+            handleCreateQuery={this.handleCreateQuery}
           />
           <div
             className={classnames('topBarWrap', this.state.docExplorerOpen && 'overlap')}
@@ -461,8 +467,11 @@ export class GraphiQL extends React.Component {
   }
 
   handleQueryUpdate(args) {
-    console.log('THIS STATE QUERY: ', this.state.query)
     this.props.handleQueryUpdate({ ...args, query: this.state.query })
+  }
+
+  handleCreateQuery = args => {
+    this.props.handleCreateQuery({ ...args, query: this.state.query })
   }
 
   handleResultPaneOpen() {

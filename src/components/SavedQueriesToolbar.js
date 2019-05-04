@@ -30,6 +30,7 @@ export class SavedQueriesToolbar extends React.Component {
       queryName: this.defaultQuery(props.queries).name,
       selectedQuery: this.defaultQuery(props.queries),
       queries: props.queries,
+      showActions: false,
     }
     this.queryName = this.defaultQuery(props.queries).name
   }
@@ -38,9 +39,12 @@ export class SavedQueriesToolbar extends React.Component {
     if (nextProps.cancel === true) {
       this.setState({ queryName: this.queryName })
     }
+    if (nextProps.queries != this.props.queries) {
+      this.setState({ queries: nextProps.queries })
+    }
   }
 
-  cancel = async () => {
+  handleCancel = async () => {
     await this.props.handleCancel()
     this.setState({ queryName: this.queryName })
   }
@@ -52,6 +56,9 @@ export class SavedQueriesToolbar extends React.Component {
   defaultQuery = queries => {
     if (queries && queries.length > 0) {
       const defaultQuery = queries.find(query => query.default === true)
+      if (!defaultQuery) {
+        return queries[0]
+      }
       return defaultQuery
     }
   }
@@ -62,15 +69,24 @@ export class SavedQueriesToolbar extends React.Component {
   }
 
   handleChange = e => {
-    this.setState({ queryName: e.target.value })
+    this.setState({ queryName: e.target.value, showActions: true, showSuccess: false })
   }
 
-  handleUpdate = () => {
-    this.props.handleQueryUpdate({
+  handleUpdate = async () => {
+    await this.props.handleQueryUpdate({
       id: this.selectedQuery(this.state.selectedValue).id,
       name: this.state.queryName,
       default: true,
     })
+    this.setState({ showActions: false, showSuccess: true })
+  }
+
+  handleCreate = async () => {
+    await this.props.handleCreateQuery({
+      name: this.state.queryName,
+      default: false,
+    })
+    this.setState({ showActions: false, showSuccess: true })
   }
 
   handleMenuItemClick = (e, header) => {
@@ -84,7 +100,7 @@ export class SavedQueriesToolbar extends React.Component {
     })
   }
   render() {
-    const { queries, handleCreate } = this.props
+    const { queries } = this.props
 
     return (
       <Grid container className="saved-queries-toolbar">
@@ -98,23 +114,34 @@ export class SavedQueriesToolbar extends React.Component {
           queryName={this.state.queryName}
           handleChange={this.handleChange}
         />
-        <Grid
-          className="query-actions"
-          container
-          alignItems="center"
-          wrap="nowrap"
-          justify="space-around"
-        >
-          <Typography className="action" onClick={this.handleUpdate}>
-            Save
-          </Typography>
-          <Typography className="action" onClick={handleCreate}>
-            Save as new
-          </Typography>
-          <Typography className="action" onClick={this.cancel}>
-            Cancel
-          </Typography>
-        </Grid>
+        {this.state.showActions && (
+          <Grid
+            className="query-actions"
+            container
+            alignItems="center"
+            wrap="nowrap"
+            justify="space-around"
+          >
+            <Typography className="action" onClick={this.handleUpdate}>
+              Save
+            </Typography>
+            <Typography className="action" onClick={this.handleCreate}>
+              Save as new
+            </Typography>
+            <Typography className="action" onClick={this.handleCancel}>
+              Cancel
+            </Typography>
+          </Grid>
+        )}
+        {this.state.showSuccess && (
+          <Grid container alignItems="center" wrap="nowrap" className="show-success">
+            <img
+              className="check-icon"
+              src={`${process.env.PUBLIC_URL}/images/checkbox-icon.svg`}
+            />
+            <Typography className="success-message">Query saved</Typography>
+          </Grid>
+        )}
       </Grid>
     )
   }

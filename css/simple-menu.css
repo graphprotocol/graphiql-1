@@ -61,7 +61,7 @@
 
 .graphiql-container .simple-menu .menu-options {
   position: absolute;
-  z-index: 2;
+  z-index: 7;
   background-color: rgba(30, 26, 48, 0.94);
   border-radius: 4px;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -69,6 +69,8 @@
   top: 0;
   left: -1px;
   width: 350px;
+  max-height: 300px;
+  overflow: scroll;
 }
 
 .menu-item {
@@ -111,4 +113,20 @@
   font-size: 14px;
   line-height: 16px;
   cursor: pointer;
+}
+
+.saved-queries-toolbar .show-success {
+  width: 180px;
+}
+
+.saved-queries-toolbar .success-message {
+  color: #4bca81;
+  font-size: 16px;
+  font-family: EuclidCircular, Arial, Helvetica, sans-serif;
+  line-height: 20px;
+}
+
+.saved-queries-toolbar .check-icon {
+  width: 18px;
+  margin-right: 12px;
 }
