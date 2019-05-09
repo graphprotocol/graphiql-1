@@ -32,6 +32,7 @@ export interface GraphiQLProps {
   savedQueries: Array<SavedQuery>
   handleQueryUpdate: (query: SavedQuery) => void
   handleCreateQuery: (query: any) => void
+  handleSelectedAction: (id: number, value: string) => void
 }
 declare class GraphiQL extends React.Component<GraphiQLProps, any> {}
 export default GraphiQL

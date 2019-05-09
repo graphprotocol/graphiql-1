@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { MenuItem as MuiMenuItem, Input, Grid } from '@material-ui/core'
+import { Input, Grid } from '@material-ui/core'
 import MenuItem from './MenuItem'
 
 /**
@@ -8,7 +8,7 @@ import MenuItem from './MenuItem'
  * and contains Saved queries
  *
  */
-export class SimpleMenu extends React.Component {
+export class Selector extends React.Component {
   static propTypes = {
     queries: PropTypes.arrayOf(
       PropTypes.shape({
@@ -43,7 +43,7 @@ export class SimpleMenu extends React.Component {
     } = this.props
 
     return (
-      <Grid className="simple-menu" autoComplete="off">
+      <Grid className="selector" autoComplete="off">
         <Grid container justify="space-between">
           <Input
             name="query"

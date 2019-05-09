@@ -1,4 +1,4 @@
-.graphiql-container .simple-menu {
+.graphiql-container .selector {
   border: 1px solid rgba(255, 255, 255, 0.08);
   background-color: rgba(216, 216, 216, 0.04);
   width: 350px;
@@ -8,12 +8,12 @@
   position: relative;
 }
 
-.graphiql-container .simple-menu > div:first-child {
+.graphiql-container .selector > div:first-child {
   position: relative;
   height: 100%;
 }
 
-.graphiql-container .simple-menu .vertical-line {
+.graphiql-container .selector .vertical-line {
   height: 32px;
   width: 1px;
   border: 1px solid #ffffff;
@@ -22,16 +22,16 @@
   box-sizing: border-box;
 }
 
-.graphiql-container .simple-menu img {
+.graphiql-container .selector img {
   height: 12px;
 }
 
-.graphiql-container .simple-menu .menu-input {
+.graphiql-container .selector .menu-input {
   width: 230px;
   padding-left: 12px;
 }
 
-.graphiql-container .simple-menu .menu-input input {
+.graphiql-container .selector .menu-input input {
   font-family: EuclidCircular, Arial, Helvetica, sans-serif;
   font-size: 0.875rem;
   letter-spacing: 1px;
@@ -39,27 +39,27 @@
   color: #ffffff;
 }
 
-.graphiql-container .simple-menu .menu-input:focus {
+.graphiql-container .selector .menu-input:focus {
   outline: none;
 }
 
-.graphiql-container .simple-menu .menu-input::before,
-.graphiql-container .simple-menu .menu-input::after {
+.graphiql-container .selector .menu-input::before,
+.graphiql-container .selector .menu-input::after {
   content: none;
 }
 
-.graphiql-container .simple-menu .menu-icons {
+.graphiql-container .selector .menu-icons {
   display: flex;
 }
 
-.graphiql-container .simple-menu .menu-icon {
+.graphiql-container .selector .menu-icon {
   padding: 16px;
   width: 18px;
   height: 16px;
   cursor: pointer;
 }
 
-.graphiql-container .simple-menu .menu-options {
+.graphiql-container .selector .menu-options {
   position: absolute;
   z-index: 7;
   background-color: rgba(30, 26, 48, 0.94);
@@ -126,7 +126,85 @@
   line-height: 20px;
 }
 
+.saved-queries-toolbar .error-message {
+  color: #ed4a6d;
+}
+
+.saved-queries-toolbar .error-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.saved-queries-toolbar .error-icon {
+  width: 14px;
+  height: 14px;
+  margin-right: 3px;
+}
+
 .saved-queries-toolbar .check-icon {
+  width: 18px;
+  margin-right: 12px;
+}
+
+.saved-queries-toolbar .flex {
+  display: flex;
+}
+.actions-menu {
+  position: relative;
+}
+
+.actions-menu .actions-menu-options {
+  position: absolute;
+  width: 285px;
+  box-sizing: border-box;
+  z-index: 10;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  background-color: rgba(30, 26, 48, 0.94);
+  left: -256px;
+  top: -8px;
+}
+
+.actions-menu .dots-icon {
+  padding: 8px;
+  cursor: pointer;
+  z-index: 12;
+  position: relative;
+}
+
+.actions-menu .diamond-icon {
+  padding-right: 16px;
+}
+
+.actions-menu .actions-menu-options .header {
+  font-weight: 400;
+  opacity: 1;
+  line-height: 20px;
+}
+
+.actions-menu .actions-menu-options .option-icon {
+  display: block;
+  box-sizing: border-box;
+  height: 12px;
+  width: 12px;
+  border: 1px solid #ffffff;
+  transform: rotate(315deg);
+  margin-right: 16px;
+}
+
+.actions-menu .actions-menu-options .trash-icon {
+  height: 16px;
+  width: 13px;
+  margin-right: 16px;
+}
+
+.actions-menu .actions-menu-options .new-query {
+  color: #4bca81;
+}
+
+.actions-menu .actions-menu-options .add-icon {
+  height: 18px;
   width: 18px;
   margin-right: 12px;
 }

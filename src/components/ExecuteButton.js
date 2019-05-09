@@ -5,8 +5,8 @@
  *  LICENSE file in the root directory of this source tree.
  */
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
 /**
  * ExecuteButton
@@ -21,25 +21,25 @@ export class ExecuteButton extends React.Component {
     isRunning: PropTypes.bool,
     operations: PropTypes.array,
     onHandleCopyToClipboard: PropTypes.func,
-  };
+  }
 
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       optionsOpen: false,
       highlight: null,
-    };
+    }
   }
 
   render() {
-    const operations = this.props.operations;
-    const optionsOpen = this.state.optionsOpen;
-    const hasOptions = operations && operations.length > 1;
+    const operations = this.props.operations
+    const optionsOpen = this.state.optionsOpen
+    const hasOptions = operations && operations.length > 1
 
-    let options = null;
+    let options = null
     if (hasOptions && optionsOpen) {
-      const highlight = this.state.highlight;
+      const highlight = this.state.highlight
       options = (
         <ul className="execute-options">
           {operations.map(operation => (
@@ -48,33 +48,34 @@ export class ExecuteButton extends React.Component {
               className={operation === highlight ? 'selected' : undefined}
               onMouseOver={() => this.setState({ highlight: operation })}
               onMouseOut={() => this.setState({ highlight: null })}
-              onMouseUp={() => this._onOptionSelected(operation)}>
+              onMouseUp={() => this._onOptionSelected(operation)}
+            >
               {operation.name ? operation.name.value : '<Unnamed>'}
             </li>
           ))}
         </ul>
-      );
+      )
     }
 
     // Allow click event if there is a running query or if there are not options
     // for which operation to run.
-    let onClick;
+    let onClick
     if (this.props.isRunning || !hasOptions) {
-      onClick = this._onClick;
+      onClick = this._onClick
     }
 
     // Allow mouse down if there is no running query, there are options for
     // which operation to run, and the dropdown is currently closed.
-    let onMouseDown;
+    let onMouseDown
     if (!this.props.isRunning && hasOptions && !optionsOpen) {
-      onMouseDown = this._onOptionsOpen;
+      onMouseDown = this._onOptionsOpen
     }
 
     const pathJSX = this.props.isRunning ? (
       <path d="M 10 10 L 23 10 L 23 23 L 10 23 z" />
     ) : (
       <path d="M 11 10 L 20 15 L 11 20 z" />
-    );
+    )
 
     return (
       <div className="execute-button-wrap">
@@ -83,55 +84,51 @@ export class ExecuteButton extends React.Component {
           className="execute-button"
           onMouseDown={onMouseDown}
           onClick={onClick}
-          title="Execute Query (Ctrl-Enter)">
+          title="Execute Query (Ctrl-Enter)"
+        >
           <svg width="30" height="30">
             {pathJSX}
           </svg>
         </button>
         {options}
-        <button
-          className="copy-button"
-          onClick={this.props.onHandleCopyToClipboard}>
-          <span className="copy-text">{'Copy'}</span>
-        </button>
       </div>
-    );
+    )
   }
 
   _onClick = () => {
     if (this.props.isRunning) {
-      this.props.onStop();
+      this.props.onStop()
     } else {
-      this.props.onRun();
+      this.props.onRun()
     }
-  };
+  }
 
   _onOptionSelected = operation => {
-    this.setState({ optionsOpen: false });
-    this.props.onRun(operation.name && operation.name.value);
-  };
+    this.setState({ optionsOpen: false })
+    this.props.onRun(operation.name && operation.name.value)
+  }
 
   _onOptionsOpen = downEvent => {
-    let initialPress = true;
-    const downTarget = downEvent.target;
-    this.setState({ highlight: null, optionsOpen: true });
+    let initialPress = true
+    const downTarget = downEvent.target
+    this.setState({ highlight: null, optionsOpen: true })
 
     let onMouseUp = upEvent => {
       if (initialPress && upEvent.target === downTarget) {
-        initialPress = false;
+        initialPress = false
       } else {
-        document.removeEventListener('mouseup', onMouseUp);
-        onMouseUp = null;
+        document.removeEventListener('mouseup', onMouseUp)
+        onMouseUp = null
         const isOptionsMenuClicked =
           downTarget.parentNode.compareDocumentPosition(upEvent.target) &
-          Node.DOCUMENT_POSITION_CONTAINED_BY;
+          Node.DOCUMENT_POSITION_CONTAINED_BY
         if (!isOptionsMenuClicked) {
           // menu calls setState if it was clicked
-          this.setState({ optionsOpen: false });
+          this.setState({ optionsOpen: false })
         }
       }
-    };
+    }
 
-    document.addEventListener('mouseup', onMouseUp);
-  };
+    document.addEventListener('mouseup', onMouseUp)
+  }
 }

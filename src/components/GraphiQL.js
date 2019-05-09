@@ -10,7 +10,6 @@ import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import { buildClientSchema, GraphQLSchema, parse, print } from 'graphql'
 
-import { ExecuteButton } from './ExecuteButton'
 import { ToolbarButton } from './ToolbarButton'
 import { ToolbarGroup } from './ToolbarGroup'
 import { ToolbarMenu, ToolbarMenuItem } from './ToolbarMenu'
@@ -34,6 +33,7 @@ import {
   introspectionQuerySansSubscriptions,
 } from '../utility/introspectionQueries'
 import classnames from 'classnames'
+import { Grid } from '@material-ui/core'
 
 const DEFAULT_DOC_EXPLORER_WIDTH = 350
 
@@ -69,6 +69,7 @@ export class GraphiQL extends React.Component {
     savedQueries: PropTypes.any,
     handleQueryUpdate: PropTypes.func,
     handleCreateQuery: PropTypes.func,
+    handleSelectedAction: PropTypes.func,
   }
 
   constructor(props) {
@@ -144,7 +145,6 @@ export class GraphiQL extends React.Component {
     if (typeof window === 'object') {
       window.addEventListener('beforeunload', () => this.componentWillUnmount())
     }
-    this.handleResultPaneOpen = this.handleResultPaneOpen.bind(this)
     this.handleSelectedQuery = this.handleSelectedQuery.bind(this)
     this.handleCancel = this.handleCancel.bind(this)
     this.handleQueryUpdate = this.handleQueryUpdate.bind(this)
@@ -334,35 +334,33 @@ export class GraphiQL extends React.Component {
           </QueryHistory>
         </div>
         <div className="editorWrap" style={editorWrapStyle}>
-          <SavedQueriesToolbar
-            queries={this.state.queries}
-            handleSelectedQuery={this.handleSelectedQuery}
-            handleCancel={this.handleCancel}
-            handleQueryUpdate={this.handleQueryUpdate}
-            handleCreateQuery={this.handleCreateQuery}
-          />
-          <div
-            className={classnames('topBarWrap', this.state.docExplorerOpen && 'overlap')}
-          >
-            <div className="topBar">
-              <div className="title">
-                <span onClick={this.handleResultPaneOpen}>{'Query'}</span>
-              </div>
-              <ExecuteButton
-                isRunning={Boolean(this.state.subscription)}
-                onRun={this.handleRunQuery}
-                onStop={this.handleStopQuery}
-                operations={this.state.operations}
-                onHandleCopyToClipboard={this.handleCopyToClipboard}
-              />
-              {toolbar}
+          <Grid container justify="space-between" alignItems="center">
+            <SavedQueriesToolbar
+              queries={this.state.queries}
+              handleSelectedQuery={this.handleSelectedQuery}
+              handleCancel={this.handleCancel}
+              handleQueryUpdate={this.handleQueryUpdate}
+              handleCreateQuery={this.handleCreateQuery}
+              handleSelectedAction={this.props.handleSelectedAction}
+              subscription={this.state.subscription}
+              handleRunQuery={this.handleRunQuery}
+              handleStopQuery={this.handleStopQuery}
+              operations={this.state.operations}
+              handleEditQuery={this.handleEditQuery}
+            />
+            <div
+              className={classnames(
+                'topBarWrap',
+                this.state.docExplorerOpen && 'overlap'
+              )}
+            >
+              {!this.state.docExplorerOpen && (
+                <button className="docExplorerShow" onClick={this.handleToggleDocs}>
+                  <span className="btnInner">{'Show schema'}</span>
+                </button>
+              )}
             </div>
-            {!this.state.docExplorerOpen && (
-              <button className="docExplorerShow" onClick={this.handleToggleDocs}>
-                <span className="btnInner">{'Show schema'}</span>
-              </button>
-            )}
-          </div>
+          </Grid>
           <div
             ref={n => {
               this.editorBarComponent = n
@@ -472,10 +470,6 @@ export class GraphiQL extends React.Component {
 
   handleCreateQuery = args => {
     this.props.handleCreateQuery({ ...args, query: this.state.query })
-  }
-
-  handleResultPaneOpen() {
-    this.setState({ resultPaneOpen: false })
   }
 
   /** Copy to clipboard */
@@ -1034,7 +1028,7 @@ export class GraphiQL extends React.Component {
 
 // Configure the UI by providing this Component as a child of GraphiQL.
 GraphiQL.Logo = function GraphiQLLogo(props) {
-  return <div className="title">{props.children || <span>{'Query'}</span>}</div>
+  return <div className="title">{props.children}</div>
 }
 
 // Configure the UI by providing this Component as a child of GraphiQL.

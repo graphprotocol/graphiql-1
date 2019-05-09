@@ -26,15 +26,6 @@
   overflow-x: hidden;
 }
 
-.graphiql-container .title {
-  font-size: 18px;
-  font-family: EuclidCircular, Arial, Helvetica, sans-serif;
-  font-size: 16px;
-  color: #b4bac5;
-  font-weight: bold;
-  line-height: 19px;
-}
-
 .graphiql-container .title em {
   font-family: georgia;
   font-size: 19px;
@@ -45,25 +36,15 @@
   flex-direction: row;
 }
 
-.graphiql-container .topBar {
+.graphiql-container .topBarWrap.overlap {
   align-items: center;
+}
+
+.graphiql-container .topBar {
   background: #13161f;
   cursor: default;
-  display: flex;
-  flex-direction: row;
-  flex: 1;
-  height: 60px;
   overflow-y: visible;
-  padding: 7px 14px 6px;
   user-select: none;
-}
-
-.graphiql-container .topBar .title {
-  margin-left: 30px;
-}
-
-.graphiql-container .topBar .title > span {
-  pointer-events: none;
 }
 
 .graphiql-container .toolbar {
@@ -605,10 +586,6 @@ div.CodeMirror-lint-tooltip > * + * {
 }
 
 @media (max-width: 640px) {
-  .graphiql-container .editorWrap .topBar .title {
-    margin-left: 0px;
-  }
-
   .graphiql-container .editorWrap .topBar .execute-button-wrap {
     margin: 0 12px;
   }
@@ -625,14 +602,6 @@ div.CodeMirror-lint-tooltip > * + * {
 @media (max-width: 480px) {
   .graphiql-container .resultWrap {
     flex: 100%;
-  }
-  .graphiql-container .topBar .title > span {
-    pointer-events: all;
-    font-size: 14px;
-    padding: 6px 14px;
-    background-color: #1b1e2a;
-    border-radius: 14px;
-    cursor: pointer;
   }
 
   .graphiql-container .docExplorerWrap {
