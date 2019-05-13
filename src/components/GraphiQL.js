@@ -121,7 +121,7 @@ export class GraphiQL extends React.Component {
         Number(this._storage.get('variableEditorHeight')) || 200,
       docExplorerOpen:
         document.documentElement.clientWidth < 640
-          ? false
+          ? true
           : this._storage.get('docExplorerOpen') === 'true' || false,
       historyPaneOpen: this._storage.get('historyPaneOpen') === 'true' || false,
       resultPaneOpen: !(document.documentElement.clientWidth < 480),
