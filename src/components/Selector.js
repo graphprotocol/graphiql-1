@@ -19,11 +19,10 @@ export class Selector extends React.Component {
       })
     ),
     handleMenuItemClick: PropTypes.func,
-    handleQueryUpdate: PropTypes.func,
     handleOpenMenu: PropTypes.func,
     handleChange: PropTypes.func,
     open: PropTypes.bool,
-    selectedValue: PropTypes.string,
+    selectedQueryName: PropTypes.string,
     queryName: PropTypes.string,
   }
 
@@ -31,11 +30,18 @@ export class Selector extends React.Component {
     super(props)
   }
 
+  isDefault = () => {
+    const selectedQuery = this.props.queries.find(
+      query => query.name === this.props.selectedQueryName
+    )
+    return selectedQuery ? selectedQuery.default : false
+  }
+
   render() {
     const {
       queries,
       open,
-      selectedValue,
+      selectedQueryName,
       queryName,
       handleMenuItemClick,
       handleOpenMenu,
@@ -51,7 +57,9 @@ export class Selector extends React.Component {
             className="menu-input"
             onChange={handleChange}
             onClick={handleChange}
+            placeholder="New query"
           />
+          {this.isDefault() && <span className="default-label">Default</span>}
           <Grid className="menu-icons">
             <div className="vertical-line" />
             <img
@@ -69,7 +77,7 @@ export class Selector extends React.Component {
                 <MenuItem
                   header={option.name}
                   className="item"
-                  selected={selectedValue === option.name}
+                  selected={selectedQueryName === option.name}
                   isDefault={option.default}
                   onClick={handleMenuItemClick}
                 />

@@ -30,9 +30,10 @@ export interface GraphiQLProps {
   ResultsTooltip?: any
   defaultTypeOrField: string
   savedQueries: Array<SavedQuery>
-  handleQueryUpdate: (query: SavedQuery) => void
+  handleUpdateQuery: (query: SavedQuery) => Promise<SavedQuery>
   handleCreateQuery: (query: any) => void
   handleSelectedAction: (id: number, value: string) => void
+  isActionsMenuOpen?: boolean
 }
 declare class GraphiQL extends React.Component<GraphiQLProps, any> {}
 export default GraphiQL

@@ -1,9 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Grid, Typography } from '@material-ui/core'
+import Grid from '@material-ui/core/Grid'
+import Typography from '@material-ui/core/Typography'
 import { Selector } from './Selector'
 import { ActionsMenu } from './ActionsMenu'
 import { ExecuteButton } from './ExecuteButton'
+import Snackbar from '@material-ui/core/Snackbar'
+import classnames from 'classnames'
 
 /**
  * Saved queries toolbar with controls and menus
@@ -19,58 +22,147 @@ export class SavedQueriesToolbar extends React.Component {
         default: PropTypes.bool,
       })
     ),
-    handleSelectedQuery: PropTypes.func,
-    handleCancel: PropTypes.func,
-    handleQueryUpdate: PropTypes.func,
+    handleUpdateQuery: PropTypes.func,
     handleSelectedAction: PropTypes.func,
     subscription: PropTypes.any,
     handleRunQuery: PropTypes.func,
     handleStopQuery: PropTypes.func,
     operations: PropTypes.any,
     handleEditQuery: PropTypes.func,
+    query: PropTypes.string,
+    isEditorFocused: PropTypes.bool,
+    isQueryValid: PropTypes.bool,
+    isActionsMenuOpen: PropTypes.bool,
   }
 
   constructor(props) {
     super(props)
     this.state = {
       open: false,
-      selectedValue: this.defaultQuery(props.queries).name,
-      queryName: this.defaultQuery(props.queries).name,
-      selectedQuery: this.defaultQuery(props.queries),
+      selectedQueryName: this.defaultQuery(props.queries).name,
+      selectedQueryObj: this.defaultQuery(props.queries),
       queries: props.queries,
-      showActions: false,
-      selectedAction: 'Share',
-      actionsOpen: false,
-      showSavedMsg: false,
+      showActions: props.isEditorFocused,
+      isActionsMenuOpen: props.isActionsMenuOpen,
+      showCreatedMsg: false,
       showUpdatedMsg: false,
       showSetDefaultMsg: false,
-      deleteQueryMsg: null,
+      showShareMsg: false,
+      deleteDefaultQuery: false,
+      isNameEmpty: false,
+      isQueryEmpty: false,
+      query: this.props.query,
+      showErrorUpdate: false,
+      isQueryValid: props.isQueryValid,
     }
-    this.queryName = this.defaultQuery(props.queries).name
+
+    // Store selected query, so when cancel is clicked we can revert it
+    this.selectedQueryName = this.defaultQuery(props.queries).name
+    this.selectedQuery = props.query
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.cancel === true) {
-      this.setState({ queryName: this.queryName, showActions: false })
-    }
+  async componentWillReceiveProps(nextProps) {
     if (nextProps.queries != this.props.queries) {
-      console.log('AM I HERE: ', nextProps.queries)
       this.setState({ queries: nextProps.queries })
     }
+
+    if (nextProps.query != this.props.query) {
+      this.setState({ query: nextProps.query })
+    }
+
+    if (nextProps.isQueryValid !== this.props.isQueryValid) {
+      await this.setState({ isQueryValid: nextProps.isQueryValid })
+    }
+
+    if (nextProps.isActionsMenuOpen !== this.state.isActionsMenuOpen) {
+      this.setState({ isActionsMenuOpen: nextProps.isActionsMenuOpen })
+    }
+
+    // if (nextProps.isEditorFocused) {
+    //   this.setState({
+    //     showActions: nextProps.isEditorFocused,
+    //   })
+    // }
+  }
+
+  handleCreate = async () => {
+    // Empty name or query is not allowed
+    if (this.state.selectedQueryName === '') {
+      return this.setState({ isNameEmpty: true, showActions: false })
+    }
+
+    if (this.state.query === '') {
+      return this.setState({ isQueryEmpty: true, showActions: false })
+    }
+    const result = await this.props.handleCreateQuery({
+      name: this.state.selectedQueryName,
+      default: false,
+    })
+    console.log('RESULT: ', result)
+    this.setState({ showActions: false, showCreatedMsg: true })
+  }
+
+  handleUpdate = async () => {
+    const isQueryValid = await this.props.handleValidateQuery()
+
+    // Empty name or query is not allowed
+    if (this.state.selectedQueryName === '') {
+      return this.setState({ isNameEmpty: true, showActions: false })
+    }
+    if (this.state.query === '') {
+      return this.setState({ isQueryEmpty: true, showActions: false })
+    }
+    console.log('THIS STATE IS VALID: ', isQueryValid)
+    this.setState({ showUpdatedMsg: true, showActions: false })
+    // if (this.state.isQueryValid) {
+    //   const updateResult = await this.props.handleUpdateQuery({
+    //     id: this.state.selectedQueryObj.id,
+    //     name: this.state.selectedQueryName,
+    //     default: this.state.selectedQueryObj.default,
+    //     query: this.state.query,
+    //   })
+
+    //   if (updateResult && updateResult.name) {
+    //     this.setState({
+    //       showUpdatedMsg: true,
+    //       showActions: false,
+    //       deleteDefaultQuery: false,
+    //       showCreatedMsg: false,
+    //     })
+    //   } else {
+    //     this.setState({
+    //       selectedQueryName: this.selectedQueryName,
+    //       query: this.selectedQuery,
+    //       showErrorUpdate: true,
+    //     })
+    //   }
+    // }
   }
 
   handleCancel = async () => {
-    await this.props.handleCancel()
-    this.setState({ queryName: this.queryName, showActions: false })
+    await this.props.handleEditQuery(this.selectedQuery)
+    this.setState({
+      selectedQueryName: this.selectedQueryName,
+      showActions: false,
+      isEditorFocused: false,
+    })
+  }
+
+  showErrors = () => {
+    return (
+      this.state.isNameEmpty ||
+      this.state.isQueryEmpty ||
+      this.state.deleteDefaultQuery ||
+      this.state.showErrorUpdate
+    )
   }
 
   handleOpenMenu = e => {
     this.setState({
       open: true,
-      showSuccess: false,
-      showSavedMsg: false,
+      showCreatedMsg: false,
       showUpdatedMsg: false,
-      deleteQueryMsg: null,
+      deleteDefaultQuery: false,
     })
   }
 
@@ -84,85 +176,100 @@ export class SavedQueriesToolbar extends React.Component {
     }
   }
 
-  selectedQuery = name => {
+  findSelectedQuery = name => {
     const selected = this.state.queries.find(query => query.name === name)
     return selected
   }
 
   handleChange = e => {
     this.setState({
-      queryName: e.target.value,
+      selectedQueryName: e.target.value,
       showActions: true,
-      showSuccess: false,
-      showSavedMsg: false,
+      showCreatedMsg: false,
       showUpdatedMsg: false,
-      deleteQueryMsg: null,
+      deleteDefaultQuery: false,
+      isNameEmpty: false,
+      isQueryEmpty: false,
+      deleteDefaultQuery: false,
     })
   }
 
-  handleUpdate = async () => {
-    await this.props.handleQueryUpdate({
-      id: this.selectedQuery(this.state.selectedValue).id,
-      name: this.state.queryName,
-      default: true,
-    })
-    this.setState({ showActions: false, showSuccess: true, showUpdatedMsg: true })
-  }
-
-  handleCreate = async () => {
-    await this.props.handleCreateQuery({
-      name: this.state.queryName,
-      default: false,
-    })
-    this.setState({ showActions: false, showSuccess: true, showSavedMsg: true })
-  }
-
-  handleMenuItemClick = (e, header) => {
-    this.queryName = header
-    this.props.handleSelectedQuery(this.selectedQuery(header).query)
-    this.setState({
-      selectedValue: header,
-      queryName: header,
+  handleMenuItemClick = async (e, value) => {
+    const selected = this.findSelectedQuery(value)
+    // save them in case we need to cancel changes
+    this.selectedQueryName = value
+    this.selectedQuery = selected.query
+    this.props.handleEditQuery(selected.query)
+    await this.setState({
+      selectedQueryName: value,
       open: false,
-      selectedQuery: this.selectedQuery(header),
+      selectedQueryObj: selected,
     })
   }
 
-  handleActionsMenuClick = () => {
+  handleActionsMenuClick = e => {
+    e.stopPropagation()
     this.setState({
-      actionsOpen: true,
-      showSuccess: false,
-      showSavedMsg: false,
+      isActionsMenuOpen: true,
+      showCreatedMsg: false,
       showUpdatedMsg: false,
       showSetDefaultMsg: false,
-      deleteQueryMsg: null,
+      deleteDefaultQuery: false,
     })
   }
 
   handleClickAction = async (e, value) => {
-    console.log('click action: ', value)
     await this.setState({
-      actionsOpen: false,
+      isActionsMenuOpen: false,
     })
-    if (value === 'Set as default') {
-      await this.props.handleSelectedAction(this.state.selectedQuery.id, value)
+    if (value === 'Share') {
+      this.setState({ showShareMsg: true })
+    } else if (value === 'Set as default') {
+      await this.props.handleSelectedAction(this.state.selectedQueryObj.id, value)
       this.setState({
         showSetDefaultMsg: true,
-        showSuccess: true,
       })
     } else if (value === 'Delete') {
-      if (this.state.selectedQuery.default === true) {
-        return this.setState({ deleteQueryMsg: "You can't delete default query" })
+      if (this.state.selectedQueryObj.default === true) {
+        return this.setState({ deleteDefaultQuery: false })
       }
-      await this.props.handleSelectedAction(this.state.selectedQuery.id, value)
-      this.props.handleEditQuery(this.state.selectedQuery)
+      await this.props.handleSelectedAction(this.state.selectedQueryObj.id, value)
+      this.props.handleEditQuery(this.state.selectedQueryObj.query)
 
       this.setState({
         showSetDefaultMsg: false,
-        showSuccess: true,
-        queryName: this.defaultQuery(this.props.queries).name,
+        selectedQueryName: this.defaultQuery(this.props.queries).name,
       })
+    } else if (value === 'New query') {
+      this.setState({ selectedQueryName: '' })
+      this.props.handleEditQuery('')
     }
+  }
+
+  handleSnackbarClose = (event, reason) => {
+    this.setState({
+      showUpdatedMsg: false,
+      showCreatedMsg: false,
+      showSetDefaultMsg: false,
+      showShareMsg: false,
+      showErrorMessage: false,
+    })
+  }
+
+  snackbarMessage = () => {
+    let message
+    if (this.state.showUpdatedMsg) {
+      message = 'Query updated'
+    } else if (this.state.showCreatedMsg) {
+      message = 'Query created'
+    } else if (this.state.showSetDefaultMsg) {
+      message = 'Default query set'
+    } else if (this.state.showShareMsg) {
+      message = 'URL copied to clipboard'
+    } else if (this.state.isNameEmpty) {
+      message = "Name can't be empty"
+    }
+    return message
   }
 
   render() {
@@ -176,12 +283,18 @@ export class SavedQueriesToolbar extends React.Component {
     const actions = [
       { id: '1', name: 'Share' },
       { id: '2', name: 'Set as default' },
-      { id: '3', name: 'Duplicate' },
-      { id: '4', name: 'Delete' },
-      { id: '5', name: 'New query' },
+      { id: '3', name: 'Delete' },
+      { id: '4', name: 'New query' },
     ]
 
-    console.log('showSetDefaultMsg: ', this.state.showSetDefaultMsg)
+    const showSuccessMessage =
+      this.state.showUpdatedMsg ||
+      this.state.showCreatedMsg ||
+      this.state.showSetDefaultMsg ||
+      this.state.showShareMsg
+
+    const showErrorMessage = this.state.isNameEmpty || this.state.isQueryEmpty
+
     return (
       <Grid
         container
@@ -192,12 +305,11 @@ export class SavedQueriesToolbar extends React.Component {
         <Grid className="flex">
           <Selector
             queries={queries}
-            handleSelectedQuery={this.props.handleSelectedQuery}
             open={this.state.open}
             handleOpenMenu={this.handleOpenMenu}
-            selectedValue={this.state.selectedValue}
+            selectedQueryName={this.state.selectedQueryName}
             handleMenuItemClick={this.handleMenuItemClick}
-            queryName={this.state.queryName}
+            queryName={this.state.selectedQueryName}
             handleChange={this.handleChange}
           />
           {this.state.showActions && (
@@ -219,42 +331,46 @@ export class SavedQueriesToolbar extends React.Component {
               </Typography>
             </Grid>
           )}
-          {this.state.showSuccess && (
-            <Grid container alignItems="center" wrap="nowrap" className="show-success">
-              <img
-                className="check-icon"
-                src={`${process.env.PUBLIC_URL}/images/checkbox-icon.svg`}
-              />
-              {this.state.showSavedMsg && (
-                <Typography className="success-message">Query saved</Typography>
-              )}
-              {this.state.showUpdatedMsg && (
-                <Typography className="success-message">Query updated</Typography>
-              )}
-              {this.state.showSetDefaultMsg && (
-                <Typography className="success-message">Default query set</Typography>
-              )}
-            </Grid>
-          )}
-          {this.state.deleteQueryMsg && (
-            <Grid className="error-wrapper">
-              <img
-                className="error-icon"
-                src={`${process.env.PUBLIC_URL}/images/error-icon.svg`}
-              />
-              <Typography className="error-message">
-                {this.state.deleteQueryMsg}
-              </Typography>
-            </Grid>
-          )}
+          <Snackbar
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+            open={showSuccessMessage || showErrorMessage}
+            autoHideDuration={3000}
+            message={
+              <div className="snackbar-content">
+                {showErrorMessage ? (
+                  <img
+                    className="error-icon"
+                    src={`${process.env.PUBLIC_URL}/images/error-icon.svg`}
+                  />
+                ) : (
+                  <span className="option-icon" />
+                )}
+                <Typography className="message">{this.snackbarMessage()}</Typography>
+              </div>
+            }
+            className={classnames(
+              'snackbar',
+              showSuccessMessage
+                ? 'snackbar-success'
+                : showErrorMessage
+                ? 'snackbar-error'
+                : 'snackbar-warning'
+            )}
+            ContentProps={{
+              classes: { root: 'content-root' },
+            }}
+            // onClose={this.handleSnackbarClose}
+          />
         </Grid>
         <Grid className="flex">
           {!this.state.showActions && (
             <ActionsMenu
               actions={actions}
-              selectedAction={this.state.selectedAction}
               handleClickAction={this.handleClickAction}
-              actionsOpen={this.state.actionsOpen}
+              actionsOpen={this.state.isActionsMenuOpen}
               handleActionsMenuClick={this.handleActionsMenuClick}
             />
           )}
