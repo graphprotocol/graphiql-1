@@ -39,7 +39,6 @@ export class QueryEditor extends React.Component {
     onPrettifyQuery: PropTypes.func,
     onRunQuery: PropTypes.func,
     editorTheme: PropTypes.string,
-    onFocusEditor: PropTypes.func,
   }
 
   constructor(props) {
@@ -89,6 +88,7 @@ export class QueryEditor extends React.Component {
       },
       lint: {
         schema: this.props.schema,
+        // getAnnotations: my_validator,
       },
       hintOptions: {
         schema: this.props.schema,
@@ -202,23 +202,22 @@ export class QueryEditor extends React.Component {
   }
 
   _onKeyUp = (cm, event) => {
-    this.props.onFocusEditor()
     if (AUTO_COMPLETE_AFTER_KEY.test(event.key)) {
       this.editor.execCommand('autocomplete')
     }
   }
 
-  _onEdit = () => {
+  _onFocus = () => {
+    this.props.onClickEditor()
+  }
+
+  _onEdit = cm => {
     if (!this.ignoreChangeEvent) {
       this.cachedValue = this.editor.getValue()
       if (this.props.onEdit) {
         this.props.onEdit(this.cachedValue)
       }
     }
-  }
-
-  _onFocus = () => {
-    this.props.onFocusEditor()
   }
 
   /**

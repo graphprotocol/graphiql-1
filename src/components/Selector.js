@@ -61,10 +61,9 @@ export class Selector extends React.Component {
           />
           {this.isDefault() && <span className="default-label">Default</span>}
           <Grid className="menu-icons">
-            <div className="vertical-line" />
             <img
               className="menu-icon"
-              src={`${process.env.PUBLIC_URL}/images/selector-icon.svg`}
+              src={`${process.env.PUBLIC_URL}/images/query-selector-icon.svg`}
               onClick={handleOpenMenu}
             />
           </Grid>

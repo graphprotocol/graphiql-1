@@ -13,15 +13,6 @@
   height: 100%;
 }
 
-.graphiql-container .selector .vertical-line {
-  height: 32px;
-  width: 1px;
-  border: 1px solid #ffffff;
-  opacity: 0.08;
-  margin: 8px 0;
-  box-sizing: border-box;
-}
-
 .graphiql-container .selector img {
   height: 12px;
 }
@@ -118,7 +109,11 @@
 }
 
 .saved-queries-toolbar .query-actions {
-  width: 200px;
+  width: 250px;
+}
+
+.saved-queries-toolbar .query-actions.new-query {
+  width: 180px;
 }
 
 .saved-queries-toolbar .query-actions .action {

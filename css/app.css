@@ -15,7 +15,8 @@
   overflow: hidden;
   width: 100%;
   border-radius: 16px;
-  background: #13161f;
+  background-color: #000000;
+  box-shadow: 0 16px 64px 0 rgba(0, 0, 0, 0.32);
 }
 
 .graphiql-container .editorWrap {
@@ -230,7 +231,7 @@
 }
 
 .graphiql-container .CodeMirror .CodeMirror-gutter {
-  background-color: #13161f;
+  background-color: #000000;
 }
 
 .graphiql-container .CodeMirror .CodeMirror-gutter-wrapper {
@@ -460,7 +461,7 @@
 }
 
 .graphiql-container .CodeMirror {
-  background-color: #13161f !important;
+  background-color: #000000 !important;
   color: #141823;
   font-family: 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace;
   font-size: 13px;

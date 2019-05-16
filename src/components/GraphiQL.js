@@ -71,6 +71,8 @@ export class GraphiQL extends React.Component {
     handleCreateQuery: PropTypes.func,
     handleSelectedAction: PropTypes.func,
     isActionsMenuOpen: PropTypes.bool,
+    versionId: PropTypes.string,
+    selectedQueryName: PropTypes.string,
   }
 
   constructor(props) {
@@ -137,8 +139,7 @@ export class GraphiQL extends React.Component {
       showQueryVariables: false,
       queries: props.savedQueries,
       ...queryFacts,
-      isEditorFocused: false,
-      isQueryValid: true,
+      showActions: false,
     }
 
     // Ensure only the last executed editor query is rendered.
@@ -292,7 +293,7 @@ export class GraphiQL extends React.Component {
           ? '100%'
           : this.state.docExplorerWidth,
       borderRadius: '0 16px 0 0',
-      background: 'rgba(11,13,19,0.8)',
+      backgroundColor: '#0F1016',
     }
     const docExplorerWrapClasses =
       'docExplorerWrap' +
@@ -338,7 +339,7 @@ export class GraphiQL extends React.Component {
             <SavedQueriesToolbar
               queries={this.state.queries}
               handleUpdateQuery={this.props.handleUpdateQuery}
-              handleCreateQuery={this.handleCreateQuery}
+              handleCreateQuery={this.props.handleCreateQuery}
               handleSelectedAction={this.props.handleSelectedAction}
               subscription={this.state.subscription}
               handleRunQuery={this.handleRunQuery}
@@ -346,10 +347,10 @@ export class GraphiQL extends React.Component {
               operations={this.state.operations}
               handleEditQuery={this.handleEditQuery}
               query={this.state.query}
-              isEditorFocused={this.state.isEditorFocused}
-              isQueryValid={this.state.isQueryValid}
-              handleValidateQuery={this.handleValidateQuery}
+              showActions={this.state.showActions}
               isActionsMenuOpen={this.props.isActionsMenuOpen}
+              versionId={this.props.versionId}
+              selectedQueryName={this.props.selectedQueryName}
             />
             <div
               className={classnames(
@@ -372,7 +373,11 @@ export class GraphiQL extends React.Component {
             onDoubleClick={this.handleResetResize}
             onMouseDown={this.handleResizeStart}
           >
-            <div className="queryWrap" style={queryWrapStyle}>
+            <div
+              className="queryWrap"
+              style={queryWrapStyle}
+              onClick={this.onClickEditor}
+            >
               <QueryEditor
                 ref={n => {
                   this.queryEditorComponent = n
@@ -385,7 +390,7 @@ export class GraphiQL extends React.Component {
                 onPrettifyQuery={this.handlePrettifyQuery}
                 onRunQuery={this.handleEditorRunQuery}
                 editorTheme={this.props.editorTheme}
-                onFocusEditor={this.handleFocusEditor}
+                onClickEditor={this.onClickEditor}
               />
               <div className="variable-editor" style={variableStyle}>
                 <div
@@ -459,10 +464,6 @@ export class GraphiQL extends React.Component {
     )
   }
 
-  handleCreateQuery = args => {
-    this.props.handleCreateQuery({ ...args, query: this.state.query })
-  }
-
   /** Copy to clipboard */
   handleCopyToClipboard() {
     if (window.getSelection) {
@@ -472,6 +473,10 @@ export class GraphiQL extends React.Component {
       window.getSelection().addRange(range)
       document.execCommand('copy')
     }
+  }
+
+  onClickEditor = () => {
+    this.setState({ showActions: true })
   }
 
   /**
@@ -670,57 +675,7 @@ export class GraphiQL extends React.Component {
     })
   }
 
-  handleFocusEditor = () => this.setState({ isEditorFocused: true })
-
-  handleValidateQuery = selectedOperationName => {
-    console.log('AM I BEING CALLED')
-    this._editorQueryID++
-    const queryID = this._editorQueryID
-
-    // Use the edited query after autoCompleteLeafs() runs or,
-    // in case autoCompletion fails (the function returns undefined),
-    // the current query from the editor.
-    const editedQuery = this.autoCompleteLeafs() || this.state.query
-    const variables = this.state.variables
-    let operationName = this.state.operationName
-
-    // If an operation was explicitly provided, different from the current
-    // operation name, then report that it changed.
-    if (selectedOperationName && selectedOperationName !== operationName) {
-      operationName = selectedOperationName
-      this.handleEditOperationName(operationName)
-    }
-
-    let isQueryValid
-
-    try {
-      this.setState({
-        operationName,
-      })
-
-      // _fetchQuery may return a subscription.
-      const subscription = this._fetchQuery(
-        editedQuery,
-        variables,
-        operationName,
-        result => {
-          if (queryID === this._editorQueryID) {
-            isQueryValid = result.data ? true : result.error ? false : false
-            this.setState({
-              isQueryValid,
-            })
-          }
-        }
-      )
-      this.setState({ subscription, resultPaneOpen: true })
-      return isQueryValid
-    } catch (error) {
-      this.setState({
-        isQueryValid: false,
-      })
-      return false
-    }
-  }
+  handleFocusEditor = value => this.setState({ isEditorFocused: value })
 
   handleRunQuery = selectedOperationName => {
     this._editorQueryID++
@@ -822,7 +777,6 @@ export class GraphiQL extends React.Component {
       this.state.schema
     )
     this.setState({
-      isEditorFocused: true,
       query: value,
       ...queryFacts,
     })

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Grid, Select, Input } from '@material-ui/core'
+import { Grid } from '@material-ui/core'
 import MenuItem from './MenuItem'
 
 /**
@@ -43,8 +43,6 @@ export class ActionsMenu extends React.Component {
                   header={option.name}
                   className="item"
                   onClick={handleClickAction}
-                  optionIcon
-                  trashIcon={`${process.env.PUBLIC_URL}/images/trash-icon.svg`}
                   addIcon={`${process.env.PUBLIC_URL}/images/plus-icon.svg`}
                 />
               </Grid>

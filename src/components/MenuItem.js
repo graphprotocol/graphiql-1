@@ -20,12 +20,6 @@ const MenuItem = ({
       onClick={e => onClick(e, header)}
     >
       <Grid container alignItems="center">
-        {optionIcon && header !== 'Delete' && header !== 'New query' && (
-          <span className="option-icon" />
-        )}
-        {trashIcon && header === 'Delete' && (
-          <img className="trash-icon" src={trashIcon} />
-        )}
         {addIcon && header === 'New query' && <img className="add-icon" src={addIcon} />}
         <Typography
           className={classnames(
