@@ -35,6 +35,7 @@ export class SavedQueriesToolbar extends React.Component {
     isActionsMenuOpen: PropTypes.bool,
     versionId: PropTypes.string,
     selectedQueryName: PropTypes.string,
+    docExplorerOpen: PropTypes.bool,
   }
 
   constructor(props) {
@@ -47,23 +48,27 @@ export class SavedQueriesToolbar extends React.Component {
       query: props.query,
       showActions: props.showActions,
       isActionsMenuOpen: props.isActionsMenuOpen,
-      showCreatedMsg: false,
-      showUpdatedMsg: false,
-      showSetDefaultMsg: false,
-      showShareMsg: false,
-      showDeletedMsg: false,
       deleteDefaultQuery: false,
-      isNameEmpty: false,
       isQueryEmpty: false,
-      isNameTaken: false,
       isQueryTaken: false,
-      query: this.props.query,
-      showErrorUpdate: false,
-      showErrorCreate: false,
       isQueryInvalid: false,
       showErrorDefaultMsg: false,
       showErrorDeletedMsg: false,
       isNewQuery: false,
+      docExplorerOpen: props.docExplorerOpen,
+      successMessages: {
+        create: false,
+        update: false,
+        setDefault: false,
+        share: false,
+        delete: false,
+      },
+      errorMessages: {
+        nameTaken: false,
+        nameEmpty: false,
+        create: false,
+        update: false,
+      },
     }
 
     // Store selected query, so when cancel is clicked we can revert it
@@ -89,37 +94,40 @@ export class SavedQueriesToolbar extends React.Component {
         showActions: nextProps.showActions,
       })
     }
-  }
 
-  validateName = () => {
-    const name = this.state.selectedQueryName
-    if (name === '') {
-      return this.setState({ isNameEmpty: true, showActions: false })
-    }
-    const foundName = this.state.queries.find(query => query.name === name)
-
-    if (foundName) {
-      return this.setState({ isNameTaken: true })
+    if (nextProps.docExplorerOpen != this.props.docExplorerOpen) {
+      this.setState({ docExplorerOpen: nextProps.docExplorerOpen })
     }
   }
 
-  validateUpdatedName = () => {
+  /* Validations: 
+     - Name can't be empty or taken
+     - Query can't be empty, taken or invalid
+  */
+  validateName = updated => {
     const name = this.state.selectedQueryName
     if (name === '') {
-      return this.setState({ isNameEmpty: true, showActions: false })
+      return this.setState(
+        Object.assign(this.state.errorMessages, {
+          nameEmpty: true,
+          showActions: false,
+        })
+      )
     }
-    const otherQueries = this.state.queries
-      .map(q => {
-        if (q.name !== this.selectedQueryName) {
-          return q
-        }
+    let foundName
+    if (updated) {
+      const otherQueries = this.state.queries.filter(
+        other => other.name !== this.selectedQueryName
+      )
+      foundName = otherQueries.find(found => found.name === name)
+    } else {
+      foundName = this.state.queries.find(query => query.name === name)
+    }
+    return this.setState(
+      Object.assign(this.state.errorMessages, {
+        nameTaken: foundName !== undefined,
       })
-      .filter(qqq => qqq !== undefined)
-
-    const foundName = otherQueries.find(qq => qq && qq.name === name)
-    if (foundName) {
-      return this.setState({ isNameTaken: true })
-    }
+    )
   }
 
   validateQuery = () => {
@@ -152,15 +160,24 @@ export class SavedQueriesToolbar extends React.Component {
     })
 
     if (result) {
-      this.setState({ showActions: false, showCreatedMsg: true, isNewQuery: false })
+      this.setState(
+        Object.assign(this.state.successMessages, {
+          create: true,
+          showActions: false,
+          isNewQuery: false,
+        })
+      )
     } else {
-      this.setState({ showActions: true, showErrorCreate: true })
+      this.setState(
+        Object.assign(this.state.errorMessages, { create: true, showActions: true })
+      )
     }
   }
 
   handleUpdate = async () => {
-    this.validateUpdatedName()
+    this.validateName(true)
     this.validateQuery()
+
     const result = await this.props.handleUpdateQuery({
       id: this.state.selectedQueryObj.id,
       name: this.state.selectedQueryName,
@@ -168,9 +185,13 @@ export class SavedQueriesToolbar extends React.Component {
     })
 
     if (result) {
-      this.setState({ showActions: false, showUpdatedMsg: true })
+      this.setState(
+        Object.assign(this.state.successMessages, { update: true, showActions: false })
+      )
     } else {
-      this.setState({ showActions: true, showErrorUpdate: true })
+      this.setState(
+        Object.assign(this.state.errorMessages, { update: true, showActions: true })
+      )
     }
   }
 
@@ -212,10 +233,7 @@ export class SavedQueriesToolbar extends React.Component {
     }
     this.setState({
       selectedQueryName: e.target.value,
-      showCreatedMsg: false,
-      showUpdatedMsg: false,
       deleteDefaultQuery: false,
-      isNameEmpty: false,
       isQueryEmpty: false,
     })
   }
@@ -237,9 +255,6 @@ export class SavedQueriesToolbar extends React.Component {
     e.stopPropagation()
     this.setState({
       isActionsMenuOpen: true,
-      showCreatedMsg: false,
-      showUpdatedMsg: false,
-      showSetDefaultMsg: false,
       deleteDefaultQuery: false,
     })
   }
@@ -249,14 +264,23 @@ export class SavedQueriesToolbar extends React.Component {
       isActionsMenuOpen: false,
     })
     if (value === 'Share') {
-      this.setState({ showShareMsg: true })
+      this.setState(
+        Object.assign(this.state.successMessages, {
+          share: true,
+        })
+      )
     } else if (value === 'Set as default') {
       const result = await this.props.handleSelectedAction(
         this.state.selectedQueryObj.id,
         value
       )
       if (result) {
-        this.setState({ showSetDefaultMsg: true, selectedQueryObj: result })
+        this.setState(
+          Object.assign(this.state.successMessages, {
+            setDefault: true,
+            selectedQueryObj: result,
+          })
+        )
       } else {
         this.setState({ showErrorDefaultMsg: true })
       }
@@ -269,10 +293,13 @@ export class SavedQueriesToolbar extends React.Component {
         value
       )
       if (deleteResult) {
-        this.setState({
-          selectedQueryName: this.defaultQuery(this.props.queries).name,
-          showDeletedMsg: true,
-        })
+        this.setState(
+          Object.assign(this.state.successMessages, {
+            delete: true,
+            selectedQueryObj: result,
+            selectedQueryName: this.defaultQuery(this.props.queries).name,
+          })
+        )
       } else {
         this.setState({ showErrorDeletedMsg: true })
       }
@@ -283,54 +310,76 @@ export class SavedQueriesToolbar extends React.Component {
   }
 
   handleSnackbarClose = (event, reason) => {
+    this.setState(
+      Object.assign(this.state.successMessages, {
+        update: false,
+        create: false,
+        share: false,
+        setDefault: false,
+        delete: false,
+      })
+    )
+    this.setState(
+      Object.assign(this.state.errorMessages, {
+        nameTaken: false,
+        nameEmpty: false,
+        create: false,
+        update: false,
+      })
+    )
     this.setState({
-      showUpdatedMsg: false,
-      showCreatedMsg: false,
-      showSetDefaultMsg: false,
-      showShareMsg: false,
-      showErrorMessage: false,
-      isNameTaken: false,
       isQueryEmpty: false,
       isQueryInvalid: false,
-      showErrorCreate: false,
       isQueryTaken: false,
       showErrorDefaultMsg: false,
       deleteDefaultQuery: false,
       showErrorDeletedMsg: false,
-      showDeletedMsg: false,
     })
   }
 
   snackbarMessage = () => {
     let message
-    if (this.state.showUpdatedMsg) {
+    const success = this.state.successMessages
+    const error = this.state.errorMessages
+    if (success.update) {
       message = 'Query updated'
-    } else if (this.state.showCreatedMsg) {
+    } else if (success.create) {
       message = 'Query created'
-    } else if (this.state.showSetDefaultMsg) {
+    } else if (success.setDefault) {
       message = 'Default query set'
-    } else if (this.state.showShareMsg) {
+    } else if (success.share) {
       message = 'URL copied to clipboard'
-    } else if (this.state.isNameEmpty) {
+    } else if (success.delete) {
+      message = 'Query successfully deleted'
+    } else if (error.nameEmpty) {
       message = "Name can't be empty"
-    } else if (this.state.isNameTaken) {
+    } else if (error.nameTaken) {
       message = 'Name is already taken'
     } else if (this.state.isQueryEmpty) {
       message = "Query can't be empty"
     } else if (this.state.isQueryInvalid) {
       message = 'Query is invalid'
-    } else if (this.state.showErrorCreate || this.state.isQueryTaken) {
+    } else if (error.create || this.state.isQueryTaken) {
+      message = 'Unable to create query (duplicate)'
+    } else if (error.update) {
       message = 'Unable to update query (duplicate)'
     } else if (this.state.showErrorDefaultMsg) {
       message = 'Unable to set the default query'
     } else if (this.state.deleteDefaultQuery) {
       message = "Default query can't be deleted"
-    } else if (this.state.showDeletedMsg) {
-      message = 'Query successfully deleted'
     } else if (this.state.showErrorDeletedMsg) {
       message = 'Unable to delete query'
     }
     return message
+  }
+
+  actions = () => {
+    return [
+      { id: '1', name: 'Share' },
+      { id: '2', name: 'Set as default' },
+      { id: '3', name: 'Delete' },
+      { id: '4', name: 'New query' },
+    ]
   }
 
   render() {
@@ -341,26 +390,22 @@ export class SavedQueriesToolbar extends React.Component {
       handleStopQuery,
       operations,
     } = this.props
-    const actions = [
-      { id: '1', name: 'Share' },
-      { id: '2', name: 'Set as default' },
-      { id: '3', name: 'Delete' },
-      { id: '4', name: 'New query' },
-    ]
+
+    const { successMessages, errorMessages } = this.state
 
     const showSuccessMessage =
-      this.state.showUpdatedMsg ||
-      this.state.showCreatedMsg ||
-      this.state.showSetDefaultMsg ||
-      this.state.showShareMsg ||
-      this.state.showDeletedMsg
+      successMessages.delete ||
+      successMessages.update ||
+      successMessages.create ||
+      successMessages.setDefault ||
+      successMessages.share
 
     const showErrorMessage =
-      this.state.isNameEmpty ||
-      this.state.isQueryEmpty ||
-      this.state.isNameTaken ||
+      errorMessages.nameEmpty ||
+      errorMessages.nameTaken ||
       this.state.isQueryInvalid ||
-      this.state.showErrorCreate ||
+      errorMessages.create ||
+      errorMessages.update ||
       this.state.isQueryTaken ||
       this.state.showErrorDefaultMsg ||
       this.state.deleteDefaultQuery ||
@@ -369,7 +414,10 @@ export class SavedQueriesToolbar extends React.Component {
     return (
       <Grid
         container
-        className="saved-queries-toolbar"
+        className={classnames(
+          'saved-queries-toolbar',
+          !this.state.docExplorerOpen && 'schema-hidden'
+        )}
         alignItems="center"
         justify="space-between"
       >
@@ -436,7 +484,7 @@ export class SavedQueriesToolbar extends React.Component {
         <Grid className="flex">
           {!this.state.showActions && (
             <ActionsMenu
-              actions={actions}
+              actions={this.actions()}
               handleClickAction={this.handleClickAction}
               actionsOpen={this.state.isActionsMenuOpen}
               handleActionsMenuClick={this.handleActionsMenuClick}

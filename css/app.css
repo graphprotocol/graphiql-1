@@ -321,7 +321,7 @@
 }
 
 .graphiql-container .execute-button-wrap {
-  height: 34px;
+  height: 40px;
   margin: 0 14px 0 28px;
   position: relative;
 }
@@ -351,6 +351,8 @@
 }
 
 .graphiql-container .execute-button {
+  display: flex;
+  justify-content: center;
   background: linear-gradient(315deg, #5500a0 0%, #8b35ff 100%);
   border: none;
   opacity: 0.8;

@@ -351,6 +351,7 @@ export class GraphiQL extends React.Component {
               isActionsMenuOpen={this.props.isActionsMenuOpen}
               versionId={this.props.versionId}
               selectedQueryName={this.props.selectedQueryName}
+              docExplorerOpen={this.state.docExplorerOpen}
             />
             <div
               className={classnames(

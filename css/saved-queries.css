@@ -112,6 +112,10 @@
   width: 250px;
 }
 
+.saved-queries-toolbar.schema-hidden {
+  width: auto;
+}
+
 .saved-queries-toolbar .query-actions.new-query {
   width: 180px;
 }
@@ -228,12 +232,12 @@
 
 .saved-queries-toolbar .snackbar.snackbar-success {
   border: 1px solid #4bca81;
-  background-color: rgba(75, 202, 129, 0.2);
+  background-color: rgba(75, 202, 129, 0.08);
 }
 
 .saved-queries-toolbar .snackbar.snackbar-error {
   border: 1px solid #ed4a6d;
-  background-color: rgba(237, 74, 109, 0.16);
+  background-color: rgba(237, 74, 109, 0.08);
 }
 
 .saved-queries-toolbar .snackbar.snackbar-warning {
