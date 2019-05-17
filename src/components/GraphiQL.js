@@ -357,7 +357,11 @@ export class GraphiQL extends React.Component {
               <button
                 className="docExplorerShow"
                 onClick={this.handleToggleDocs}>
-                <span className="btnInner">{'Show schema'}</span>
+                <span className="btnInner">
+                  {document.documentElement.clientWidth < 640
+                    ? 'Hide queries'
+                    : 'Show schema'}
+                </span>
               </button>
             )}
           </div>
@@ -441,7 +445,9 @@ export class GraphiQL extends React.Component {
             schema={this.state.schema}
             defaultTypeOrField={this.props.defaultTypeOrField}>
             <div className="docExplorerHide" onClick={this.handleToggleDocs}>
-              {'Hide Schema'}
+              {document.documentElement.clientWidth < 640
+                ? 'Show queries'
+                : 'Hide schema'}
             </div>
           </DocExplorer>
         </div>
