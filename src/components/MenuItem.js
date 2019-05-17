@@ -9,14 +9,18 @@ const MenuItem = ({
   selected,
   isDefault,
   onClick,
-  optionIcon,
-  trashIcon,
+  isDefaultQuery,
   addIcon,
 }) => {
   return (
     <Grid
       container
-      className={classnames('menu-item', className, selected && 'selected')}
+      className={classnames(
+        'menu-item',
+        className,
+        selected && 'selected',
+        isDefaultQuery && header === 'Set as default' && 'default-query'
+      )}
       onClick={e => onClick(e, header)}
     >
       <Grid container alignItems="center">

@@ -19,6 +19,7 @@ export class ActionsMenu extends React.Component {
     actionsOpen: PropTypes.bool,
     handleClickAction: PropTypes.func,
     handleActionsMenuClick: PropTypes.func,
+    isDefaultQuery: PropTypes.bool,
   }
 
   constructor(props) {
@@ -26,7 +27,13 @@ export class ActionsMenu extends React.Component {
   }
 
   render() {
-    const { actions, handleClickAction, handleActionsMenuClick, actionsOpen } = this.props
+    const {
+      actions,
+      handleClickAction,
+      handleActionsMenuClick,
+      actionsOpen,
+      isDefaultQuery,
+    } = this.props
 
     return (
       <Grid className="actions-menu">
@@ -44,6 +51,7 @@ export class ActionsMenu extends React.Component {
                   className="item"
                   onClick={handleClickAction}
                   addIcon={`${process.env.PUBLIC_URL}/images/plus-icon.svg`}
+                  isDefaultQuery={isDefaultQuery}
                 />
               </Grid>
             ))}

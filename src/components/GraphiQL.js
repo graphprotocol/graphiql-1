@@ -72,7 +72,8 @@ export class GraphiQL extends React.Component {
     handleSelectedAction: PropTypes.func,
     isActionsMenuOpen: PropTypes.bool,
     versionId: PropTypes.string,
-    selectedQueryName: PropTypes.string,
+    handleSelectQuery: PropTypes.func,
+    selectedQueryName: PropTypes.any,
   }
 
   constructor(props) {
@@ -86,10 +87,16 @@ export class GraphiQL extends React.Component {
     // Cache the storage instance
     this._storage = new StorageAPI(props.storage)
 
+    const selectedQuery = props.selectedQueryName
+      ? this.props.savedQueries.find(sq => sq.name === props.selectedQueryName)
+      : undefined
+
     // Determine the initial query to display.
     const query =
       props.query !== undefined
         ? props.query
+        : selectedQuery !== undefined
+        ? selectedQuery.query
         : props.defaultQuery !== undefined
         ? props.defaultQuery
         : this._storage.get('query') !== null
@@ -337,6 +344,7 @@ export class GraphiQL extends React.Component {
         <div className="editorWrap" style={editorWrapStyle}>
           <Grid container justify="space-between" alignItems="center">
             <SavedQueriesToolbar
+              selectedQueryName={this.props.selectedQueryName}
               queries={this.state.queries}
               handleUpdateQuery={this.props.handleUpdateQuery}
               handleCreateQuery={this.props.handleCreateQuery}
@@ -350,7 +358,7 @@ export class GraphiQL extends React.Component {
               showActions={this.state.showActions}
               isActionsMenuOpen={this.props.isActionsMenuOpen}
               versionId={this.props.versionId}
-              selectedQueryName={this.props.selectedQueryName}
+              handleSelectQuery={this.props.handleSelectQuery}
               docExplorerOpen={this.state.docExplorerOpen}
             />
             <div

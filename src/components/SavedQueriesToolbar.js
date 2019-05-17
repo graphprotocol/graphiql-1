@@ -34,16 +34,25 @@ export class SavedQueriesToolbar extends React.Component {
     showActions: PropTypes.bool,
     isActionsMenuOpen: PropTypes.bool,
     versionId: PropTypes.string,
-    selectedQueryName: PropTypes.string,
+    handleSelectQuery: PropTypes.func,
     docExplorerOpen: PropTypes.bool,
+    selectedQueryName: PropTypes.any,
   }
 
   constructor(props) {
     super(props)
     this.state = {
-      open: false,
-      selectedQueryName: this.defaultQuery(props.queries).name,
-      selectedQueryObj: this.defaultQuery(props.queries),
+      open: props.isActionsMenuOpen,
+      selectedQueryName:
+        props.selectedQueryName &&
+        this.findSelectedQuery(props.queries, props.selectedQueryName)
+          ? this.findSelectedQuery(props.queries, props.selectedQueryName).name
+          : this.defaultQuery(props.queries).name,
+      selectedQueryObj:
+        props.selectedQueryName &&
+        this.findSelectedQuery(props.queries, props.selectedQueryName)
+          ? this.findSelectedQuery(props.queries, props.selectedQueryName)
+          : this.defaultQuery(props.queries),
       queries: props.queries,
       query: props.query,
       showActions: props.showActions,
@@ -85,8 +94,14 @@ export class SavedQueriesToolbar extends React.Component {
       this.setState({ query: nextProps.query })
     }
 
-    if (nextProps.isActionsMenuOpen !== this.state.isActionsMenuOpen) {
-      this.setState({ isActionsMenuOpen: nextProps.isActionsMenuOpen })
+    if (
+      nextProps.isActionsMenuOpen !== this.state.isActionsMenuOpen ||
+      nextProps.isActionsMenuOpen !== this.state.open
+    ) {
+      this.setState({
+        isActionsMenuOpen: nextProps.isActionsMenuOpen,
+        open: nextProps.isActionsMenuOpen,
+      })
     }
 
     if (nextProps.showActions !== this.props.showActions) {
@@ -160,6 +175,7 @@ export class SavedQueriesToolbar extends React.Component {
     })
 
     if (result) {
+      this.props.handleSelectQuery(this.state.selectedQueryName)
       this.setState(
         Object.assign(this.state.successMessages, {
           create: true,
@@ -185,6 +201,7 @@ export class SavedQueriesToolbar extends React.Component {
     })
 
     if (result) {
+      this.props.handleSelectQuery(this.state.selectedQueryName)
       this.setState(
         Object.assign(this.state.successMessages, { update: true, showActions: false })
       )
@@ -206,9 +223,9 @@ export class SavedQueriesToolbar extends React.Component {
   }
 
   handleOpenMenu = e => {
+    e.stopPropagation()
     this.setState({
       open: true,
-      deleteDefaultQuery: false,
     })
   }
 
@@ -222,10 +239,7 @@ export class SavedQueriesToolbar extends React.Component {
     }
   }
 
-  findSelectedQuery = name => {
-    const selected = this.state.queries.find(query => query.name === name)
-    return selected
-  }
+  findSelectedQuery = (queries, name) => queries.find(query => query.name === name)
 
   handleChange = e => {
     if (e.target.value !== this.state.selectedQueryName) {
@@ -239,7 +253,8 @@ export class SavedQueriesToolbar extends React.Component {
   }
 
   handleMenuItemClick = async (e, value) => {
-    const selected = this.findSelectedQuery(value)
+    const selected = this.findSelectedQuery(this.state.queries, value)
+    this.props.handleSelectQuery(value)
     // save them in case we need to cancel changes
     this.selectedQueryName = value
     this.selectedQuery = selected.query
@@ -488,6 +503,9 @@ export class SavedQueriesToolbar extends React.Component {
               handleClickAction={this.handleClickAction}
               actionsOpen={this.state.isActionsMenuOpen}
               handleActionsMenuClick={this.handleActionsMenuClick}
+              isDefaultQuery={
+                this.state.selectedQueryObj ? this.state.selectedQueryObj.default : false
+              }
             />
           )}
           <ExecuteButton

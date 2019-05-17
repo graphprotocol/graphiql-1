@@ -37,7 +37,8 @@ export interface GraphiQLProps {
   handleSelectedAction: (id: number, value: string) => void
   isActionsMenuOpen?: boolean
   versionId: string
-  selectedQueryName?: string
+  handleSelectQuery?: (name: string) => void
+  selectedQueryName?: any
 }
 declare class GraphiQL extends React.Component<GraphiQLProps, any> {}
 export default GraphiQL

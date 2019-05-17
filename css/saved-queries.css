@@ -66,8 +66,20 @@
 
 .menu-item {
   position: relative;
-  padding: 12px;
+  padding: 12px 24px;
   cursor: pointer;
+}
+
+.menu-item:hover {
+  background-color: #0d0b15f0;
+}
+
+.actions-menu-options .menu-item:first-child {
+  margin-top: 12px;
+}
+
+.actions-menu-options .menu-item:last-child {
+  margin-bottom: 12px;
 }
 
 .menu-item .header {
@@ -95,6 +107,12 @@
   position: absolute;
   right: 60px;
   top: 16px;
+}
+
+.menu-item.default-query {
+  opacity: 0.3;
+  pointer-events: none;
+  display: block;
 }
 
 .menu-item .default-tag {
@@ -170,7 +188,6 @@
   width: 285px;
   box-sizing: border-box;
   z-index: 10;
-  padding: 12px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 4px;
   background-color: rgba(30, 26, 48, 0.94);
