@@ -39,6 +39,7 @@ export class QueryEditor extends React.Component {
     onPrettifyQuery: PropTypes.func,
     onRunQuery: PropTypes.func,
     editorTheme: PropTypes.string,
+    onClickEditor: PropTypes.func,
   }
 
   constructor(props) {
@@ -202,6 +203,7 @@ export class QueryEditor extends React.Component {
   }
 
   _onKeyUp = (cm, event) => {
+    this.props.onClickEditor()
     if (AUTO_COMPLETE_AFTER_KEY.test(event.key)) {
       this.editor.execCommand('autocomplete')
     }

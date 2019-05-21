@@ -8,6 +8,14 @@
   position: relative;
 }
 
+.graphiql-container .selector .pointer {
+  cursor: pointer;
+}
+
+.graphiql-container .selector .pointer input {
+  cursor: pointer !important;
+}
+
 .graphiql-container .selector > div:first-child {
   position: relative;
   height: 100%;
@@ -179,8 +187,10 @@
 .saved-queries-toolbar .flex {
   display: flex;
 }
+
 .actions-menu {
   position: relative;
+  display: flex;
 }
 
 .actions-menu .actions-menu-options {
@@ -223,12 +233,6 @@
   margin-right: 16px;
 }
 
-.actions-menu .actions-menu-options .trash-icon {
-  height: 16px;
-  width: 13px;
-  margin-right: 16px;
-}
-
 .actions-menu .actions-menu-options .new-query {
   color: #4bca81;
 }
@@ -252,6 +256,15 @@
   background-color: rgba(75, 202, 129, 0.08);
 }
 
+.saved-queries-toolbar .snackbar.snackbar-warning {
+  border: 1px solid #4bca81;
+  background-color: rgba(75, 202, 129, 0.08);
+}
+
+.saved-queries-toolbar .snackbar.snackbar-warning .trash-icon {
+  margin-right: 16px;
+}
+
 .saved-queries-toolbar .snackbar.snackbar-error {
   border: 1px solid #ed4a6d;
   background-color: rgba(237, 74, 109, 0.08);
@@ -259,7 +272,19 @@
 
 .saved-queries-toolbar .snackbar.snackbar-warning {
   border: 1px solid #ffa542;
-  background-color: rgba(255, 165, 66, 0.16);
+  background-color: rgba(255, 165, 66, 0.08);
+}
+
+.saved-queries-toolbar .snackbar .undo-delete {
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 6px 14px;
+  border-radius: 4px;
+  color: #ffffff;
+  font-family: EuclidCircular, Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  margin-left: 62px;
+  cursor: pointer;
 }
 
 .saved-queries-toolbar .snackbar .snackbar-content .message {

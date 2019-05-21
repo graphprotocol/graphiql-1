@@ -71,9 +71,9 @@ export class GraphiQL extends React.Component {
     handleCreateQuery: PropTypes.func,
     handleSelectedAction: PropTypes.func,
     isActionsMenuOpen: PropTypes.bool,
-    versionId: PropTypes.string,
     handleSelectQuery: PropTypes.func,
     selectedQueryName: PropTypes.any,
+    isOwner: PropTypes.bool,
   }
 
   constructor(props) {
@@ -346,20 +346,20 @@ export class GraphiQL extends React.Component {
             <SavedQueriesToolbar
               selectedQueryName={this.props.selectedQueryName}
               queries={this.state.queries}
-              handleUpdateQuery={this.props.handleUpdateQuery}
+              query={this.state.query}
               handleCreateQuery={this.props.handleCreateQuery}
+              handleUpdateQuery={this.props.handleUpdateQuery}
               handleSelectedAction={this.props.handleSelectedAction}
+              handleSelectQuery={this.props.handleSelectQuery}
               subscription={this.state.subscription}
               handleRunQuery={this.handleRunQuery}
               handleStopQuery={this.handleStopQuery}
               operations={this.state.operations}
               handleEditQuery={this.handleEditQuery}
-              query={this.state.query}
               showActions={this.state.showActions}
               isActionsMenuOpen={this.props.isActionsMenuOpen}
-              versionId={this.props.versionId}
-              handleSelectQuery={this.props.handleSelectQuery}
               docExplorerOpen={this.state.docExplorerOpen}
+              isOwner={this.props.isOwner}
             />
             <div
               className={classnames(
@@ -485,7 +485,9 @@ export class GraphiQL extends React.Component {
   }
 
   onClickEditor = () => {
-    this.setState({ showActions: true })
+    if (this.props.isOwner) {
+      this.setState({ showActions: true })
+    }
   }
 
   /**

@@ -18,23 +18,17 @@ export class Selector extends React.Component {
         default: PropTypes.bool,
       })
     ),
-    handleMenuItemClick: PropTypes.func,
-    handleOpenMenu: PropTypes.func,
-    handleChange: PropTypes.func,
     open: PropTypes.bool,
     selectedQueryName: PropTypes.string,
-    queryName: PropTypes.string,
+    handleOpenMenu: PropTypes.func,
+    handleMenuItemClick: PropTypes.func,
+    handleChange: PropTypes.func,
+    isDefaultQuery: PropTypes.bool,
+    isOwner: PropTypes.bool,
   }
 
   constructor(props) {
     super(props)
-  }
-
-  isDefault = () => {
-    const selectedQuery = this.props.queries.find(
-      query => query.name === this.props.selectedQueryName
-    )
-    return selectedQuery ? selectedQuery.default : false
   }
 
   render() {
@@ -42,24 +36,31 @@ export class Selector extends React.Component {
       queries,
       open,
       selectedQueryName,
-      queryName,
       handleMenuItemClick,
       handleOpenMenu,
       handleChange,
+      isDefaultQuery,
+      isOwner,
     } = this.props
 
     return (
       <Grid className="selector" autoComplete="off">
-        <Grid container justify="space-between">
+        <Grid
+          container
+          justify="space-between"
+          onClick={!isOwner ? handleOpenMenu : () => false}
+          className={!isOwner ? 'pointer' : ''}
+        >
           <Input
             name="query"
-            value={queryName}
+            value={selectedQueryName}
             className="menu-input"
             onChange={handleChange}
             onClick={handleChange}
             placeholder="New query"
+            readOnly={!isOwner}
           />
-          {this.isDefault() && <span className="default-label">Default</span>}
+          {isDefaultQuery && <span className="default-label">Default</span>}
           <Grid className="menu-icons">
             <img
               className="menu-icon"

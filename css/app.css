@@ -56,7 +56,7 @@
 .graphiql-container .docExplorerShow,
 .graphiql-container .historyShow {
   color: #b4bac5;
-  background-color: #13161f !important;
+  background-color: #000 !important;
   font-family: EuclidCircular, Arial, Helvetica, sans-serif;
   font-size: 14px;
   font-weight: bold;
