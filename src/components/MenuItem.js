@@ -32,7 +32,7 @@ const MenuItem = ({
           )}
         >
           {header}
-          {isDefault && <span className="default-tag">Default</span>}
+          {isDefault && <span className="default-tag">{'Default'}</span>}
           {selected && <img src={`${process.env.PUBLIC_URL}/images/checked-icon.svg`} />}
         </Typography>
       </Grid>
@@ -46,8 +46,8 @@ MenuItem.propTypes = {
   selected: PropTypes.oneOfType([PropTypes.boolean, undefined]),
   isDefault: PropTypes.oneOfType([PropTypes.boolean, undefined]),
   onClick: PropTypes.func,
-  optionIcon: PropTypes.bool,
-  trashIcon: PropTypes.string,
+  addIcon: PropTypes.string,
+  isDefaultQuery: PropTypes.bool,
 }
 
 export default MenuItem

@@ -6,7 +6,7 @@ type SavedQuery = {
   query: string
   default?: boolean
   subgraphId?: number
-  versionoId?: string
+  versionId?: string
 }
 
 export interface GraphiQLProps {

@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import { Selector } from './Selector'
-import { ActionsMenu } from './ActionsMenu'
+import Selector from './Selector'
+import ActionsMenu from './ActionsMenu'
 import { ExecuteButton } from './ExecuteButton'
 import Snackbar from '@material-ui/core/Snackbar'
 import classnames from 'classnames'
@@ -43,18 +43,16 @@ export class SavedQueriesToolbar extends React.Component {
 
   constructor(props) {
     super(props)
+    const findSelected =
+      props.selectedQueryName &&
+      this.findSelectedQuery(props.queries, props.selectedQueryName)
+    console.log('findSelected: ', findSelected)
     this.state = {
       open: props.isActionsMenuOpen,
-      selectedQueryName:
-        props.selectedQueryName &&
-        this.findSelectedQuery(props.queries, props.selectedQueryName)
-          ? this.findSelectedQuery(props.queries, props.selectedQueryName).name
-          : this.defaultQuery(props.queries).name,
-      selectedQueryObj:
-        props.selectedQueryName &&
-        this.findSelectedQuery(props.queries, props.selectedQueryName)
-          ? this.findSelectedQuery(props.queries, props.selectedQueryName)
-          : this.defaultQuery(props.queries),
+      selectedQueryName: findSelected
+        ? findSelected.name
+        : this.defaultQuery(props.queries).name,
+      selectedQueryObj: findSelected ? findSelected : this.defaultQuery(props.queries),
       queries: props.queries,
       query: props.query,
       showActions: props.showActions,
@@ -84,19 +82,15 @@ export class SavedQueriesToolbar extends React.Component {
 
     // Store selected query, so when cancel is clicked we can revert it
     this.selectedQueryName = this.defaultQuery(props.queries).name
-    this.selectedQueryObj =
-      props.selectedQueryName &&
-      this.findSelectedQuery(props.queries, props.selectedQueryName)
-        ? this.findSelectedQuery(props.queries, props.selectedQueryName)
-        : this.defaultQuery(props.queries)
+    this.selectedQueryObj = findSelected ? findSelected : this.defaultQuery(props.queries)
   }
 
   async componentWillReceiveProps(nextProps) {
-    if (nextProps.queries != this.props.queries) {
+    if (nextProps.queries !== this.props.queries) {
       this.setState({ queries: nextProps.queries })
     }
 
-    if (nextProps.query != this.props.query) {
+    if (nextProps.query !== this.props.query) {
       this.setState({ query: nextProps.query })
     }
 
@@ -116,7 +110,7 @@ export class SavedQueriesToolbar extends React.Component {
       })
     }
 
-    if (nextProps.docExplorerOpen != this.props.docExplorerOpen) {
+    if (nextProps.docExplorerOpen !== this.props.docExplorerOpen) {
       this.setState({ docExplorerOpen: nextProps.docExplorerOpen })
     }
   }
@@ -172,10 +166,9 @@ export class SavedQueriesToolbar extends React.Component {
     }
   }
 
-  /* Click handlers for different actions: 
-     - create, update, set as default and delete a query 
-  */
-  handleCreate = async e => {
+  /* Click handlers for different actions */
+  // create a query
+  handleCreate = async () => {
     this.validateName()
     this.validateQuery()
 
@@ -200,6 +193,7 @@ export class SavedQueriesToolbar extends React.Component {
     }
   }
 
+  // update existing query
   handleUpdate = async () => {
     this.validateName(true)
     this.validateQuery()
@@ -222,6 +216,7 @@ export class SavedQueriesToolbar extends React.Component {
     }
   }
 
+  // cancel changes to the query
   handleCancel = async e => {
     e.stopPropagation()
     await this.props.handleEditQuery(this.selectedQueryObj.query)
@@ -232,6 +227,7 @@ export class SavedQueriesToolbar extends React.Component {
     })
   }
 
+  // type a new query name
   handleChange = e => {
     if (e.target.value !== this.state.selectedQueryName) {
       this.setState({ showActions: true })
@@ -241,6 +237,7 @@ export class SavedQueriesToolbar extends React.Component {
     })
   }
 
+  // click on the dropdown menu with queries
   handleMenuItemClick = async (e, value) => {
     const selected = this.findSelectedQuery(this.state.queries, value)
     this.props.handleSelectQuery(value)
@@ -255,6 +252,7 @@ export class SavedQueriesToolbar extends React.Component {
     })
   }
 
+  // click to open the actions menu
   handleActionsMenuClick = e => {
     e.stopPropagation()
     this.setState({
@@ -262,6 +260,8 @@ export class SavedQueriesToolbar extends React.Component {
     })
   }
 
+  /* handle actions from the actions menu
+   - Share, Set as default and Delete */
   handleClickAction = async (e, value) => {
     await this.setState({
       isActionsMenuOpen: false,
@@ -316,10 +316,12 @@ export class SavedQueriesToolbar extends React.Component {
     }
   }
 
+  // handle delete action
   handleDelete = () => {
     this.props.handleSelectedAction(this.selectedQueryObj.id, 'Delete')
   }
 
+  // undo deleting if user changes their mind
   handleUndoDelete = async () => {
     await this.props.handleSelectQuery(this.selectedQueryName)
     this.setState({
@@ -331,6 +333,7 @@ export class SavedQueriesToolbar extends React.Component {
     this.props.handleEditQuery(this.selectedQueryObj.query)
   }
 
+  // open the actions menu
   handleOpenMenu = e => {
     e.stopPropagation()
     this.setState({
@@ -338,6 +341,7 @@ export class SavedQueriesToolbar extends React.Component {
     })
   }
 
+  // pick default query that we can use when there are no other queries
   defaultQuery = queries => {
     if (queries && queries.length > 0) {
       const defaultQuery = queries.find(query => query.default === true)
@@ -350,7 +354,9 @@ export class SavedQueriesToolbar extends React.Component {
 
   findSelectedQuery = (queries, name) => queries.find(query => query.name === name)
 
-  handleSnackbarClose = (event, reason) => {
+  // when shackbar closes, set all the success and error messages to false
+  // so they don't show in the UI
+  handleSnackbarClose = () => {
     if (this.state.deleteQuery) {
       this.handleDelete()
     }
@@ -484,14 +490,14 @@ export class SavedQueriesToolbar extends React.Component {
             >
               {!this.state.isNewQuery && (
                 <Typography className="action" onClick={this.handleUpdate}>
-                  Save
+                  {'Save'}
                 </Typography>
               )}
               <Typography className="action" onClick={this.handleCreate}>
-                Save as new
+                {'Save as new'}
               </Typography>
               <Typography className="action" onClick={this.handleCancel}>
-                Cancel
+                {'Cancel'}
               </Typography>
             </Grid>
           )}
@@ -513,7 +519,7 @@ export class SavedQueriesToolbar extends React.Component {
                 <Typography className="message">{this.snackbarMessage()}</Typography>
                 {this.state.successMessages.delete && (
                   <Typography onClick={this.handleUndoDelete} className="undo-delete">
-                    Undo
+                    {'Undo'}
                   </Typography>
                 )}
               </div>
