@@ -25,6 +25,7 @@ export class Selector extends React.Component {
     handleChange: PropTypes.func,
     isDefaultQuery: PropTypes.bool,
     isOwner: PropTypes.bool,
+    isMobile: PropTypes.bool,
   }
 
   constructor(props) {
@@ -41,6 +42,7 @@ export class Selector extends React.Component {
       handleChange,
       isDefaultQuery,
       isOwner,
+      isMobile,
     } = this.props
 
     return (
@@ -48,8 +50,8 @@ export class Selector extends React.Component {
         <Grid
           container
           justify="space-between"
-          onClick={!isOwner ? handleOpenMenu : () => false}
-          className={!isOwner ? 'pointer' : ''}
+          onClick={!isOwner || isMobile ? handleOpenMenu : () => false}
+          className={!isOwner || isMobile ? 'pointer' : ''}
         >
           <Input
             name="query"
@@ -58,7 +60,7 @@ export class Selector extends React.Component {
             onChange={handleChange}
             onClick={handleChange}
             placeholder="New query"
-            readOnly={!isOwner}
+            readOnly={!isOwner || isMobile}
           />
           {isDefaultQuery && <span className="default-label">Default</span>}
           <Grid className="menu-icons">

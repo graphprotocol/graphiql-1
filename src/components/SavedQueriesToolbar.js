@@ -37,6 +37,8 @@ export class SavedQueriesToolbar extends React.Component {
     isActionsMenuOpen: PropTypes.bool,
     docExplorerOpen: PropTypes.bool,
     isOwner: PropTypes.bool,
+    isMobile: PropTypes.bool,
+    handleToggleDocs: PropTypes.func,
   }
 
   constructor(props) {
@@ -457,7 +459,7 @@ export class SavedQueriesToolbar extends React.Component {
         alignItems="center"
         justify="space-between"
       >
-        <Grid className="flex">
+        <Grid className={classnames('flex', 'main-flex')}>
           <Selector
             queries={queries}
             open={this.state.open}
@@ -467,8 +469,9 @@ export class SavedQueriesToolbar extends React.Component {
             handleChange={this.handleChange}
             isDefaultQuery={this.selectedQueryObj ? this.selectedQueryObj.default : false}
             isOwner={this.props.isOwner}
+            isMobile={this.props.isMobile}
           />
-          {this.state.showActions && this.props.isOwner && (
+          {this.state.showActions && this.props.isOwner && !this.props.isMobile && (
             <Grid
               className={classnames(
                 'query-actions',
@@ -531,8 +534,8 @@ export class SavedQueriesToolbar extends React.Component {
             resumeHideDuration={0}
           />
         </Grid>
-        <Grid className="flex">
-          {!this.state.showActions && this.props.isOwner && (
+        <Grid className="flex actions-flex">
+          {!this.state.showActions && this.props.isOwner && !this.props.isMobile && (
             <ActionsMenu
               actions={this.actions()}
               handleClickAction={this.handleClickAction}
@@ -550,6 +553,15 @@ export class SavedQueriesToolbar extends React.Component {
             operations={operations}
           />
         </Grid>
+        <div
+          className={classnames('topBarWrap', this.state.docExplorerOpen && 'overlap')}
+        >
+          {!this.state.docExplorerOpen && (
+            <button className="docExplorerShow" onClick={this.props.handleToggleDocs}>
+              <span className="btnInner">{'Show schema'}</span>
+            </button>
+          )}
+        </div>
       </Grid>
     )
   }

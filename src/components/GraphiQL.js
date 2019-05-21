@@ -360,19 +360,9 @@ export class GraphiQL extends React.Component {
               isActionsMenuOpen={this.props.isActionsMenuOpen}
               docExplorerOpen={this.state.docExplorerOpen}
               isOwner={this.props.isOwner}
+              isMobile={document.documentElement.clientWidth < 740}
+              handleToggleDocs={this.handleToggleDocs}
             />
-            <div
-              className={classnames(
-                'topBarWrap',
-                this.state.docExplorerOpen && 'overlap'
-              )}
-            >
-              {!this.state.docExplorerOpen && (
-                <button className="docExplorerShow" onClick={this.handleToggleDocs}>
-                  <span className="btnInner">{'Show schema'}</span>
-                </button>
-              )}
-            </div>
           </Grid>
           <div
             ref={n => {
