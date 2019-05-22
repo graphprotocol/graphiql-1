@@ -1,10 +1,7 @@
 {
   "parser": "babel-eslint",
 
-  "plugins": [
-    "babel",
-    "react"
-  ],
+  "plugins": ["babel", "react"],
 
   "settings": {
     "react": {
@@ -192,7 +189,7 @@
     "no-unneeded-ternary": 2,
     "no-unreachable": 2,
     "no-unused-expressions": 2,
-    "no-unused-vars": [2, {"vars": "all", "args": "after-used"}],
+    "no-unused-vars": [1, { "vars": "all", "args": "after-used" }],
     "no-use-before-define": 0,
     "no-useless-call": 2,
     "no-useless-escape": 2,

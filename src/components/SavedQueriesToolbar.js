@@ -438,8 +438,8 @@ export class SavedQueriesToolbar extends React.Component {
       isActionsMenuOpen: false,
     });
     if (value === 'Share') {
-      // const url = window.location.href
-      // await navigator.clipboard.writeText(url)
+      const url = window.location.href;
+      await navigator.clipboard.writeText(url);
       this.setState(
         Object.assign(this.state.successMessages, {
           share: true,
