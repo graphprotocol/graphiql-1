@@ -15,7 +15,8 @@
   overflow: hidden;
   width: 100%;
   border-radius: 16px;
-  background: #13161f;
+  background-color: #000000;
+  box-shadow: 0 16px 64px 0 rgba(0, 0, 0, 0.32);
 }
 
 .graphiql-container .editorWrap {
@@ -24,15 +25,6 @@
   flex-direction: column;
   flex: 1;
   overflow-x: hidden;
-}
-
-.graphiql-container .title {
-  font-size: 18px;
-  font-family: EuclidCircular, Arial, Helvetica, sans-serif;
-  font-size: 16px;
-  color: #b4bac5;
-  font-weight: bold;
-  line-height: 19px;
 }
 
 .graphiql-container .title em {
@@ -45,25 +37,15 @@
   flex-direction: row;
 }
 
-.graphiql-container .topBar {
+.graphiql-container .topBarWrap.overlap {
   align-items: center;
+}
+
+.graphiql-container .topBar {
   background: #13161f;
   cursor: default;
-  display: flex;
-  flex-direction: row;
-  flex: 1;
-  height: 60px;
   overflow-y: visible;
-  padding: 7px 14px 6px;
   user-select: none;
-}
-
-.graphiql-container .topBar .title {
-  margin-left: 30px;
-}
-
-.graphiql-container .topBar .title > span {
-  pointer-events: none;
 }
 
 .graphiql-container .toolbar {
@@ -74,7 +56,7 @@
 .graphiql-container .docExplorerShow,
 .graphiql-container .historyShow {
   color: #b4bac5;
-  background-color: #13161f !important;
+  background-color: #000 !important;
   font-family: EuclidCircular, Arial, Helvetica, sans-serif;
   font-size: 14px;
   font-weight: bold;
@@ -249,7 +231,7 @@
 }
 
 .graphiql-container .CodeMirror .CodeMirror-gutter {
-  background-color: #13161f;
+  background-color: #000000;
 }
 
 .graphiql-container .CodeMirror .CodeMirror-gutter-wrapper {
@@ -339,7 +321,7 @@
 }
 
 .graphiql-container .execute-button-wrap {
-  height: 34px;
+  height: 40px;
   margin: 0 14px 0 28px;
   position: relative;
 }
@@ -369,6 +351,8 @@
 }
 
 .graphiql-container .execute-button {
+  display: flex;
+  justify-content: center;
   background: linear-gradient(315deg, #5500a0 0%, #8b35ff 100%);
   border: none;
   opacity: 0.8;
@@ -479,7 +463,7 @@
 }
 
 .graphiql-container .CodeMirror {
-  background-color: #13161f !important;
+  background-color: #000000 !important;
   color: #141823;
   font-family: 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace;
   font-size: 13px;
@@ -605,10 +589,6 @@ div.CodeMirror-lint-tooltip > * + * {
 }
 
 @media (max-width: 640px) {
-  .graphiql-container .editorWrap .topBar .title {
-    margin-left: 0px;
-  }
-
   .graphiql-container .editorWrap .topBar .execute-button-wrap {
     margin: 0 12px;
   }
@@ -625,14 +605,6 @@ div.CodeMirror-lint-tooltip > * + * {
 @media (max-width: 480px) {
   .graphiql-container .resultWrap {
     flex: 100%;
-  }
-  .graphiql-container .topBar .title > span {
-    pointer-events: all;
-    font-size: 14px;
-    padding: 6px 14px;
-    background-color: #1b1e2a;
-    border-radius: 14px;
-    cursor: pointer;
   }
 
   .graphiql-container .docExplorerWrap {
