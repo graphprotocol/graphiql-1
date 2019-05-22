@@ -1,6 +1,6 @@
 {
   "name": "@graphprotocol/graphiql",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "An graphical interactive in-browser GraphQL IDE.",
@@ -74,6 +74,7 @@
     "classnames": "^2.2.6",
     "codemirror": "^5.26.0",
     "codemirror-graphql": "^0.7.1",
+    "debug": "^4.1.1",
     "eslint": "4.4.1",
     "eslint-config-prettier": "^2.3.0",
     "eslint-plugin-babel": "4.1.2",
