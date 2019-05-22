@@ -10,8 +10,8 @@ import MenuItem from './MenuItem'
 
 const ActionsMenu = ({
   actions,
-  handleClickAction,
-  handleActionsMenuClick,
+  onClickAction,
+  onActionsMenuClick,
   actionsOpen,
   isDefaultQuery,
 }) => {
@@ -20,7 +20,7 @@ const ActionsMenu = ({
       <img
         className="dots-icon"
         src={`${process.env.PUBLIC_URL}/images/dots-icon.svg`}
-        onClick={handleActionsMenuClick}
+        onClick={onActionsMenuClick}
       />
       {actionsOpen && (
         <Grid className="actions-menu-options">
@@ -29,7 +29,7 @@ const ActionsMenu = ({
               <MenuItem
                 header={option.name}
                 className="item"
-                onClick={handleClickAction}
+                onClick={onClickAction}
                 addIcon={`${process.env.PUBLIC_URL}/images/plus-icon.svg`}
                 isDefaultQuery={isDefaultQuery}
               />
@@ -49,8 +49,8 @@ ActionsMenu.propTypes = {
     })
   ),
   actionsOpen: PropTypes.bool,
-  handleClickAction: PropTypes.func,
-  handleActionsMenuClick: PropTypes.func,
+  onClickAction: PropTypes.func,
+  onActionsMenuClick: PropTypes.func,
   isDefaultQuery: PropTypes.bool,
 }
 

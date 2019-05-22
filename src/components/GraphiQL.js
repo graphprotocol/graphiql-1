@@ -177,6 +177,7 @@ export class GraphiQL extends React.Component {
     let nextVariables = this.state.variables
     let nextOperationName = this.state.operationName
     let nextResponse = this.state.response
+    let savedQueries = this.state.savedQueries
 
     if (nextProps.schema !== undefined) {
       nextSchema = nextProps.schema
@@ -218,6 +219,10 @@ export class GraphiQL extends React.Component {
       nextSchema = undefined
     }
 
+    if (nextProps.savedQueries !== this.props.savedQueries) {
+      savedQueries = nextProps.savedQueries
+    }
+
     this.setState(
       {
         schema: nextSchema,
@@ -225,6 +230,7 @@ export class GraphiQL extends React.Component {
         variables: nextVariables,
         operationName: nextOperationName,
         response: nextResponse,
+        queries: savedQueries,
       },
       () => {
         if (this.state.schema === undefined) {
@@ -235,10 +241,7 @@ export class GraphiQL extends React.Component {
     )
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.savedQueries !== this.props.savedQueries) {
-      this.setState({ queries: this.props.savedQueries })
-    }
+  componentDidUpdate() {
     // If this update caused DOM nodes to have changed sizes, update the
     // corresponding CodeMirror instance sizes to match.
     this.codeMirrorSizer.updateSizes([
@@ -267,25 +270,24 @@ export class GraphiQL extends React.Component {
     // const logo = find(children, child => child.type === GraphiQL.Logo) || (
     //   <GraphiQL.Logo />
     // );
-
-    const toolbar = find(children, child => child.type === GraphiQL.Toolbar) || (
-      <GraphiQL.Toolbar>
-        {this.state.showPrettifyButton && (
-          <ToolbarButton
-            onClick={this.handlePrettifyQuery}
-            title="Prettify Query (Shift-Ctrl-P)"
-            label="Prettify"
-          />
-        )}
-        {this.state.showHistoryButton && (
-          <ToolbarButton
-            onClick={this.handleToggleHistory}
-            title="Show History"
-            label="History"
-          />
-        )}
-      </GraphiQL.Toolbar>
-    )
+    // const toolbar = find(children, child => child.type === GraphiQL.Toolbar) || (
+    //   <GraphiQL.Toolbar>
+    //     {this.state.showPrettifyButton && (
+    //       <ToolbarButton
+    //         onClick={this.handlePrettifyQuery}
+    //         title="Prettify Query (Shift-Ctrl-P)"
+    //         label="Prettify"
+    //       />
+    //     )}
+    //     {this.state.showHistoryButton && (
+    //       <ToolbarButton
+    //         onClick={this.handleToggleHistory}
+    //         title="Show History"
+    //         label="History"
+    //       />
+    //     )}
+    //   </GraphiQL.Toolbar>
+    // )
 
     const footer = find(children, child => child.type === GraphiQL.Footer)
 
@@ -347,21 +349,21 @@ export class GraphiQL extends React.Component {
               selectedQueryName={this.props.selectedQueryName}
               queries={this.state.queries}
               query={this.state.query}
-              handleCreateQuery={this.props.handleCreateQuery}
-              handleUpdateQuery={this.props.handleUpdateQuery}
-              handleSelectedAction={this.props.handleSelectedAction}
-              handleSelectQuery={this.props.handleSelectQuery}
+              onCreateQuery={this.props.handleCreateQuery}
+              onUpdateQuery={this.props.handleUpdateQuery}
+              onSelectedAction={this.props.handleSelectedAction}
+              onSelectQuery={this.props.handleSelectQuery}
               subscription={this.state.subscription}
-              handleRunQuery={this.handleRunQuery}
-              handleStopQuery={this.handleStopQuery}
+              onRunQuery={this.handleRunQuery}
+              onStopQuery={this.handleStopQuery}
               operations={this.state.operations}
-              handleEditQuery={this.handleEditQuery}
+              onEditQuery={this.handleEditQuery}
               showActions={this.state.showActions}
               isActionsMenuOpen={this.props.isActionsMenuOpen}
               docExplorerOpen={this.state.docExplorerOpen}
               isOwner={this.props.isOwner}
               isMobile={document.documentElement.clientWidth < 740}
-              handleToggleDocs={this.handleToggleDocs}
+              onToggleDocs={this.handleToggleDocs}
             />
           </Grid>
           <div
@@ -375,7 +377,7 @@ export class GraphiQL extends React.Component {
             <div
               className="queryWrap"
               style={queryWrapStyle}
-              onClick={this.onClickEditor}
+              onClick={this.handleClickEditor}
             >
               <QueryEditor
                 ref={n => {
@@ -389,7 +391,7 @@ export class GraphiQL extends React.Component {
                 onPrettifyQuery={this.handlePrettifyQuery}
                 onRunQuery={this.handleEditorRunQuery}
                 editorTheme={this.props.editorTheme}
-                onClickEditor={this.onClickEditor}
+                onClickEditor={this.handleClickEditor}
               />
               <div className="variable-editor" style={variableStyle}>
                 <div
@@ -474,7 +476,7 @@ export class GraphiQL extends React.Component {
     }
   }
 
-  onClickEditor = () => {
+  handleClickEditor = () => {
     if (this.props.isOwner) {
       this.setState({ showActions: true })
     }

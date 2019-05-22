@@ -12,9 +12,9 @@ const Selector = ({
   queries,
   open,
   selectedQueryName,
-  handleMenuItemClick,
-  handleOpenMenu,
-  handleChange,
+  onMenuItemClick,
+  onOpenMenu,
+  onChange,
   isDefaultQuery,
   isOwner,
   isMobile,
@@ -24,15 +24,15 @@ const Selector = ({
       <Grid
         container
         justify="space-between"
-        onClick={!isOwner || isMobile ? handleOpenMenu : () => false}
+        onClick={!isOwner || isMobile ? onOpenMenu : () => false}
         className={!isOwner || isMobile ? 'pointer' : ''}
       >
         <Input
           name="query"
           value={selectedQueryName}
           className="menu-input"
-          onChange={handleChange}
-          onClick={handleChange}
+          onChange={onChange}
+          onClick={onChange}
           placeholder="New query"
           readOnly={!isOwner || isMobile}
         />
@@ -41,7 +41,7 @@ const Selector = ({
           <img
             className="menu-icon"
             src={`${process.env.PUBLIC_URL}/images/query-selector-icon.svg`}
-            onClick={handleOpenMenu}
+            onClick={onOpenMenu}
           />
         </Grid>
       </Grid>
@@ -55,7 +55,7 @@ const Selector = ({
                 className="item"
                 selected={selectedQueryName === option.name}
                 isDefault={option.default}
-                onClick={handleMenuItemClick}
+                onClick={onMenuItemClick}
               />
             </Grid>
           ))}
@@ -76,9 +76,9 @@ Selector.propTypes = {
   ),
   open: PropTypes.bool,
   selectedQueryName: PropTypes.string,
-  handleOpenMenu: PropTypes.func,
-  handleMenuItemClick: PropTypes.func,
-  handleChange: PropTypes.func,
+  onOpenMenu: PropTypes.func,
+  onMenuItemClick: PropTypes.func,
+  onChange: PropTypes.func,
   isDefaultQuery: PropTypes.bool,
   isOwner: PropTypes.bool,
   isMobile: PropTypes.bool,

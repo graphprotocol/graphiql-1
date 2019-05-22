@@ -202,7 +202,7 @@ export class QueryEditor extends React.Component {
     return this._node && this._node.clientHeight
   }
 
-  _onKeyUp = (cm, event) => {
+  _onKeyUp = event => {
     this.props.onClickEditor()
     if (AUTO_COMPLETE_AFTER_KEY.test(event.key)) {
       this.editor.execCommand('autocomplete')
@@ -213,7 +213,7 @@ export class QueryEditor extends React.Component {
     this.props.onClickEditor()
   }
 
-  _onEdit = cm => {
+  _onEdit = () => {
     if (!this.ignoreChangeEvent) {
       this.cachedValue = this.editor.getValue()
       if (this.props.onEdit) {

@@ -66,6 +66,15 @@ Object.defineProperty(window, 'localStorage', {
   value: mockStorage,
 });
 
+const savedQueries = [
+  {
+    id: '1',
+    name: 'test',
+    query: '',
+    default: true,
+  },
+];
+
 describe('GraphiQL', () => {
   const noOpFetcher = () => {};
 
@@ -77,7 +86,9 @@ describe('GraphiQL', () => {
 
   it('should construct correctly with fetcher', () => {
     expect(() =>
-      ReactTestRenderer.create(<GraphiQL fetcher={noOpFetcher} />),
+      ReactTestRenderer.create(
+        <GraphiQL fetcher={noOpFetcher} savedQueries={savedQueries} />,
+      ),
     ).to.not.throw();
   });
 
@@ -96,7 +107,7 @@ describe('GraphiQL', () => {
 
     // Initial render calls fetcher
     const instance = ReactTestRenderer.create(
-      <GraphiQL fetcher={firstFetcher} />,
+      <GraphiQL fetcher={firstFetcher} savedQueries={savedQueries} />,
     );
     expect(firstCalled).to.equal(true);
 
@@ -104,7 +115,9 @@ describe('GraphiQL', () => {
 
     // Re-render does not call fetcher again
     firstCalled = false;
-    instance.update(<GraphiQL fetcher={firstFetcher} />);
+    instance.update(
+      <GraphiQL fetcher={firstFetcher} savedQueries={savedQueries} />,
+    );
     expect(firstCalled).to.equal(false);
 
     await wait();
@@ -116,13 +129,19 @@ describe('GraphiQL', () => {
 
   it('should not throw error if schema missing and query provided', () => {
     expect(() =>
-      ReactTestRenderer.create(<GraphiQL fetcher={noOpFetcher} query="{}" />),
+      ReactTestRenderer.create(
+        <GraphiQL
+          fetcher={noOpFetcher}
+          query="{}"
+          savedQueries={savedQueries}
+        />,
+      ),
     ).to.not.throw();
   });
 
   it('defaults to the built-in default query', () => {
     const graphiQL = ReactTestRenderer.create(
-      <GraphiQL fetcher={noOpFetcher} />,
+      <GraphiQL fetcher={noOpFetcher} savedQueries={savedQueries} />,
     );
     expect(graphiQL.getInstance().state.query).to.include(
       '# Welcome to GraphiQL',
@@ -131,7 +150,11 @@ describe('GraphiQL', () => {
 
   it('accepts a custom default query', () => {
     const graphiQL = ReactTestRenderer.create(
-      <GraphiQL fetcher={noOpFetcher} defaultQuery="GraphQL Party!!" />,
+      <GraphiQL
+        fetcher={noOpFetcher}
+        defaultQuery="GraphQL Party!!"
+        savedQueries={savedQueries}
+      />,
     );
     expect(graphiQL.getInstance().state.query).to.equal('GraphQL Party!!');
   });
