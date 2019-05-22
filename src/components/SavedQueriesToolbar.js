@@ -162,7 +162,11 @@ export class SavedQueriesToolbar extends React.Component {
             onMenuItemClick={this.handleMenuItemClick}
             onChange={this.handleChange}
             isDefaultQuery={
-              this.selectedQueryObj ? this.selectedQueryObj.default : false
+              this.state.isNewQuery
+                ? false
+                : this.selectedQueryObj
+                ? this.selectedQueryObj.default
+                : false
             }
             isOwner={this.props.isOwner}
             isMobile={this.props.isMobile}
@@ -246,7 +250,9 @@ export class SavedQueriesToolbar extends React.Component {
                   actionsOpen={this.state.isActionsMenuOpen}
                   onActionsMenuClick={this.handleActionsMenuClick}
                   isDefaultQuery={
-                    this.selectedQueryObj
+                    this.state.isNewQuery
+                      ? false
+                      : this.selectedQueryObj
                       ? this.selectedQueryObj.default
                       : false
                   }
@@ -341,6 +347,8 @@ export class SavedQueriesToolbar extends React.Component {
 
     if (result) {
       this.props.onSelectQuery(this.state.selectedQueryName);
+      this.selectedQueryObj = result;
+      this.selectedQueryName = result.name;
       this.setState(
         Object.assign(this.state.successMessages, {
           create: true,
@@ -371,6 +379,8 @@ export class SavedQueriesToolbar extends React.Component {
 
     if (result) {
       this.props.onSelectQuery(this.state.selectedQueryName);
+      this.selectedQueryObj = result;
+      this.selectedQueryName = result.name;
       this.setState(
         Object.assign(this.state.successMessages, {
           update: true,
