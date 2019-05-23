@@ -46,7 +46,7 @@
   },
   "lint-staged": {
     "*.js": [
-      "prettier --jsx-bracket-same-line --single-quote --trailing-comma=all --write",
+      "prettier --jsx-bracket-same-line --no-semi --single-quote --write",
       "git add"
     ]
   },

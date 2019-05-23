@@ -30,10 +30,11 @@ import { fillLeafs } from '../utility/fillLeafs'
 import { getLeft, getTop } from '../utility/elementPosition'
 import {
   introspectionQuery,
-  introspectionQuerySansSubscriptions,
+  introspectionQuerySansSubscriptions
 } from '../utility/introspectionQueries'
 import classnames from 'classnames'
-import { Grid } from '@material-ui/core'
+import Grid from '@material-ui/core/Grid'
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 
 const DEFAULT_DOC_EXPLORER_WIDTH = 350
 
@@ -54,7 +55,7 @@ export class GraphiQL extends React.Component {
     storage: PropTypes.shape({
       getItem: PropTypes.func,
       setItem: PropTypes.func,
-      removeItem: PropTypes.func,
+      removeItem: PropTypes.func
     }),
     defaultQuery: PropTypes.string,
     onEditQuery: PropTypes.func,
@@ -73,7 +74,7 @@ export class GraphiQL extends React.Component {
     isActionsMenuOpen: PropTypes.bool,
     handleSelectQuery: PropTypes.func,
     selectedQueryName: PropTypes.any,
-    isOwner: PropTypes.bool,
+    isOwner: PropTypes.bool
   }
 
   constructor(props) {
@@ -108,7 +109,9 @@ export class GraphiQL extends React.Component {
 
     // Determine the initial variables to display.
     const variables =
-      props.variables !== undefined ? props.variables : this._storage.get('variables')
+      props.variables !== undefined
+        ? props.variables
+        : this._storage.get('variables')
 
     // Determine the initial operationName to use.
     const operationName =
@@ -130,7 +133,8 @@ export class GraphiQL extends React.Component {
       response: props.response,
       editorFlex: Number(this._storage.get('editorFlex')) || 1,
       variableEditorOpen: Boolean(variables),
-      variableEditorHeight: Number(this._storage.get('variableEditorHeight')) || 200,
+      variableEditorHeight:
+        Number(this._storage.get('variableEditorHeight')) || 200,
       docExplorerOpen:
         document.documentElement.clientWidth < 640
           ? true
@@ -138,7 +142,8 @@ export class GraphiQL extends React.Component {
       historyPaneOpen: this._storage.get('historyPaneOpen') === 'true' || false,
       resultPaneOpen: !(document.documentElement.clientWidth < 480),
       docExplorerWidth:
-        Number(this._storage.get('docExplorerWidth')) || DEFAULT_DOC_EXPLORER_WIDTH,
+        Number(this._storage.get('docExplorerWidth')) ||
+        DEFAULT_DOC_EXPLORER_WIDTH,
       isWaitingForResponse: false,
       subscription: null,
       showHistoryButton: false,
@@ -146,7 +151,7 @@ export class GraphiQL extends React.Component {
       showQueryVariables: false,
       queries: props.savedQueries,
       ...queryFacts,
-      showActions: false,
+      showActions: false
     }
 
     // Ensure only the last executed editor query is rendered.
@@ -215,7 +220,10 @@ export class GraphiQL extends React.Component {
 
     // If schema is not supplied via props and the fetcher changed, then
     // remove the schema so fetchSchema() will be called with the new fetcher.
-    if (nextProps.schema === undefined && nextProps.fetcher !== this.props.fetcher) {
+    if (
+      nextProps.schema === undefined &&
+      nextProps.fetcher !== this.props.fetcher
+    ) {
       nextSchema = undefined
     }
 
@@ -230,7 +238,7 @@ export class GraphiQL extends React.Component {
         variables: nextVariables,
         operationName: nextOperationName,
         response: nextResponse,
-        queries: savedQueries,
+        queries: savedQueries
       },
       () => {
         if (this.state.schema === undefined) {
@@ -247,7 +255,7 @@ export class GraphiQL extends React.Component {
     this.codeMirrorSizer.updateSizes([
       this.queryEditorComponent,
       this.variableEditorComponent,
-      this.resultComponent,
+      this.resultComponent
     ])
   }
 
@@ -293,7 +301,7 @@ export class GraphiQL extends React.Component {
 
     const queryWrapStyle = {
       WebkitFlex: this.state.editorFlex,
-      flex: this.state.editorFlex,
+      flex: this.state.editorFlex
     }
 
     const docWrapStyle = {
@@ -302,7 +310,7 @@ export class GraphiQL extends React.Component {
           ? '100%'
           : this.state.docExplorerWidth,
       borderRadius: '0 16px 0 0',
-      backgroundColor: '#0F1016',
+      backgroundColor: '#0F1016'
     }
     const docExplorerWrapClasses =
       'docExplorerWrap' +
@@ -311,20 +319,21 @@ export class GraphiQL extends React.Component {
     const historyPaneStyle = {
       display: this.state.historyPaneOpen ? 'block' : 'none',
       width: '230px',
-      zIndex: '7',
+      zIndex: '7'
     }
 
     const variableOpen = this.state.variableEditorOpen
     const variableStyle = {
       height: variableOpen ? this.state.variableEditorHeight : null,
-      display: 'none',
+      display: 'none'
     }
 
     const editorWrapStyle = {
       display:
-        this.state.docExplorerOpen && document.documentElement.clientWidth <= 480
+        this.state.docExplorerOpen &&
+        document.documentElement.clientWidth <= 480
           ? 'none'
-          : 'flex',
+          : 'flex'
     }
 
     return (
@@ -336,8 +345,7 @@ export class GraphiQL extends React.Component {
             variables={this.state.variables}
             onSelectQuery={this.handleSelectHistoryQuery}
             storage={this._storage}
-            queryID={this._editorQueryID}
-          >
+            queryID={this._editorQueryID}>
             <div className="docExplorerHide" onClick={this.handleToggleHistory}>
               {'\u2715'}
             </div>
@@ -364,6 +372,7 @@ export class GraphiQL extends React.Component {
               isOwner={this.props.isOwner}
               isMobile={document.documentElement.clientWidth < 740}
               onToggleDocs={this.handleToggleDocs}
+              onClickAwayEditor={this.handleClickAwayEditor}
             />
           </Grid>
           <div
@@ -372,13 +381,11 @@ export class GraphiQL extends React.Component {
             }}
             className="editorBar"
             onDoubleClick={this.handleResetResize}
-            onMouseDown={this.handleResizeStart}
-          >
+            onMouseDown={this.handleResizeStart}>
             <div
               className="queryWrap"
               style={queryWrapStyle}
-              onClick={this.handleClickEditor}
-            >
+              onClick={this.handleClickEditor}>
               <QueryEditor
                 ref={n => {
                   this.queryEditorComponent = n
@@ -397,8 +404,7 @@ export class GraphiQL extends React.Component {
                 <div
                   className="variable-editor-title"
                   style={{ cursor: variableOpen ? 'row-resize' : 'n-resize' }}
-                  onMouseDown={this.handleVariableResizeStart}
-                >
+                  onMouseDown={this.handleVariableResizeStart}>
                   {'Query Variables'}
                 </div>
                 <VariableEditor
@@ -440,8 +446,7 @@ export class GraphiQL extends React.Component {
             docExplorerWrapClasses,
             this.state.docExplorerOpen ? 'show' : 'hide'
           )}
-          style={docWrapStyle}
-        >
+          style={docWrapStyle}>
           <div
             className="docExplorerResizer"
             onDoubleClick={this.handleDocsResetResize}
@@ -452,8 +457,7 @@ export class GraphiQL extends React.Component {
               this.docExplorerComponent = c
             }}
             schema={this.state.schema}
-            defaultTypeOrField={this.props.defaultTypeOrField}
-          >
+            defaultTypeOrField={this.props.defaultTypeOrField}>
             <div className="docExplorerHide" onClick={this.handleToggleDocs}>
               {document.documentElement.clientWidth < 640
                 ? 'Show queries'
@@ -480,6 +484,10 @@ export class GraphiQL extends React.Component {
     if (this.props.isOwner) {
       this.setState({ showActions: true })
     }
+  }
+
+  handleClickAwayEditor = () => {
+    this.setState({ showActions: false })
   }
 
   /**
@@ -537,7 +545,7 @@ export class GraphiQL extends React.Component {
             {
               className: 'autoInsertedLeaf',
               clearOnEnter: true,
-              title: 'Automatically added leaf fields',
+              title: 'Automatically added leaf fields'
             }
           )
         )
@@ -563,7 +571,7 @@ export class GraphiQL extends React.Component {
     const fetch = observableToPromise(fetcher({ query: introspectionQuery }))
     if (!isPromise(fetch)) {
       this.setState({
-        response: 'Fetcher did not return a Promise for introspection.',
+        response: 'Fetcher did not return a Promise for introspection.'
       })
       return
     }
@@ -578,7 +586,7 @@ export class GraphiQL extends React.Component {
         // sans-subscriptions query for services which do not yet support it.
         const fetch2 = observableToPromise(
           fetcher({
-            query: introspectionQuerySansSubscriptions,
+            query: introspectionQuerySansSubscriptions
           })
         )
         if (!isPromise(fetch)) {
@@ -600,18 +608,20 @@ export class GraphiQL extends React.Component {
           this.setState({ schema, ...queryFacts })
         } else {
           const responseString =
-            typeof result === 'string' ? result : JSON.stringify(result, null, 2)
+            typeof result === 'string'
+              ? result
+              : JSON.stringify(result, null, 2)
           this.setState({
             // Set schema to `null` to explicitly indicate that no schema exists.
             schema: null,
-            response: responseString,
+            response: responseString
           })
         }
       })
       .catch(error => {
         this.setState({
           schema: null,
-          response: error && String(error.stack || error),
+          response: error && String(error.stack || error)
         })
       })
   }
@@ -621,7 +631,8 @@ export class GraphiQL extends React.Component {
     let jsonVariables = null
 
     try {
-      jsonVariables = variables && variables.trim() !== '' ? JSON.parse(variables) : null
+      jsonVariables =
+        variables && variables.trim() !== '' ? JSON.parse(variables) : null
     } catch (error) {
       throw new Error(`Variables are invalid JSON: ${error.message}.`)
     }
@@ -633,7 +644,7 @@ export class GraphiQL extends React.Component {
     const fetch = fetcher({
       query,
       variables: jsonVariables,
-      operationName,
+      operationName
     })
 
     if (isPromise(fetch)) {
@@ -642,7 +653,7 @@ export class GraphiQL extends React.Component {
       fetch.then(cb).catch(error => {
         this.setState({
           isWaitingForResponse: false,
-          response: error && String(error.stack || error),
+          response: error && String(error.stack || error)
         })
       })
     } else if (isObservable(fetch)) {
@@ -655,15 +666,15 @@ export class GraphiQL extends React.Component {
           this.setState({
             isWaitingForResponse: false,
             response: error && String(error.stack || error),
-            subscription: null,
+            subscription: null
           })
         },
         complete: () => {
           this.setState({
             isWaitingForResponse: false,
-            subscription: null,
+            subscription: null
           })
-        },
+        }
       })
 
       return subscription
@@ -702,7 +713,7 @@ export class GraphiQL extends React.Component {
       this.setState({
         isWaitingForResponse: true,
         response: null,
-        operationName,
+        operationName
       })
 
       // _fetchQuery may return a subscription.
@@ -714,7 +725,7 @@ export class GraphiQL extends React.Component {
           if (queryID === this._editorQueryID) {
             this.setState({
               isWaitingForResponse: false,
-              response: JSON.stringify(result, null, 2),
+              response: JSON.stringify(result, null, 2)
             })
           }
         }
@@ -723,7 +734,7 @@ export class GraphiQL extends React.Component {
     } catch (error) {
       this.setState({
         isWaitingForResponse: false,
-        response: error.message,
+        response: error.message
       })
     }
   }
@@ -732,7 +743,7 @@ export class GraphiQL extends React.Component {
     const subscription = this.state.subscription
     this.setState({
       isWaitingForResponse: false,
-      subscription: null,
+      subscription: null
     })
     if (subscription) {
       subscription.unsubscribe()
@@ -756,7 +767,10 @@ export class GraphiQL extends React.Component {
         // Loop through all operations to see if one contains the cursor.
         for (let i = 0; i < operations.length; i++) {
           const operation = operations[i]
-          if (operation.loc.start <= cursorIndex && operation.loc.end >= cursorIndex) {
+          if (
+            operation.loc.start <= cursorIndex &&
+            operation.loc.end >= cursorIndex
+          ) {
             operationName = operation.name && operation.name.value
             break
           }
@@ -781,7 +795,7 @@ export class GraphiQL extends React.Component {
     )
     this.setState({
       query: value,
-      ...queryFacts,
+      ...queryFacts
     })
     if (this.props.onEditQuery) {
       return this.props.onEditQuery(value)
@@ -806,7 +820,7 @@ export class GraphiQL extends React.Component {
 
       return {
         operationName: updatedOperationName,
-        ...queryFacts,
+        ...queryFacts
       }
     }
   }
@@ -953,7 +967,7 @@ export class GraphiQL extends React.Component {
       } else {
         this.setState({
           docExplorerOpen: true,
-          docExplorerWidth: Math.min(docsSize, 650),
+          docExplorerWidth: Math.min(docsSize, 650)
         })
       }
     }
@@ -975,7 +989,7 @@ export class GraphiQL extends React.Component {
 
   handleDocsResetResize = () => {
     this.setState({
-      docExplorerWidth: DEFAULT_DOC_EXPLORER_WIDTH,
+      docExplorerWidth: DEFAULT_DOC_EXPLORER_WIDTH
     })
   }
 
@@ -1000,12 +1014,12 @@ export class GraphiQL extends React.Component {
       if (bottomSize < 60) {
         this.setState({
           variableEditorOpen: false,
-          variableEditorHeight: hadHeight,
+          variableEditorHeight: hadHeight
         })
       } else {
         this.setState({
           variableEditorOpen: true,
-          variableEditorHeight: bottomSize,
+          variableEditorHeight: bottomSize
         })
       }
     }
