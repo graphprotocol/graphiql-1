@@ -480,9 +480,11 @@ export class GraphiQL extends React.Component {
     }
   }
 
-  handleClickEditor = () => {
+  handleClickEditor = e => {
     if (this.props.isOwner) {
-      this.setState({ showActions: true })
+      if (e !== undefined) {
+        this.setState({ showActions: true })
+      }
     }
   }
 
@@ -688,8 +690,6 @@ export class GraphiQL extends React.Component {
       this.docExplorerComponent.showDocForReference(reference)
     })
   }
-
-  handleFocusEditor = value => this.setState({ isEditorFocused: value })
 
   handleRunQuery = selectedOperationName => {
     this._editorQueryID++

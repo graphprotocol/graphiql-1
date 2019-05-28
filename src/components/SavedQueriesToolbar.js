@@ -50,11 +50,6 @@ export class SavedQueriesToolbar extends React.Component {
     const defaultQuery = this.defaultQuery(props.queries)
     this.state = {
       open: props.isActionsMenuOpen,
-      selectedQueryName: findSelected
-        ? findSelected.name
-        : defaultQuery
-        ? defaultQuery.name
-        : 'Example Query',
       selectedQueryObj: findSelected ? findSelected : defaultQuery,
       queries: props.queries,
       query: props.query,
@@ -83,7 +78,6 @@ export class SavedQueriesToolbar extends React.Component {
     }
 
     // Store selected query, so when cancel is clicked we can revert it
-    this.selectedQueryName = defaultQuery ? defaultQuery.name : 'Example Query'
     this.selectedQueryObj = findSelected ? findSelected : defaultQuery
   }
 
@@ -156,20 +150,39 @@ export class SavedQueriesToolbar extends React.Component {
           <Selector
             queries={queries}
             open={this.state.open}
-            selectedQueryName={this.state.selectedQueryName}
+            selectedQueryName={this.state.selectedQueryObj.name}
             onOpenMenu={this.handleOpenMenu}
             onMenuItemClick={this.handleMenuItemClick}
             onChange={this.handleChange}
             isDefaultQuery={
               this.state.isNewQuery
                 ? false
-                : this.selectedQueryObj
-                ? this.selectedQueryObj.default
+                : this.state.selectedQueryObj
+                ? this.state.selectedQueryObj.default
                 : false
             }
             isOwner={this.props.isOwner}
             isMobile={this.props.isMobile}
           />
+          <Grid className="flex actions-flex">
+            {!this.state.showActions &&
+              this.props.isOwner &&
+              !this.props.isMobile && (
+                <ActionsMenu
+                  actions={this.actions()}
+                  onClickAction={this.handleClickAction}
+                  actionsOpen={this.state.isActionsMenuOpen}
+                  onActionsMenuClick={this.handleActionsMenuClick}
+                  isDefaultQuery={
+                    this.state.isNewQuery
+                      ? false
+                      : this.state.selectedQueryObj
+                      ? this.state.selectedQueryObj.default
+                      : false
+                  }
+                />
+              )}
+          </Grid>
           {this.state.showActions &&
             this.props.isOwner &&
             !this.props.isMobile && (
@@ -240,36 +253,17 @@ export class SavedQueriesToolbar extends React.Component {
           />
         </Grid>
         <Grid className="flex">
-          <Grid className="flex actions-flex">
-            {!this.state.showActions &&
-              this.props.isOwner &&
-              !this.props.isMobile && (
-                <ActionsMenu
-                  actions={this.actions()}
-                  onClickAction={this.handleClickAction}
-                  actionsOpen={this.state.isActionsMenuOpen}
-                  onActionsMenuClick={this.handleActionsMenuClick}
-                  isDefaultQuery={
-                    this.state.isNewQuery
-                      ? false
-                      : this.selectedQueryObj
-                      ? this.selectedQueryObj.default
-                      : false
-                  }
-                />
-              )}
+          <div
+            className={classnames(
+              'topBarWrap',
+              this.state.docExplorerOpen && 'overlap'
+            )}>
             <ExecuteButton
               isRunning={Boolean(subscription)}
               onRun={onRunQuery}
               onStop={onStopQuery}
               operations={operations}
             />
-          </Grid>
-          <div
-            className={classnames(
-              'topBarWrap',
-              this.state.docExplorerOpen && 'overlap'
-            )}>
             {!this.state.docExplorerOpen && (
               <button
                 className="docExplorerShow"
@@ -289,21 +283,20 @@ export class SavedQueriesToolbar extends React.Component {
      Note: Duplicate query validation happens on the server
   */
   validateName = updated => {
-    const name = this.state.selectedQueryName
+    const name = this.state.selectedQueryObj.name
     let isValid = true
     if (name === '') {
       isValid = false
       this.setState(
         Object.assign(this.state.errorMessages, {
-          nameEmpty: true,
-          showActions: false
+          nameEmpty: true
         })
       )
     }
     let foundName
     if (updated) {
       const otherQueries = this.state.queries.filter(
-        other => other.name !== this.state.selectedQueryName
+        other => other.name !== this.state.selectedQueryObj.name
       )
       foundName = otherQueries.find(found => found.name === name)
     } else {
@@ -327,8 +320,7 @@ export class SavedQueriesToolbar extends React.Component {
       isValid = false
       this.setState(
         Object.assign(this.state.errorMessages, {
-          queryEmpty: true,
-          showActions: false
+          queryEmpty: true
         })
       )
     }
@@ -347,21 +339,17 @@ export class SavedQueriesToolbar extends React.Component {
   /* Click handlers for different actions */
   // create a query
   handleCreate = async () => {
-    this.validateName()
-    this.validateQuery()
-
     if (!this.validateName() || !this.validateQuery()) {
       return false
     }
     const result = await this.props.onCreateQuery({
-      name: this.state.selectedQueryName,
+      name: this.state.selectedQueryObj.name,
       query: this.state.query
     })
 
     if (result) {
-      this.props.onSelectQuery(this.state.selectedQueryName)
+      this.props.onSelectQuery(this.state.selectedQueryObj.name)
       this.selectedQueryObj = result
-      this.selectedQueryName = result.name
       await this.setState(
         Object.assign(this.state.successMessages, {
           create: true,
@@ -384,28 +372,25 @@ export class SavedQueriesToolbar extends React.Component {
   // update existing query
   handleUpdate = async e => {
     e.stopPropagation()
-    this.validateName(true)
-    this.validateQuery()
-
-    if (!this.validateName() || !this.validateQuery()) {
+    if (!this.validateName(true) || !this.validateQuery()) {
       return false
     }
     this.props.onClickAwayEditor()
 
     const result = await this.props.onUpdateQuery({
       id: this.state.selectedQueryObj.id,
-      name: this.state.selectedQueryName,
+      name: this.state.selectedQueryObj.name,
       query: this.state.query
     })
 
     if (result) {
-      this.props.onSelectQuery(this.state.selectedQueryName)
+      this.props.onSelectQuery(this.state.selectedQueryObj.name)
       this.selectedQueryObj = result
-      this.selectedQueryName = result.name
       await this.setState(
         Object.assign(this.state.successMessages, {
           update: true,
-          showActions: false
+          showActions: false,
+          selectedQueryObj: result
         })
       )
     } else {
@@ -424,7 +409,7 @@ export class SavedQueriesToolbar extends React.Component {
     this.props.onClickAwayEditor()
     await this.props.onEditQuery(this.selectedQueryObj.query)
     this.setState({
-      selectedQueryName: this.selectedQueryName,
+      selectedQueryObj: this.selectedQueryObj,
       showActions: false,
       isNewQuery: false
     })
@@ -433,11 +418,11 @@ export class SavedQueriesToolbar extends React.Component {
   // type a new query name
   handleChange = e => {
     e.stopPropagation()
-    if (e.target.value !== this.state.selectedQueryName) {
+    if (e.target.value !== this.state.selectedQueryObj.name) {
       this.setState({ showActions: true })
     }
     this.setState({
-      selectedQueryName: e.target.value
+      selectedQueryObj: { ...this.state.selectedQueryObj, name: e.target.value }
     })
   }
 
@@ -446,11 +431,9 @@ export class SavedQueriesToolbar extends React.Component {
     const selected = this.findSelectedQuery(this.state.queries, value)
     this.props.onSelectQuery(value)
     // save them in case we need to cancel changes
-    this.selectedQueryName = value
     this.selectedQueryObj = selected
     this.props.onEditQuery(selected.query)
     await this.setState({
-      selectedQueryName: value,
       open: false,
       selectedQueryObj: selected
     })
@@ -500,44 +483,48 @@ export class SavedQueriesToolbar extends React.Component {
       }
     } else if (value === 'Delete') {
       if (this.state.selectedQueryObj.default === true) {
-        return this.setState(
+        this.setState(
           Object.assign(this.state.errorMessages, {
-            deleteDefault: true
+            deleteDefault: true,
+            deleteQuery: false
           })
         )
+        return
       }
       await this.setState(
         Object.assign(this.state.successMessages, {
           delete: true,
           selectedQueryObj: this.defaultQuery(this.props.queries),
-          selectedQueryName: this.defaultQuery(this.props.queries).name,
           deleteQuery: true
         })
       )
-      this.selectedQueryObj = this.defaultQuery(this.props.queries)
-      this.props.onSelectQuery(this.state.selectedQueryName)
+      this.props.onSelectQuery(this.state.selectedQueryObj.name)
       this.props.onEditQuery(this.state.selectedQueryObj.query)
     } else if (value === 'New query') {
-      this.setState({ selectedQueryName: '', isNewQuery: true })
+      this.setState({
+        selectedQueryObj: { ...this.state.selectedQueryObj, name: '' },
+        isNewQuery: true
+      })
       this.props.onEditQuery('')
     }
   }
 
   // handle delete action
-  handleDelete = () => {
-    this.props.onSelectedAction(this.selectedQueryObj.id, 'Delete')
+  handleDelete = async () => {
+    await this.props.onSelectedAction(this.selectedQueryObj.id, 'Delete')
+    this.selectedQueryObj = this.defaultQuery(this.props.queries)
   }
 
   // undo deleting if user changes their mind
   handleUndoDelete = async () => {
-    await this.props.onSelectQuery(this.selectedQueryName)
+    await this.props.onSelectQuery(this.selectedQueryObj.name)
     this.setState({
-      selectedQueryName: this.selectedQueryName,
       selectedQueryObj: this.selectedQueryObj,
       deleteQuery: false
     })
 
-    this.props.onEditQuery(this.selectedQueryObj.query)
+    await this.props.onEditQuery(this.selectedQueryObj.query)
+    this.handleSnackbarClose()
   }
 
   // open the actions menu
@@ -550,7 +537,7 @@ export class SavedQueriesToolbar extends React.Component {
 
   // when shackbar closes, set all the success and error messages to false
   // so they don't show in the UI
-  handleSnackbarClose = () => {
+  handleSnackbarClose = e => {
     if (this.state.deleteQuery) {
       this.handleDelete()
     }
