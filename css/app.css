@@ -322,7 +322,7 @@
 
 .graphiql-container .execute-button-wrap {
   height: 40px;
-  margin: 0 14px 0 28px;
+  margin: 0 28px 0 16px;
   position: relative;
 }
 
@@ -585,6 +585,10 @@ div.CodeMirror-lint-tooltip > * + * {
     width: 300px;
     z-index: 2;
     position: relative;
+  }
+
+  .graphiql-container .docExplorerWrap {
+    width: 300px !important;
   }
 }
 

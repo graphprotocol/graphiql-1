@@ -329,10 +329,16 @@
 @media (max-width: 850px) {
   .graphiql-container .selector {
     margin-left: 16px;
+    margin-right: 0;
   }
 
   .saved-queries-toolbar .query-actions {
     margin-left: 16px;
+  }
+
+  .saved-queries-toolbar .flex .execute-button-wrap {
+    margin-left: 6px;
+    margin-right: 12px;
   }
 }
 
@@ -340,6 +346,16 @@
   .saved-queries-toolbar .actions-flex {
     margin-left: 8px;
     margin-top: 0px;
+  }
+
+  .saved-queries-toolbar .main-flex {
+    align-self: center;
+  }
+
+  .saved-queries-toolbar.schema-hidden .selector {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
   }
 
   .saved-queries-toolbar.schema-hidden .topBarWrap {

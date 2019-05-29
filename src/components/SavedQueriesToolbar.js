@@ -164,25 +164,7 @@ export class SavedQueriesToolbar extends React.Component {
             isOwner={this.props.isOwner}
             isMobile={this.props.isMobile}
           />
-          <Grid className="flex actions-flex">
-            {!this.state.showActions &&
-              this.props.isOwner &&
-              !this.props.isMobile && (
-                <ActionsMenu
-                  actions={this.actions()}
-                  onClickAction={this.handleClickAction}
-                  actionsOpen={this.state.isActionsMenuOpen}
-                  onActionsMenuClick={this.handleActionsMenuClick}
-                  isDefaultQuery={
-                    this.state.isNewQuery
-                      ? false
-                      : this.state.selectedQueryObj
-                      ? this.state.selectedQueryObj.default
-                      : false
-                  }
-                />
-              )}
-          </Grid>
+
           {this.state.showActions &&
             this.props.isOwner &&
             !this.props.isMobile && (
@@ -253,17 +235,34 @@ export class SavedQueriesToolbar extends React.Component {
           />
         </Grid>
         <Grid className="flex">
-          <div
-            className={classnames(
-              'topBarWrap',
-              this.state.docExplorerOpen && 'overlap'
-            )}>
+          <Grid className="flex actions-flex">
+            {this.props.isOwner && !this.props.isMobile && (
+              <ActionsMenu
+                actions={this.actions()}
+                onClickAction={this.handleClickAction}
+                actionsOpen={this.state.isActionsMenuOpen}
+                onActionsMenuClick={this.handleActionsMenuClick}
+                isDefaultQuery={
+                  this.state.isNewQuery
+                    ? false
+                    : this.state.selectedQueryObj
+                    ? this.state.selectedQueryObj.default
+                    : false
+                }
+              />
+            )}
             <ExecuteButton
               isRunning={Boolean(subscription)}
               onRun={onRunQuery}
               onStop={onStopQuery}
               operations={operations}
             />
+          </Grid>
+          <div
+            className={classnames(
+              'topBarWrap',
+              this.state.docExplorerOpen && 'overlap'
+            )}>
             {!this.state.docExplorerOpen && (
               <button
                 className="docExplorerShow"
