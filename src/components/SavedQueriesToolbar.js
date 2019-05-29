@@ -234,7 +234,7 @@ export class SavedQueriesToolbar extends React.Component {
             resumeHideDuration={0}
           />
         </Grid>
-        <Grid className="flex">
+        <Grid className="flex wrapper">
           <Grid className="flex actions-flex">
             {this.props.isOwner && !this.props.isMobile && (
               <ActionsMenu

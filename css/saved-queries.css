@@ -378,4 +378,13 @@
   .saved-queries-toolbar .actions-flex {
     margin-left: 0;
   }
+
+  .saved-queries-toolbar .main-flex {
+    width: 100%;
+  }
+
+  .saved-queries-toolbar .wrapper {
+    justify-content: space-between;
+    width: 100%;
+  }
 }
