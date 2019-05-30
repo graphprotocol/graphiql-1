@@ -150,7 +150,11 @@ export class SavedQueriesToolbar extends React.Component {
           <Selector
             queries={queries}
             open={this.state.open}
-            selectedQueryName={this.state.selectedQueryObj.name}
+            selectedQueryName={
+              this.state.selectedQueryObj
+                ? this.state.selectedQueryObj.name
+                : ''
+            }
             onOpenMenu={this.handleOpenMenu}
             onMenuItemClick={this.handleMenuItemClick}
             onChange={this.handleChange}
@@ -417,7 +421,10 @@ export class SavedQueriesToolbar extends React.Component {
   // type a new query name
   handleChange = e => {
     e.stopPropagation()
-    if (e.target.value !== this.state.selectedQueryObj.name) {
+    if (
+      this.state.selectedQueryObj &&
+      e.target.value !== this.state.selectedQueryObj.name
+    ) {
       this.setState({ showActions: true })
     }
     this.setState({
