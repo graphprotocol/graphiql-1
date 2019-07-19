@@ -177,9 +177,13 @@
 
 .graphiql-container .field-short-description {
   color: #999;
-  margin-left: 5px;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-left: 0 !important;
+}
+
+.graphiql-container .field-short-description p {
+  margin-bottom: 8px;
 }
 
 .graphiql-container .enum-value {
