@@ -19,6 +19,36 @@
   box-shadow: 0 16px 64px 0 rgba(0, 0, 0, 0.32);
 }
 
+.graphiql-container .title {
+  font-size: 18px;
+  font-family: EuclidCircular, Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  color: #b4bac5;
+  font-weight: bold;
+  line-height: 19px;
+}
+
+.graphiql-container .topBar {
+  align-items: center;
+  background: transparent;
+  cursor: default;
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  height: 60px;
+  overflow-y: visible;
+  padding: 7px 14px 6px;
+  user-select: none;
+}
+
+.graphiql-container .topBar .title {
+  margin-left: 30px;
+}
+
+.graphiql-container .topBar .title > span {
+  pointer-events: none;
+}
+
 .graphiql-container .editorWrap {
   border-radius: 16px 0 0 0;
   display: flex;
@@ -39,13 +69,6 @@
 
 .graphiql-container .topBarWrap.overlap {
   align-items: center;
-}
-
-.graphiql-container .topBar {
-  background: #13161f;
-  cursor: default;
-  overflow-y: visible;
-  user-select: none;
 }
 
 .graphiql-container .toolbar {
@@ -322,7 +345,7 @@
 
 .graphiql-container .execute-button-wrap {
   height: 40px;
-  margin: 0 28px 0 16px;
+  margin: 32px 28px 32px 16px;
   position: relative;
 }
 
@@ -593,6 +616,9 @@ div.CodeMirror-lint-tooltip > * + * {
 }
 
 @media (max-width: 640px) {
+  .graphiql-container .editorWrap .topBar .title {
+    margin-left: 0px;
+  }
   .graphiql-container .editorWrap .topBar .execute-button-wrap {
     margin: 0 12px;
   }
@@ -607,6 +633,15 @@ div.CodeMirror-lint-tooltip > * + * {
 }
 
 @media (max-width: 480px) {
+  .graphiql-container .topBar .title > span {
+    pointer-events: all;
+    font-size: 14px;
+    padding: 6px 14px;
+    background-color: #1b1e2a;
+    border-radius: 14px;
+    cursor: pointer;
+  }
+
   .graphiql-container .resultWrap {
     flex: 100%;
   }

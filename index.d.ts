@@ -31,10 +31,10 @@ export interface GraphiQLProps {
   onToggleHistory?: () => void
   ResultsTooltip?: any
   defaultTypeOrField: string
-  savedQueries: Array<SavedQuery>
-  handleUpdateQuery: (query: SavedQuery) => Promise<SavedQuery>
-  handleCreateQuery: (query: SavedQuery) => Promise<SavedQuery>
-  handleSelectedAction: (id: number, value: string) => void
+  savedQueries?: Array<SavedQuery>
+  handleUpdateQuery?: (query: SavedQuery) => Promise<SavedQuery>
+  handleCreateQuery?: (query: SavedQuery) => Promise<SavedQuery>
+  handleSelectedAction?: (id: number, value: string) => void
   isActionsMenuOpen?: boolean
   handleSelectQuery?: (name: string) => void
   selectedQueryName?: any
