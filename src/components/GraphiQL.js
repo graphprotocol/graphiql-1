@@ -399,6 +399,17 @@ export class GraphiQL extends React.Component {
                 />
                 {toolbar}
               </div>
+              {!this.state.docExplorerOpen && (
+                <button
+                  className="docExplorerShow"
+                  onClick={this.handleToggleDocs}>
+                  <span className="btnInner">
+                    {document.documentElement.clientWidth < 640
+                      ? 'Hide queries'
+                      : 'Show schema'}
+                  </span>
+                </button>
+              )}
             </div>
           )}
           <div
