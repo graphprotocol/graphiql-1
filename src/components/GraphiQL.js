@@ -10,6 +10,7 @@ import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import { buildClientSchema, GraphQLSchema, parse, print } from 'graphql'
 
+import { ExecuteButton } from './ExecuteButton'
 import { ToolbarButton } from './ToolbarButton'
 import { ToolbarGroup } from './ToolbarGroup'
 import { ToolbarMenu, ToolbarMenuItem } from './ToolbarMenu'
@@ -92,17 +93,30 @@ export class GraphiQL extends React.Component {
       ? this.props.savedQueries.find(sq => sq.name === props.selectedQueryName)
       : undefined
 
-    // Determine the initial query to display.
-    const query =
-      props.query !== undefined
-        ? props.query
-        : selectedQuery !== undefined
-        ? selectedQuery.query
-        : props.defaultQuery !== undefined
-        ? props.defaultQuery
-        : this._storage.get('query') !== null
-        ? this._storage.get('query')
-        : defaultQuery
+    let query
+    console.log('default query: ', props.defaultQuery)
+    if (props.savedQueries) {
+      // Determine the initial query to display.
+      query =
+        props.query !== undefined
+          ? props.query
+          : selectedQuery !== undefined
+          ? selectedQuery.query
+          : props.defaultQuery !== undefined
+          ? props.defaultQuery
+          : this._storage.get('query') !== null
+          ? this._storage.get('query')
+          : defaultQuery
+    } else {
+      query =
+        props.query !== undefined
+          ? props.query
+          : this._storage.get('query') !== null
+          ? this._storage.get('query')
+          : props.defaultQuery !== undefined
+          ? props.defaultQuery
+          : defaultQuery
+    }
 
     // Get the initial query facts.
     const queryFacts = getQueryFacts(props.schema, query)
@@ -278,24 +292,27 @@ export class GraphiQL extends React.Component {
     // const logo = find(children, child => child.type === GraphiQL.Logo) || (
     //   <GraphiQL.Logo />
     // );
-    // const toolbar = find(children, child => child.type === GraphiQL.Toolbar) || (
-    //   <GraphiQL.Toolbar>
-    //     {this.state.showPrettifyButton && (
-    //       <ToolbarButton
-    //         onClick={this.handlePrettifyQuery}
-    //         title="Prettify Query (Shift-Ctrl-P)"
-    //         label="Prettify"
-    //       />
-    //     )}
-    //     {this.state.showHistoryButton && (
-    //       <ToolbarButton
-    //         onClick={this.handleToggleHistory}
-    //         title="Show History"
-    //         label="History"
-    //       />
-    //     )}
-    //   </GraphiQL.Toolbar>
-    // )
+    const toolbar = find(
+      children,
+      child => child.type === GraphiQL.Toolbar
+    ) || (
+      <GraphiQL.Toolbar>
+        {this.state.showPrettifyButton && (
+          <ToolbarButton
+            onClick={this.handlePrettifyQuery}
+            title="Prettify Query (Shift-Ctrl-P)"
+            label="Prettify"
+          />
+        )}
+        {this.state.showHistoryButton && (
+          <ToolbarButton
+            onClick={this.handleToggleHistory}
+            title="Show History"
+            label="History"
+          />
+        )}
+      </GraphiQL.Toolbar>
+    )
 
     const footer = find(children, child => child.type === GraphiQL.Footer)
 
@@ -352,29 +369,62 @@ export class GraphiQL extends React.Component {
           </QueryHistory>
         </div>
         <div className="editorWrap" style={editorWrapStyle}>
-          <Grid container justify="space-between" alignItems="center">
-            <SavedQueriesToolbar
-              selectedQueryName={this.props.selectedQueryName}
-              queries={this.state.queries}
-              query={this.state.query}
-              onCreateQuery={this.props.handleCreateQuery}
-              onUpdateQuery={this.props.handleUpdateQuery}
-              onSelectedAction={this.props.handleSelectedAction}
-              onSelectQuery={this.props.handleSelectQuery}
-              subscription={this.state.subscription}
-              onRunQuery={this.handleRunQuery}
-              onStopQuery={this.handleStopQuery}
-              operations={this.state.operations}
-              onEditQuery={this.handleEditQuery}
-              showActions={this.state.showActions}
-              isActionsMenuOpen={this.props.isActionsMenuOpen}
-              docExplorerOpen={this.state.docExplorerOpen}
-              isOwner={this.props.isOwner}
-              isMobile={document.documentElement.clientWidth < 740}
-              onToggleDocs={this.handleToggleDocs}
-              onClickAwayEditor={this.handleClickAwayEditor}
-            />
-          </Grid>
+          {this.state.queries ? (
+            <Grid container justify="space-between" alignItems="center">
+              <SavedQueriesToolbar
+                selectedQueryName={this.props.selectedQueryName}
+                queries={this.state.queries}
+                query={this.state.query}
+                onCreateQuery={this.props.handleCreateQuery}
+                onUpdateQuery={this.props.handleUpdateQuery}
+                onSelectedAction={this.props.handleSelectedAction}
+                onSelectQuery={this.props.handleSelectQuery}
+                subscription={this.state.subscription}
+                onRunQuery={this.handleRunQuery}
+                onStopQuery={this.handleStopQuery}
+                operations={this.state.operations}
+                onEditQuery={this.handleEditQuery}
+                showActions={this.state.showActions}
+                isActionsMenuOpen={this.props.isActionsMenuOpen}
+                docExplorerOpen={this.state.docExplorerOpen}
+                isOwner={this.props.isOwner}
+                isMobile={document.documentElement.clientWidth < 740}
+                onToggleDocs={this.handleToggleDocs}
+                onClickAwayEditor={this.handleClickAwayEditor}
+              />
+            </Grid>
+          ) : (
+            <div
+              className={classnames(
+                'topBarWrap',
+                this.state.docExplorerOpen && 'overlap'
+              )}>
+              <div className="topBar">
+                <div className="title">
+                  <span onClick={this.handleResultPaneOpen}>{'Query'}</span>
+                </div>
+                <ExecuteButton
+                  isRunning={Boolean(this.state.subscription)}
+                  onRun={this.handleRunQuery}
+                  onStop={this.handleStopQuery}
+                  operations={this.state.operations}
+                  onHandleCopyToClipboard={this.handleCopyToClipboard}
+                />
+                {toolbar}
+              </div>
+              {!this.state.docExplorerOpen && (
+                <button
+                  className="docExplorerShow"
+                  onClick={this.handleToggleDocs}>
+                  <span className="btnInner">
+                    {document.documentElement.clientWidth < 640
+                      ? 'Hide queries'
+                      : 'Show schema'}
+                  </span>
+                </button>
+              )}
+            </div>
+          )}
           <div
             ref={n => {
               this.editorBarComponent = n
