@@ -93,17 +93,30 @@ export class GraphiQL extends React.Component {
       ? this.props.savedQueries.find(sq => sq.name === props.selectedQueryName)
       : undefined
 
-    // Determine the initial query to display.
-    const query =
-      props.query !== undefined
-        ? props.query
-        : selectedQuery !== undefined
-        ? selectedQuery.query
-        : props.defaultQuery !== undefined
-        ? props.defaultQuery
-        : this._storage.get('query') !== null
-        ? this._storage.get('query')
-        : defaultQuery
+    let query
+    console.log('default query: ', props.defaultQuery)
+    if (props.savedQueries) {
+      // Determine the initial query to display.
+      query =
+        props.query !== undefined
+          ? props.query
+          : selectedQuery !== undefined
+          ? selectedQuery.query
+          : props.defaultQuery !== undefined
+          ? props.defaultQuery
+          : this._storage.get('query') !== null
+          ? this._storage.get('query')
+          : defaultQuery
+    } else {
+      query =
+        props.query !== undefined
+          ? props.query
+          : this._storage.get('query') !== null
+          ? this._storage.get('query')
+          : props.defaultQuery !== undefined
+          ? props.defaultQuery
+          : defaultQuery
+    }
 
     // Get the initial query facts.
     const queryFacts = getQueryFacts(props.schema, query)
