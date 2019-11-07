@@ -1,5 +1,5 @@
 .graphiql-container .doc-explorer {
-  background-color: rgba(11, 13, 19, 0.8);
+  background-color: #000;
   border-radius: 0 16px 0 0;
 }
 
@@ -71,7 +71,7 @@
 
 .graphiql-container .doc-explorer-contents,
 .graphiql-container .history-contents {
-  background-color: rgba(11, 13, 19, 0.8);
+  background-color: #000;
   bottom: 0;
   left: 0;
   overflow-y: auto;

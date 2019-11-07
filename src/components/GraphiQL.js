@@ -74,7 +74,8 @@ export class GraphiQL extends React.Component {
     isActionsMenuOpen: PropTypes.bool,
     handleSelectQuery: PropTypes.func,
     selectedQueryName: PropTypes.any,
-    isOwner: PropTypes.bool
+    isOwner: PropTypes.bool,
+    docExplorerClosed: PropTypes.bool
   }
 
   constructor(props) {
@@ -138,6 +139,8 @@ export class GraphiQL extends React.Component {
       docExplorerOpen:
         document.documentElement.clientWidth < 640
           ? true
+          : props.docExplorerClosed
+          ? false
           : this._storage.get('docExplorerOpen') === 'true' || false,
       historyPaneOpen: this._storage.get('historyPaneOpen') === 'true' || false,
       resultPaneOpen: !(document.documentElement.clientWidth < 480),
@@ -310,7 +313,7 @@ export class GraphiQL extends React.Component {
           ? '100%'
           : this.state.docExplorerWidth,
       borderRadius: '0 16px 0 0',
-      backgroundColor: '#0F1016'
+      backgroundColor: '#000'
     }
     const docExplorerWrapClasses =
       'docExplorerWrap' +

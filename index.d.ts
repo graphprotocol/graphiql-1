@@ -39,6 +39,7 @@ export interface GraphiQLProps {
   handleSelectQuery?: (name: string) => void
   selectedQueryName?: any
   isOwner?: boolean
+  docExplorerClosed?: boolean
 }
 declare class GraphiQL extends React.Component<GraphiQLProps, any> {}
 export default GraphiQL

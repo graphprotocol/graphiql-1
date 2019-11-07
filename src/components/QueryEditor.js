@@ -75,7 +75,8 @@ export class QueryEditor extends React.Component {
 
     this.editor = CodeMirror(this._node, {
       value: this.props.value || '',
-      lineNumbers: true,
+      lineNumbers: false,
+      viewportMargin: Infinity,
       tabSize: 2,
       mode: 'graphql',
       theme: this.props.editorTheme || 'graphiql',
@@ -84,9 +85,7 @@ export class QueryEditor extends React.Component {
       matchBrackets: true,
       showCursorWhenSelecting: true,
       readOnly: this.props.readOnly ? 'nocursor' : false,
-      foldGutter: {
-        minFoldSize: 4
-      },
+      foldGutter: false,
       lint: {
         schema: this.props.schema
       },
