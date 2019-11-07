@@ -40,6 +40,7 @@ export interface GraphiQLProps {
   selectedQueryName?: any
   isOwner?: boolean
   docExplorerClosed?: boolean
+  from?: string
 }
 declare class GraphiQL extends React.Component<GraphiQLProps, any> {}
 export default GraphiQL

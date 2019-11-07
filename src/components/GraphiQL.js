@@ -75,7 +75,8 @@ export class GraphiQL extends React.Component {
     handleSelectQuery: PropTypes.func,
     selectedQueryName: PropTypes.any,
     isOwner: PropTypes.bool,
-    docExplorerClosed: PropTypes.bool
+    docExplorerClosed: PropTypes.bool,
+    from: PropTypes.string
   }
 
   constructor(props) {
@@ -137,7 +138,7 @@ export class GraphiQL extends React.Component {
       variableEditorHeight:
         Number(this._storage.get('variableEditorHeight')) || 200,
       docExplorerOpen:
-        document.documentElement.clientWidth < 640
+        document.documentElement.clientWidth < 640 && props.from !== 'blog'
           ? true
           : props.docExplorerClosed
           ? false
@@ -879,6 +880,10 @@ export class GraphiQL extends React.Component {
       this.props.onToggleDocs(!this.state.docExplorerOpen)
     }
     this.setState({ docExplorerOpen: !this.state.docExplorerOpen })
+    if (document.documentElement.clientWidth < 480) {
+      console.log('AM I IN HERE')
+      this.setState({ resultPaneOpen: false })
+    }
   }
 
   handleToggleHistory = () => {

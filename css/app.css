@@ -631,7 +631,7 @@ div.CodeMirror-lint-tooltip > * + * {
   }
 
   .graphiql-container .CodeMirror .CodeMirror-line {
-    background-color: #13161f;
+    background-color: #000;
   }
 
   .graphiql-container .editorWrap .topBar .execute-button-wrap {
