@@ -17,7 +17,7 @@ const Selector = ({
   onChange,
   isDefaultQuery,
   isOwner,
-  isMobile,
+  isMobile
 }) => {
   return (
     <Grid className="selector" autoComplete="off">
@@ -25,8 +25,7 @@ const Selector = ({
         container
         justify="space-between"
         onClick={!isOwner || isMobile ? onOpenMenu : () => false}
-        className={!isOwner || isMobile ? 'pointer' : ''}
-      >
+        className={!isOwner || isMobile ? 'pointer' : ''}>
         <Input
           name="query"
           value={selectedQueryName}
@@ -40,7 +39,9 @@ const Selector = ({
         <Grid className="menu-icons">
           <img
             className="menu-icon"
-            src={`${process.env.PUBLIC_URL}/images/query-selector-icon.svg`}
+            src={
+              'https://storage.googleapis.com/graph-web/query-selector-icon.svg'
+            }
             onClick={onOpenMenu}
           />
         </Grid>
@@ -71,7 +72,7 @@ Selector.propTypes = {
       id: PropTypes.string,
       name: PropTypes.string,
       query: PropTypes.string,
-      default: PropTypes.bool,
+      default: PropTypes.bool
     })
   ),
   open: PropTypes.bool,
@@ -81,7 +82,7 @@ Selector.propTypes = {
   onChange: PropTypes.func,
   isDefaultQuery: PropTypes.bool,
   isOwner: PropTypes.bool,
-  isMobile: PropTypes.bool,
+  isMobile: PropTypes.bool
 }
 
 export default Selector
