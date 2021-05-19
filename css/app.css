@@ -15,9 +15,7 @@
   margin: 0;
   overflow: hidden;
   width: 100%;
-  border-radius: 16px;
-  background-color: #000000;
-  box-shadow: 0 16px 64px 0 rgba(0, 0, 0, 0.32);
+  background-color: transparent;
 }
 
 .graphiql-container .editorWrap {
@@ -57,7 +55,7 @@
 .graphiql-container .docExplorerShow,
 .graphiql-container .historyShow {
   color: #b4bac5;
-  background-color: #000 !important;
+  background-color: transparent !important;
   font-family: EuclidCircular, Arial, Helvetica, sans-serif;
   font-size: 14px;
   font-weight: bold;
@@ -119,7 +117,7 @@
 
 .graphiql-container .docExplorerWrap,
 .graphiql-container .historyPaneWrap {
-  background: #000;
+  background: transparent;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
   position: relative;
   z-index: 3;
@@ -237,7 +235,7 @@
 }
 
 .graphiql-container .CodeMirror .CodeMirror-gutter {
-  background-color: #000000;
+  background-color: transparent;
 }
 
 .graphiql-container .CodeMirror .CodeMirror-gutter-wrapper {
@@ -275,7 +273,7 @@
 .graphiql-container .result-window .CodeMirror-foldgutter,
 .graphiql-container .result-window .CodeMirror-foldgutter-open:after,
 .graphiql-container .result-window .CodeMirror-foldgutter-folded:after {
-  padding-left: 3px;
+  padding-left: 0px;
 }
 
 .graphiql-container .toolbar-button {
@@ -360,6 +358,7 @@
 .graphiql-container .execute-button {
   display: flex;
   justify-content: center;
+  align-items: center;
   background: linear-gradient(315deg, #5500a0 0%, #8b35ff 100%);
   border: none;
   opacity: 0.8;
@@ -470,7 +469,7 @@
 }
 
 .graphiql-container .CodeMirror {
-  background-color: #000000 !important;
+  background-color: transparent !important;
   color: #141823;
   font-family: 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace;
   font-size: 13px;
@@ -635,7 +634,7 @@ div.CodeMirror-lint-tooltip > * + * {
   }
 
   .graphiql-container .CodeMirror .CodeMirror-line {
-    background-color: #000;
+    background-color: transparent;
   }
 
   .graphiql-container .editorWrap .topBar .execute-button-wrap {

@@ -6,7 +6,7 @@
   text-shadow: #b9f 1px 1px 2px, #b9f -1px -1px 2px, #b9f 1px -1px 2px, #b9f -1px 1px 2px;
 }
 .CodeMirror-foldgutter {
-  width: 0.7em;
+  width: 0px;
 }
 .CodeMirror-foldgutter-open:after {
   content: none;

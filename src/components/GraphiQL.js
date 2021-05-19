@@ -34,7 +34,6 @@ import {
 } from '../utility/introspectionQueries'
 import classnames from 'classnames'
 import Grid from '@material-ui/core/Grid'
-import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 
 const DEFAULT_DOC_EXPLORER_WIDTH = 350
 
@@ -76,7 +75,8 @@ export class GraphiQL extends React.Component {
     selectedQueryName: PropTypes.any,
     isOwner: PropTypes.bool,
     docExplorerClosed: PropTypes.bool,
-    from: PropTypes.string
+    from: PropTypes.string,
+    hideSnackbar: PropTypes.bool
   }
 
   constructor(props) {
@@ -314,7 +314,7 @@ export class GraphiQL extends React.Component {
           ? '100%'
           : this.state.docExplorerWidth,
       borderRadius: '0 16px 0 0',
-      backgroundColor: '#000'
+      backgroundColor: 'transparent'
     }
     const docExplorerWrapClasses =
       'docExplorerWrap' +
@@ -377,6 +377,7 @@ export class GraphiQL extends React.Component {
               isMobile={document.documentElement.clientWidth < 740}
               onToggleDocs={this.handleToggleDocs}
               onClickAwayEditor={this.handleClickAwayEditor}
+              hideSnackbar={this.props.hideSnackbar}
             />
           </Grid>
           <div

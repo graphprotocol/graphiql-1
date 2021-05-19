@@ -39,7 +39,8 @@ export class SavedQueriesToolbar extends React.Component {
     isOwner: PropTypes.bool,
     isMobile: PropTypes.bool,
     onToggleDocs: PropTypes.func,
-    onClickAwayEditor: PropTypes.func
+    onClickAwayEditor: PropTypes.func,
+    hideSnackbar: PropTypes.bool
   }
 
   constructor(props) {
@@ -117,7 +118,8 @@ export class SavedQueriesToolbar extends React.Component {
       subscription,
       onRunQuery,
       onStopQuery,
-      operations
+      operations,
+      hideSnackbar
     } = this.props
     const { successMessages, errorMessages } = this.state
 
@@ -194,49 +196,51 @@ export class SavedQueriesToolbar extends React.Component {
                 </Typography>
               </Grid>
             )}
-          <Snackbar
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left'
-            }}
-            ClickAwayListenerProps={{ onClickAway: this.handleSnackbarClose }}
-            open={showSuccessMessage || showErrorMessage}
-            autoHideDuration={this.state.successMessages.delete ? 5000 : 2000}
-            message={
-              <div className="snackbar-content">
-                {this.state.successMessages.delete && (
-                  <img
-                    src={`${process.env.PUBLIC_URL}/images/trash-icon.svg`}
-                    className="trash-icon"
-                  />
-                )}
-                <Typography className="message">
-                  {this.snackbarMessage()}
-                </Typography>
-                {this.state.successMessages.delete && (
-                  <Typography
-                    onClick={this.handleUndoDelete}
-                    className="undo-delete">
-                    {'Undo'}
+          {!hideSnackbar && (
+            <Snackbar
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left'
+              }}
+              ClickAwayListenerProps={{ onClickAway: this.handleSnackbarClose }}
+              open={showSuccessMessage || showErrorMessage}
+              autoHideDuration={this.state.successMessages.delete ? 5000 : 2000}
+              message={
+                <div className="snackbar-content">
+                  {this.state.successMessages.delete && (
+                    <img
+                      src={`${process.env.PUBLIC_URL}/images/trash-icon.svg`}
+                      className="trash-icon"
+                    />
+                  )}
+                  <Typography className="message">
+                    {this.snackbarMessage()}
                   </Typography>
-                )}
-              </div>
-            }
-            className={classnames(
-              'snackbar',
-              showSuccessMessage
-                ? 'snackbar-success'
-                : showErrorMessage
-                ? 'snackbar-error'
-                : '',
-              this.state.successMessages.delete && 'snackbar-warning'
-            )}
-            ContentProps={{
-              classes: { root: 'content-root' }
-            }}
-            onClose={this.handleSnackbarClose}
-            resumeHideDuration={0}
-          />
+                  {this.state.successMessages.delete && (
+                    <Typography
+                      onClick={this.handleUndoDelete}
+                      className="undo-delete">
+                      {'Undo'}
+                    </Typography>
+                  )}
+                </div>
+              }
+              className={classnames(
+                'snackbar',
+                showSuccessMessage
+                  ? 'snackbar-success'
+                  : showErrorMessage
+                  ? 'snackbar-error'
+                  : '',
+                this.state.successMessages.delete && 'snackbar-warning'
+              )}
+              ContentProps={{
+                classes: { root: 'content-root' }
+              }}
+              onClose={this.handleSnackbarClose}
+              resumeHideDuration={0}
+            />
+          )}
         </Grid>
         <Grid className="flex wrapper">
           <Grid className="flex actions-flex">

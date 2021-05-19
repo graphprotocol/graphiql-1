@@ -41,6 +41,7 @@ export interface GraphiQLProps {
   isOwner?: boolean
   docExplorerClosed?: boolean
   from?: string
+  hideSnackbar?: boolean
 }
-declare class GraphiQL extends React.Component<GraphiQLProps, any> {}
+declare class GraphiQL extends React.Component<GraphiQLProps, any> { }
 export default GraphiQL
