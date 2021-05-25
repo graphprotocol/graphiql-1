@@ -49,10 +49,11 @@
 
 .graphiql-container .selector .menu-icons {
   display: flex;
+  align-items: center;
+  padding-right: 12px;
 }
 
 .graphiql-container .selector .menu-icon {
-  padding: 16px;
   width: 18px;
   height: 16px;
   cursor: pointer;
@@ -243,11 +244,20 @@
   border-radius: 4px;
 }
 
-.saved-queries-toolbar .snackbar .content-root {
+.saved-queries-toolbar .snackbar .content-root , .toast{
   background: transparent;
 }
 
-.saved-queries-toolbar .snackbar.snackbar-success {
+.Toastify__toast--default {
+  background: transparent;
+}
+
+.toast-success {
+  border: 1px solid #4bca81;
+  background-color: rgba(75, 202, 129, 0.08);
+}
+
+.saved-queries-toolbar .snackbar.snackbar-success, .toast-success {
   border: 1px solid #4bca81;
   background-color: rgba(75, 202, 129, 0.08);
 }

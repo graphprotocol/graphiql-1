@@ -8,6 +8,8 @@ import { ExecuteButton } from './ExecuteButton'
 import Snackbar from '@material-ui/core/Snackbar'
 import classnames from 'classnames'
 
+import { ToastContainer, toast } from 'react-toastify'
+
 /**
  * Saved queries toolbar with controls and menus
  *
@@ -196,6 +198,23 @@ export class SavedQueriesToolbar extends React.Component {
                 </Typography>
               </Grid>
             )}
+          {hideSnackbar && (
+            <ToastContainer
+              position="bottom-left"
+              autoClose={2000}
+              hideProgressBar
+              closeOnClick
+              className="toast-container"
+              toastClassName={
+                showSuccessMessage
+                  ? 'toast-success'
+                  : showErrorMessage
+                  ? 'toast-error'
+                  : 'toast'
+              }
+              bodyClassName="toast-body"
+            />
+          )}
           {!hideSnackbar && (
             <Snackbar
               anchorOrigin={{
@@ -226,11 +245,11 @@ export class SavedQueriesToolbar extends React.Component {
                 </div>
               }
               className={classnames(
-                'snackbar',
+                'toast',
                 showSuccessMessage
-                  ? 'snackbar-success'
+                  ? 'toast-success'
                   : showErrorMessage
-                  ? 'snackbar-error'
+                  ? 'toast-error'
                   : '',
                 this.state.successMessages.delete && 'snackbar-warning'
               )}
@@ -284,12 +303,14 @@ export class SavedQueriesToolbar extends React.Component {
     )
   }
 
+  /* eslint-disable no-unused-expressions */
+
   /* Validations: 
      - Name can't be empty or taken
      - Query can't be empty or invalid. 
      Note: Duplicate query validation happens on the server
   */
-  validateName = updated => {
+  validateName = async updated => {
     const name = this.state.selectedQueryObj.name
     let isValid = true
     if (name === '') {
@@ -312,33 +333,37 @@ export class SavedQueriesToolbar extends React.Component {
     if (foundName !== undefined) {
       isValid = false
     }
-    this.setState(
+    await this.setState(
       Object.assign(this.state.errorMessages, {
         nameTaken: foundName !== undefined
       })
     )
+    this.props.hideSnackbar && toast.error(this.snackbarMessage())
     return isValid
   }
 
-  validateQuery = () => {
+  validateQuery = async () => {
     const queryString = this.state.query.replace(/\s/g, '')
     let isValid = true
     if (queryString.length === 0) {
       isValid = false
-      this.setState(
+      await this.setState(
         Object.assign(this.state.errorMessages, {
           queryEmpty: true
         })
       )
+      this.props.hideSnackbar && toast.error(this.snackbarMessage())
     }
     const errors = document.querySelectorAll('.CodeMirror-lint-mark-error')
     if (errors.length > 0) {
       isValid = false
-      return this.setState(
+      await this.setState(
         Object.assign(this.state.errorMessages, {
           queryInvalid: true
         })
       )
+      this.props.hideSnackbar && toast.error(this.snackbarMessage())
+      return
     }
     return isValid
   }
@@ -365,6 +390,7 @@ export class SavedQueriesToolbar extends React.Component {
           selectedQueryObj: result
         })
       )
+      this.props.hideSnackbar && toast.success(this.snackbarMessage())
       this.props.onClickAwayEditor()
     } else {
       await this.setState(
@@ -373,6 +399,7 @@ export class SavedQueriesToolbar extends React.Component {
           showActions: true
         })
       )
+      this.props.hideSnackbar && toast.error(this.snackbarMessage())
     }
   }
 
@@ -400,6 +427,8 @@ export class SavedQueriesToolbar extends React.Component {
           selectedQueryObj: result
         })
       )
+      console.log('AM I HERE: ', this.props.hideSnackbar)
+      this.props.hideSnackbar && toast.success(this.snackbarMessage())
     } else {
       await this.setState(
         Object.assign(this.state.errorMessages, {
@@ -407,6 +436,7 @@ export class SavedQueriesToolbar extends React.Component {
           showActions: true
         })
       )
+      this.props.hideSnackbar && toast.error(this.snackbarMessage())
     }
   }
 
@@ -624,7 +654,6 @@ export class SavedQueriesToolbar extends React.Component {
 
   actions = () => {
     return [
-      { id: '1', name: 'Share' },
       { id: '2', name: 'Set as default' },
       { id: '3', name: 'Delete' },
       { id: '4', name: 'New query' }

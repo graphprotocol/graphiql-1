@@ -24,6 +24,7 @@
   flex-direction: column;
   flex: 1;
   overflow-x: hidden;
+  border-right: 1px solid rgba(255, 255, 255, 0.16);
 }
 
 .graphiql-container .title em {
@@ -128,6 +129,7 @@
   transition: all 0.5s cubic-bezier(0.64, 0.04, 0.35, 1) 0s;
   left: 0;
   position: relative;
+  margin-top: 32px;
 }
 
 .graphiql-container .docExplorerWrap.hide {

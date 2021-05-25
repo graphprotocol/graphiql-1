@@ -882,7 +882,6 @@ export class GraphiQL extends React.Component {
     }
     this.setState({ docExplorerOpen: !this.state.docExplorerOpen })
     if (document.documentElement.clientWidth < 480) {
-      console.log('AM I IN HERE')
       this.setState({ resultPaneOpen: false })
     }
   }
