@@ -1,6 +1,6 @@
 {
   "name": "@graphprotocol/graphiql",
-  "version": "0.3.2-alpha",
+  "version": "0.3.3-alphs",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "An graphical interactive in-browser GraphQL IDE.",
