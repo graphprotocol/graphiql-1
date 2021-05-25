@@ -336,9 +336,11 @@ export class SavedQueriesToolbar extends React.Component {
     await this.setState(
       Object.assign(this.state.errorMessages, {
         nameTaken: foundName !== undefined
-      })
+      }),
+      () => {
+        this.props.hideSnackbar && toast.error(this.snackbarMessage())
+      }
     )
-    this.props.hideSnackbar && toast.error(this.snackbarMessage())
     return isValid
   }
 
@@ -360,9 +362,11 @@ export class SavedQueriesToolbar extends React.Component {
       await this.setState(
         Object.assign(this.state.errorMessages, {
           queryInvalid: true
-        })
+        }),
+        () => {
+          this.props.hideSnackbar && toast.error(this.snackbarMessage())
+        }
       )
-      this.props.hideSnackbar && toast.error(this.snackbarMessage())
       return
     }
     return isValid
@@ -388,18 +392,22 @@ export class SavedQueriesToolbar extends React.Component {
           showActions: false,
           isNewQuery: false,
           selectedQueryObj: result
-        })
+        }),
+        () => {
+          this.props.hideSnackbar && toast.success(this.snackbarMessage())
+        }
       )
-      this.props.hideSnackbar && toast.success(this.snackbarMessage())
       this.props.onClickAwayEditor()
     } else {
       await this.setState(
         Object.assign(this.state.errorMessages, {
           create: true,
           showActions: true
-        })
+        }),
+        () => {
+          this.props.hideSnackbar && toast.error(this.snackbarMessage())
+        }
       )
-      this.props.hideSnackbar && toast.error(this.snackbarMessage())
     }
   }
 
@@ -425,18 +433,22 @@ export class SavedQueriesToolbar extends React.Component {
           update: true,
           showActions: false,
           selectedQueryObj: result
-        })
+        }),
+        () => {
+          this.props.hideSnackbar && toast.success(this.snackbarMessage())
+        }
       )
       console.log('AM I HERE: ', this.props.hideSnackbar)
-      this.props.hideSnackbar && toast.success(this.snackbarMessage())
     } else {
       await this.setState(
         Object.assign(this.state.errorMessages, {
           update: true,
           showActions: true
-        })
+        }),
+        () => {
+          this.props.hideSnackbar && toast.error(this.snackbarMessage())
+        }
       )
-      this.props.hideSnackbar && toast.error(this.snackbarMessage())
     }
   }
 
