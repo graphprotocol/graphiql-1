@@ -91,7 +91,11 @@ export class GraphiQL extends React.Component {
     this._storage = new StorageAPI(props.storage)
 
     const selectedQuery = props.selectedQueryName
-      ? this.props.savedQueries.find(sq => sq.name === props.selectedQueryName)
+      ? this.props.savedQueries
+        ? this.props.savedQueries.find(
+            sq => sq.name === props.selectedQueryName
+          )
+        : undefined
       : undefined
 
     // Determine the initial query to display.

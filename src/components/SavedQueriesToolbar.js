@@ -42,15 +42,19 @@ export class SavedQueriesToolbar extends React.Component {
     isMobile: PropTypes.bool,
     onToggleDocs: PropTypes.func,
     onClickAwayEditor: PropTypes.func,
-    hideSnackbar: PropTypes.bool
+    hideSnackbar: PropTypes.bool,
+    defaultQuery: PropTypes.any
   }
 
   constructor(props) {
     super(props)
     const findSelected =
       props.selectedQueryName &&
+      props.queries &&
       this.findSelectedQuery(props.queries, props.selectedQueryName)
-    const defaultQuery = this.defaultQuery(props.queries)
+    const defaultQuery = props.queries
+      ? this.defaultQuery(props.queries)
+      : props.defaultQuery
     this.state = {
       open: props.isActionsMenuOpen,
       selectedQueryObj: findSelected ? findSelected : defaultQuery,
@@ -155,9 +159,11 @@ export class SavedQueriesToolbar extends React.Component {
             queries={queries}
             open={this.state.open}
             selectedQueryName={
-              this.state.selectedQueryObj
-                ? this.state.selectedQueryObj.name
-                : ''
+              this.props.queries
+                ? this.state.selectedQueryObj
+                  ? this.state.selectedQueryObj.name
+                  : ''
+                : this.props.selectedQueryName
             }
             onOpenMenu={this.handleOpenMenu}
             onMenuItemClick={this.handleMenuItemClick}
@@ -438,7 +444,6 @@ export class SavedQueriesToolbar extends React.Component {
           this.props.hideSnackbar && toast.success(this.snackbarMessage())
         }
       )
-      console.log('AM I HERE: ', this.props.hideSnackbar)
     } else {
       await this.setState(
         Object.assign(this.state.errorMessages, {

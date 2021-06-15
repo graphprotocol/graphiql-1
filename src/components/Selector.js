@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Input, Grid } from '@material-ui/core'
 import MenuItem from './MenuItem'
+import classnames from 'classnames'
 
 /**
  * Dropdown menu that's in the Toolbar
@@ -24,8 +25,8 @@ const Selector = ({
       <Grid
         container
         justify="space-between"
-        onClick={!isOwner || isMobile ? onOpenMenu : () => false}
-        className={!isOwner || isMobile ? 'pointer' : ''}>
+        onClick={queries && (!isOwner || isMobile) ? onOpenMenu : () => false}
+        className={queries && (!isOwner || isMobile) ? 'pointer' : ''}>
         <Input
           name="query"
           value={selectedQueryName}
@@ -38,11 +39,14 @@ const Selector = ({
         {isDefaultQuery && <span className="default-label">{'Default'}</span>}
         <Grid className="menu-icons">
           <img
-            className="menu-icon"
             src={
               'https://storage.googleapis.com/graph-web/query-selector-icon.svg'
             }
-            onClick={onOpenMenu}
+            onClick={queries ? onOpenMenu : () => false}
+            className={classnames(
+              'menu-icon',
+              queries && (!isOwner || isMobile) ? 'pointer' : ''
+            )}
           />
         </Grid>
       </Grid>
